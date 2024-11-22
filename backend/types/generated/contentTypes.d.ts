@@ -639,7 +639,7 @@ export interface ApiSosRequestSosRequest extends Struct.CollectionTypeSchema {
     singularName: 'sos-request';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     AudioFile: Schema.Attribute.Media<'files' | 'audios', true>;
