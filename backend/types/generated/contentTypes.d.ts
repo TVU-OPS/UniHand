@@ -369,6 +369,372 @@ export interface AdminUser extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiAffectedLocationAffectedLocation
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'affected_locations';
+  info: {
+    displayName: 'AffectedLocation';
+    pluralName: 'affected-locations';
+    singularName: 'affected-location';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Disaster: Schema.Attribute.Relation<'oneToOne', 'api::disaster.disaster'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::affected-location.affected-location'
+    > &
+      Schema.Attribute.Private;
+    Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiContactInfoContactInfo extends Struct.CollectionTypeSchema {
+  collectionName: 'contact_infos';
+  info: {
+    displayName: 'ContactInfo';
+    pluralName: 'contact-infos';
+    singularName: 'contact-info';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    ContactType: Schema.Attribute.String & Schema.Attribute.Required;
+    ContactValue: Schema.Attribute.String & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::contact-info.contact-info'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    SupportOrganization: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::support-organization.support-organization'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiDisasterTypeDisasterType
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'disaster_types';
+  info: {
+    description: '';
+    displayName: 'DisasterType';
+    pluralName: 'disaster-types';
+    singularName: 'disaster-type';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    DisasterTypeName: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::disaster-type.disaster-type'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiDisasterDisaster extends Struct.CollectionTypeSchema {
+  collectionName: 'disasters';
+  info: {
+    description: '';
+    displayName: 'Disaster';
+    pluralName: 'disasters';
+    singularName: 'disaster';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Description: Schema.Attribute.Text & Schema.Attribute.Required;
+    DisasterType: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::disaster-type.disaster-type'
+    >;
+    EndDate: Schema.Attribute.DateTime;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::disaster.disaster'
+    > &
+      Schema.Attribute.Private;
+    Name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    StartDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiDistrictDistrict extends Struct.CollectionTypeSchema {
+  collectionName: 'districts';
+  info: {
+    description: '';
+    displayName: 'District';
+    pluralName: 'districts';
+    singularName: 'district';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    DistrictName: Schema.Attribute.String & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::district.district'
+    > &
+      Schema.Attribute.Private;
+    Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiNotificationNotification
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'notifications';
+  info: {
+    description: '';
+    displayName: 'Notification';
+    pluralName: 'notifications';
+    singularName: 'notification';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::notification.notification'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    SOSRequest: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::sos-request.sos-request'
+    >;
+    SupportOrganization: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::support-organization.support-organization'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiOrganizationAddressOrganizationAddress
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'organization_addresses';
+  info: {
+    description: '';
+    displayName: 'OrganizationAddress';
+    pluralName: 'organization-addresses';
+    singularName: 'organization-address';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::organization-address.organization-address'
+    > &
+      Schema.Attribute.Private;
+    Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
+    publishedAt: Schema.Attribute.DateTime;
+    SupportOrganization: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::support-organization.support-organization'
+    >;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Ward: Schema.Attribute.Relation<'oneToOne', 'api::ward.ward'>;
+  };
+}
+
+export interface ApiProvinceProvince extends Struct.CollectionTypeSchema {
+  collectionName: 'provinces';
+  info: {
+    description: '';
+    displayName: 'Province';
+    pluralName: 'provinces';
+    singularName: 'province';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::province.province'
+    > &
+      Schema.Attribute.Private;
+    ProvinceName: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiSosRequestSosRequest extends Struct.CollectionTypeSchema {
+  collectionName: 'sos_requests';
+  info: {
+    description: '';
+    displayName: 'SOSRequest';
+    pluralName: 'sos-requests';
+    singularName: 'sos-request';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    AudioFile: Schema.Attribute.Media<'files' | 'audios', true>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    DamageImage: Schema.Attribute.Media<'images' | 'files', true>;
+    District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
+    Email: Schema.Attribute.Email;
+    FullName: Schema.Attribute.Text & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::sos-request.sos-request'
+    > &
+      Schema.Attribute.Private;
+    Location: Schema.Attribute.JSON;
+    NeedFood: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    NeedMedical: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    NeedWater: Schema.Attribute.Boolean & Schema.Attribute.Required;
+    PeopleCount: Schema.Attribute.Integer & Schema.Attribute.Required;
+    PhoneNumber: Schema.Attribute.String & Schema.Attribute.Required;
+    Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
+    publishedAt: Schema.Attribute.DateTime;
+    RequestDescription: Schema.Attribute.Text;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Ward: Schema.Attribute.Relation<'oneToOne', 'api::ward.ward'>;
+  };
+}
+
+export interface ApiSupportOrganizationSupportOrganization
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'support_organizations';
+  info: {
+    displayName: 'SupportOrganization';
+    pluralName: 'support-organizations';
+    singularName: 'support-organization';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Image: Schema.Attribute.Media<'images' | 'files', true> &
+      Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::support-organization.support-organization'
+    > &
+      Schema.Attribute.Private;
+    Name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    Representative: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Users: Schema.Attribute.Relation<
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+  };
+}
+
+export interface ApiWardWard extends Struct.CollectionTypeSchema {
+  collectionName: 'wards';
+  info: {
+    description: '';
+    displayName: 'Ward';
+    pluralName: 'wards';
+    singularName: 'ward';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::ward.ward'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    WardName: Schema.Attribute.String;
+  };
+}
+
 export interface PluginContentReleasesRelease
   extends Struct.CollectionTypeSchema {
   collectionName: 'strapi_releases';
@@ -878,6 +1244,17 @@ declare module '@strapi/strapi' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
+      'api::affected-location.affected-location': ApiAffectedLocationAffectedLocation;
+      'api::contact-info.contact-info': ApiContactInfoContactInfo;
+      'api::disaster-type.disaster-type': ApiDisasterTypeDisasterType;
+      'api::disaster.disaster': ApiDisasterDisaster;
+      'api::district.district': ApiDistrictDistrict;
+      'api::notification.notification': ApiNotificationNotification;
+      'api::organization-address.organization-address': ApiOrganizationAddressOrganizationAddress;
+      'api::province.province': ApiProvinceProvince;
+      'api::sos-request.sos-request': ApiSosRequestSosRequest;
+      'api::support-organization.support-organization': ApiSupportOrganizationSupportOrganization;
+      'api::ward.ward': ApiWardWard;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

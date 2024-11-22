@@ -1,0 +1,82 @@
+{
+  "kind": "collectionType",
+  "collectionName": "sos_requests",
+  "info": {
+    "singularName": "sos-request",
+    "pluralName": "sos-requests",
+    "displayName": "SOSRequest",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "FullName": {
+      "type": "text",
+      "required": true
+    },
+    "RequestDescription": {
+      "type": "text"
+    },
+    "PeopleCount": {
+      "type": "integer",
+      "required": true
+    },
+    "NeedWater": {
+      "type": "boolean",
+      "required": true
+    },
+    "NeedFood": {
+      "type": "boolean",
+      "required": true
+    },
+    "NeedMedical": {
+      "type": "boolean",
+      "required": true
+    },
+    "DamageImage": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "AudioFile": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "files",
+        "audios"
+      ]
+    },
+    "Location": {
+      "type": "json"
+    },
+    "PhoneNumber": {
+      "type": "string",
+      "required": true
+    },
+    "Email": {
+      "type": "email"
+    },
+    "Province": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::province.province"
+    },
+    "District": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::district.district"
+    },
+    "Ward": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::ward.ward"
+    }
+  }
+}

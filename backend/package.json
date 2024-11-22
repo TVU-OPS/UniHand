@@ -8,7 +8,9 @@
     "deploy": "strapi deploy",
     "develop": "strapi develop",
     "start": "strapi start",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "build:pro": "ccros-env NODE_ENV=production npm run build",
+    "start:pro": "ccros-env NODE_ENV=production npm run start"
   },
   "dependencies": {
     "@strapi/plugin-cloud": "5.4.1",

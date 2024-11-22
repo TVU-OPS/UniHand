@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "organization_addresses",
+  "info": {
+    "singularName": "organization-address",
+    "pluralName": "organization-addresses",
+    "displayName": "OrganizationAddress",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "SupportOrganization": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::support-organization.support-organization"
+    },
+    "Province": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::province.province"
+    },
+    "District": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::district.district"
+    },
+    "Ward": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::ward.ward"
+    }
+  }
+}
