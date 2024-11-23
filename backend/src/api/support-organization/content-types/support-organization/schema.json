@@ -4,7 +4,8 @@
   "info": {
     "singularName": "support-organization",
     "pluralName": "support-organizations",
-    "displayName": "SupportOrganization"
+    "displayName": "SupportOrganization",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -13,25 +14,32 @@
   "attributes": {
     "Name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "unique": true
     },
     "Representative": {
       "type": "string",
       "required": true
     },
     "Image": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
       "allowedTypes": [
         "images",
         "files"
-      ],
-      "type": "media",
-      "multiple": true,
-      "required": true
+      ]
     },
-    "Users": {
+    "User": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "Confirmed": {
+      "type": "boolean",
+      "default": false,
+      "required": false,
+      "private": true
     }
   }
 }

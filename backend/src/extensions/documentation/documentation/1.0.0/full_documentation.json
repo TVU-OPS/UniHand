@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2024-11-22T21:04:54.937Z"
+    "x-generation-date": "2024-11-23T15:43:01.880Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -8462,7 +8462,7 @@
                   }
                 }
               },
-              "Users": {
+              "User": {
                 "type": "object",
                 "properties": {
                   "id": {
@@ -8709,6 +8709,9 @@
                     }
                   }
                 }
+              },
+              "Confirmed": {
+                "type": "boolean"
               },
               "createdAt": {
                 "type": "string",
@@ -11761,7 +11764,7 @@
                   }
                 }
               },
-              "Users": {
+              "User": {
                 "type": "object",
                 "properties": {
                   "id": {
@@ -12008,6 +12011,9 @@
                     }
                   }
                 }
+              },
+              "Confirmed": {
+                "type": "boolean"
               },
               "createdAt": {
                 "type": "string",
@@ -12933,7 +12939,7 @@
                   }
                 }
               },
-              "Users": {
+              "User": {
                 "type": "object",
                 "properties": {
                   "id": {
@@ -13180,6 +13186,9 @@
                     }
                   }
                 }
+              },
+              "Confirmed": {
+                "type": "boolean"
               },
               "createdAt": {
                 "type": "string",
@@ -15691,7 +15700,7 @@
                   "example": "string or id"
                 }
               },
-              "Users": {
+              "User": {
                 "oneOf": [
                   {
                     "type": "integer"
@@ -15701,6 +15710,9 @@
                   }
                 ],
                 "example": "string or id"
+              },
+              "Confirmed": {
+                "type": "boolean"
               },
               "locale": {
                 "type": "string"
@@ -16379,7 +16391,7 @@
               }
             }
           },
-          "Users": {
+          "User": {
             "type": "object",
             "properties": {
               "id": {
@@ -16627,6 +16639,9 @@
               }
             }
           },
+          "Confirmed": {
+            "type": "boolean"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -16813,7 +16828,7 @@
                     }
                   }
                 },
-                "Users": {
+                "User": {
                   "type": "object",
                   "properties": {
                     "id": {
@@ -16823,6 +16838,9 @@
                       "type": "string"
                     }
                   }
+                },
+                "Confirmed": {
+                  "type": "boolean"
                 },
                 "createdAt": {
                   "type": "string",
