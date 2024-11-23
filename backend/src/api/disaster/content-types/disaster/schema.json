@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "disasters",
+  "info": {
+    "singularName": "disaster",
+    "pluralName": "disasters",
+    "displayName": "Disaster",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string",
+      "required": true
+    },
+    "Description": {
+      "type": "text",
+      "required": true
+    },
+    "StartDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "EndDate": {
+      "type": "datetime"
+    },
+    "DisasterType": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::disaster-type.disaster-type"
+    }
+  }
+}

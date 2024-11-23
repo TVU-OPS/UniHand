@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "affected_locations",
+  "info": {
+    "singularName": "affected-location",
+    "pluralName": "affected-locations",
+    "displayName": "AffectedLocation"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Disaster": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::disaster.disaster"
+    },
+    "Province": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::province.province"
+    }
+  }
+}

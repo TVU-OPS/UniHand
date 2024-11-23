@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "districts",
+  "info": {
+    "singularName": "district",
+    "pluralName": "districts",
+    "displayName": "District",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "DistrictName": {
+      "type": "string",
+      "required": true
+    },
+    "Province": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::province.province"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "collectionName": "disaster_types",
+  "info": {
+    "singularName": "disaster-type",
+    "pluralName": "disaster-types",
+    "displayName": "DisasterType",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "DisasterTypeName": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
