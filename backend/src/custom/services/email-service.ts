@@ -30,7 +30,7 @@ const sendEmailNotification = async (email, sosRequest, supportOrganization) => 
           </p>
           <p style="color: #4b5563">
             Yêu cầu này có thể liên quan đến một tình huống khẩn cấp cần sự hỗ trợ từ tổ chức của quý vị.
-            Vui lòng đăng nhập vào hệ thống <a href="https://your-website.com" style="color: #3498db; font-weight: 600;">UniHand</a> để xem thêm chi tiết và xử lý yêu cầu này.
+            Vui lòng đăng nhập vào hệ thống <a href="${process.env.URL_CLIENT}" style="color: #3498db; font-weight: 600;">UniHand</a> để xem thêm chi tiết và xử lý yêu cầu này.
           </p>
           <p style="color: #4b5563;">Chúng tôi chân thành cảm ơn sự hỗ trợ của quý vị!</p>
         </div>

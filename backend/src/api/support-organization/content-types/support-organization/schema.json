@@ -33,7 +33,8 @@
     "User": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "support_organization"
     },
     "Confirmed": {
       "type": "boolean",
