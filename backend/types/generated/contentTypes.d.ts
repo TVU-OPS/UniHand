@@ -647,6 +647,7 @@ export interface ApiSosRequestSosRequest extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     DamageImage: Schema.Attribute.Media<'images' | 'files', true>;
+    Disaster: Schema.Attribute.Relation<'oneToOne', 'api::disaster.disaster'>;
     District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
     Email: Schema.Attribute.Email;
     FullName: Schema.Attribute.Text & Schema.Attribute.Required;
@@ -685,9 +686,7 @@ export interface ApiSupportOrganizationSupportOrganization
     draftAndPublish: false;
   };
   attributes: {
-    Confirmed: Schema.Attribute.Boolean &
-      Schema.Attribute.Private &
-      Schema.Attribute.DefaultTo<false>;
+    Confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
