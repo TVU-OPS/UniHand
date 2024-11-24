@@ -4,7 +4,8 @@
   "info": {
     "singularName": "affected-location",
     "pluralName": "affected-locations",
-    "displayName": "AffectedLocation"
+    "displayName": "AffectedLocation",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -16,10 +17,11 @@
       "relation": "oneToOne",
       "target": "api::disaster.disaster"
     },
-    "Province": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::province.province"
+    "Location": {
+      "type": "json"
+    },
+    "Scope": {
+      "type": "string"
     }
   }
 }

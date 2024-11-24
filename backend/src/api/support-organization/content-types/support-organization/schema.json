@@ -35,11 +35,6 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "support_organization"
-    },
-    "Confirmed": {
-      "type": "boolean",
-      "default": false,
-      "required": false
     }
   }
 }

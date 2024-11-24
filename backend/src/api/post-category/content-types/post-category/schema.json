@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "collectionName": "post_categories",
+  "info": {
+    "singularName": "post-category",
+    "pluralName": "post-categories",
+    "displayName": "PostCategory",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "CategoryName": {
+      "type": "string",
+      "unique": true
+    }
+  }
+}
