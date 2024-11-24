@@ -647,6 +647,7 @@ export interface ApiSosRequestSosRequest extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     DamageImage: Schema.Attribute.Media<'images' | 'files', true>;
+    Disaster: Schema.Attribute.Relation<'oneToOne', 'api::disaster.disaster'>;
     District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
     Email: Schema.Attribute.Email;
     FullName: Schema.Attribute.Text & Schema.Attribute.Required;
@@ -676,6 +677,7 @@ export interface ApiSupportOrganizationSupportOrganization
   extends Struct.CollectionTypeSchema {
   collectionName: 'support_organizations';
   info: {
+    description: '';
     displayName: 'SupportOrganization';
     pluralName: 'support-organizations';
     singularName: 'support-organization';
@@ -684,6 +686,7 @@ export interface ApiSupportOrganizationSupportOrganization
     draftAndPublish: false;
   };
   attributes: {
+    Confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -695,13 +698,15 @@ export interface ApiSupportOrganizationSupportOrganization
       'api::support-organization.support-organization'
     > &
       Schema.Attribute.Private;
-    Name: Schema.Attribute.String & Schema.Attribute.Required;
+    Name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;
     Representative: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    Users: Schema.Attribute.Relation<
+    User: Schema.Attribute.Relation<
       'oneToOne',
       'plugin::users-permissions.user'
     >;
@@ -1221,6 +1226,10 @@ export interface PluginUsersPermissionsUser
     role: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.role'
+    >;
+    support_organization: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::support-organization.support-organization'
     >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
