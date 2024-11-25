@@ -373,6 +373,7 @@ export interface ApiAffectedLocationAffectedLocation
   extends Struct.CollectionTypeSchema {
   collectionName: 'affected_locations';
   info: {
+    description: '';
     displayName: 'AffectedLocation';
     pluralName: 'affected-locations';
     singularName: 'affected-location';
@@ -391,8 +392,9 @@ export interface ApiAffectedLocationAffectedLocation
       'api::affected-location.affected-location'
     > &
       Schema.Attribute.Private;
-    Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
+    Location: Schema.Attribute.JSON;
     publishedAt: Schema.Attribute.DateTime;
+    Scope: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -489,7 +491,9 @@ export interface ApiDisasterDisaster extends Struct.CollectionTypeSchema {
       'api::disaster.disaster'
     > &
       Schema.Attribute.Private;
-    Name: Schema.Attribute.String & Schema.Attribute.Required;
+    Name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;
     StartDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -601,6 +605,100 @@ export interface ApiOrganizationAddressOrganizationAddress
   };
 }
 
+export interface ApiPostCategoryPostCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'post_categories';
+  info: {
+    description: '';
+    displayName: 'PostCategory';
+    pluralName: 'post-categories';
+    singularName: 'post-category';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    CategoryName: Schema.Attribute.String & Schema.Attribute.Unique;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::post-category.post-category'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPostToCategoryPostToCategory
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'post_to_categories';
+  info: {
+    displayName: 'PostToCategory';
+    pluralName: 'post-to-categories';
+    singularName: 'post-to-category';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::post-to-category.post-to-category'
+    > &
+      Schema.Attribute.Private;
+    Post: Schema.Attribute.Relation<'oneToOne', 'api::post.post'>;
+    PostCategory: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::post-category.post-category'
+    >;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiPostPost extends Struct.CollectionTypeSchema {
+  collectionName: 'posts';
+  info: {
+    description: '';
+    displayName: 'Post';
+    pluralName: 'posts';
+    singularName: 'post';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    Author: Schema.Attribute.String;
+    Content: Schema.Attribute.Text;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    Image: Schema.Attribute.Media<'images' | 'files', true>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::post.post'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    Title: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProvinceProvince extends Struct.CollectionTypeSchema {
   collectionName: 'provinces';
   info: {
@@ -686,7 +784,6 @@ export interface ApiSupportOrganizationSupportOrganization
     draftAndPublish: false;
   };
   attributes: {
-    Confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1260,6 +1357,9 @@ declare module '@strapi/strapi' {
       'api::district.district': ApiDistrictDistrict;
       'api::notification.notification': ApiNotificationNotification;
       'api::organization-address.organization-address': ApiOrganizationAddressOrganizationAddress;
+      'api::post-category.post-category': ApiPostCategoryPostCategory;
+      'api::post-to-category.post-to-category': ApiPostToCategoryPostToCategory;
+      'api::post.post': ApiPostPost;
       'api::province.province': ApiProvinceProvince;
       'api::sos-request.sos-request': ApiSosRequestSosRequest;
       'api::support-organization.support-organization': ApiSupportOrganizationSupportOrganization;
