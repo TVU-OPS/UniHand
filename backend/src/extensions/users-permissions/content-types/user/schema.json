@@ -69,7 +69,7 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::support-organization.support-organization",
-      "mappedBy": "User"
+      "mappedBy": "user"
     }
   }
 }
