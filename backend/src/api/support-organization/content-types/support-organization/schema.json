@@ -40,6 +40,25 @@
       "type": "boolean",
       "default": false,
       "required": false
+    },
+    "Province": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::province.province"
+    },
+    "District": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::district.district"
+    },
+    "Ward": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::ward.ward"
+    },
+    "NotificationEmail": {
+      "type": "email",
+      "required": true
     }
   }
 }

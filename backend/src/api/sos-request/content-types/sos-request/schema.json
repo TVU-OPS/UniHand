@@ -82,6 +82,14 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::disaster.disaster"
+    },
+    "State": {
+      "type": "boolean"
+    },
+    "AcceptedBy": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::support-organization.support-organization"
     }
   }
 }
