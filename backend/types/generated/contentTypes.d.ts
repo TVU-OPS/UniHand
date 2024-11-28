@@ -569,42 +569,6 @@ export interface ApiNotificationNotification
   };
 }
 
-export interface ApiOrganizationAddressOrganizationAddress
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'organization_addresses';
-  info: {
-    description: '';
-    displayName: 'OrganizationAddress';
-    pluralName: 'organization-addresses';
-    singularName: 'organization-address';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::organization-address.organization-address'
-    > &
-      Schema.Attribute.Private;
-    Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
-    publishedAt: Schema.Attribute.DateTime;
-    SupportOrganization: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::support-organization.support-organization'
-    >;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    Ward: Schema.Attribute.Relation<'oneToOne', 'api::ward.ward'>;
-  };
-}
-
 export interface ApiPostCategoryPostCategory
   extends Struct.CollectionTypeSchema {
   collectionName: 'post_categories';
@@ -740,6 +704,10 @@ export interface ApiSosRequestSosRequest extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    AcceptedBy: Schema.Attribute.Relation<
+      'oneToOne',
+      'api::support-organization.support-organization'
+    >;
     AudioFile: Schema.Attribute.Media<'files' | 'audios', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -764,6 +732,7 @@ export interface ApiSosRequestSosRequest extends Struct.CollectionTypeSchema {
     Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
     publishedAt: Schema.Attribute.DateTime;
     RequestDescription: Schema.Attribute.Text;
+    State: Schema.Attribute.Boolean;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -788,6 +757,7 @@ export interface ApiSupportOrganizationSupportOrganization
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
     Image: Schema.Attribute.Media<'images' | 'files', true> &
       Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -799,6 +769,8 @@ export interface ApiSupportOrganizationSupportOrganization
     Name: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
+    NotificationEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
     publishedAt: Schema.Attribute.DateTime;
     Representative: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -808,6 +780,7 @@ export interface ApiSupportOrganizationSupportOrganization
       'oneToOne',
       'plugin::users-permissions.user'
     >;
+    Ward: Schema.Attribute.Relation<'oneToOne', 'api::ward.ward'>;
   };
 }
 
@@ -1357,7 +1330,6 @@ declare module '@strapi/strapi' {
       'api::disaster.disaster': ApiDisasterDisaster;
       'api::district.district': ApiDistrictDistrict;
       'api::notification.notification': ApiNotificationNotification;
-      'api::organization-address.organization-address': ApiOrganizationAddressOrganizationAddress;
       'api::post-category.post-category': ApiPostCategoryPostCategory;
       'api::post-to-category.post-to-category': ApiPostToCategoryPostToCategory;
       'api::post.post': ApiPostPost;
