@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "contact_infos",
+  "info": {
+    "singularName": "contact-info",
+    "pluralName": "contact-infos",
+    "displayName": "ContactInfo"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "SupportOrganization": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::support-organization.support-organization"
+    },
+    "ContactType": {
+      "type": "string",
+      "required": true
+    },
+    "ContactValue": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

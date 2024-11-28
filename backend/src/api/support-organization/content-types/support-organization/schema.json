@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "support_organizations",
+  "info": {
+    "singularName": "support-organization",
+    "pluralName": "support-organizations",
+    "displayName": "SupportOrganization",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "Representative": {
+      "type": "string",
+      "required": true
+    },
+    "Image": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "support_organization"
+    },
+    "Confirmed": {
+      "type": "boolean",
+      "default": false,
+      "required": false
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "post_to_categories",
+  "info": {
+    "singularName": "post-to-category",
+    "pluralName": "post-to-categories",
+    "displayName": "PostToCategory"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Post": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::post.post"
+    },
+    "PostCategory": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::post-category.post-category"
+    }
+  }
+}

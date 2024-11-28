@@ -1,0 +1,27 @@
+{
+  "kind": "collectionType",
+  "collectionName": "affected_locations",
+  "info": {
+    "singularName": "affected-location",
+    "pluralName": "affected-locations",
+    "displayName": "AffectedLocation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Disaster": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::disaster.disaster"
+    },
+    "Location": {
+      "type": "json"
+    },
+    "Scope": {
+      "type": "string"
+    }
+  }
+}
