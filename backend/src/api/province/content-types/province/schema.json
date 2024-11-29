@@ -15,6 +15,12 @@
     "ProvinceName": {
       "type": "string",
       "required": true
+    },
+    "disasters": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::disaster.disaster",
+      "mappedBy": "Provinces"
     }
   }
 }
