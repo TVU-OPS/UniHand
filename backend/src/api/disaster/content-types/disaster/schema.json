@@ -32,6 +32,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::disaster-type.disaster-type"
+    },
+    "Provinces": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::province.province",
+      "inversedBy": "disasters"
     }
   }
 }

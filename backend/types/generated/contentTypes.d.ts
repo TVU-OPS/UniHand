@@ -494,6 +494,10 @@ export interface ApiDisasterDisaster extends Struct.CollectionTypeSchema {
     Name: Schema.Attribute.String &
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
+    Provinces: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::province.province'
+    >;
     publishedAt: Schema.Attribute.DateTime;
     StartDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -678,6 +682,10 @@ export interface ApiProvinceProvince extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    disasters: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::disaster.disaster'
+    >;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
