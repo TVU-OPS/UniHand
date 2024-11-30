@@ -26,13 +26,24 @@ module.exports = {
         Road = addressDetails.road;
         Amenity = addressDetails.amenity;
 
+        if (
+          !addressDetails.province ||
+          !addressDetails.district ||
+          !addressDetails.ward
+        ) {
+          return ctx.badRequest(
+            `Province ${addressDetails.province} or District ${addressDetails.district} or Ward ${addressDetails.ward} not found.`
+          );
+        }
+
         // Chuẩn hóa tên tỉnh, huyện, xã trước khi tìm kiếm
-        const normalizedProvince = normalizeLocationName(
+        const normalizedProvince = normalizeProvinceName(
           addressDetails.province
         );
-        const normalizedDistrict = normalizeLocationName(
+        const normalizedDistrict = normalizeDistrictName(
           addressDetails.district
         );
+        const normalizedWard = normalizeWardName(addressDetails.ward);
 
         // Tìm kiếm trong cơ sở dữ liệu để lấy id của tỉnh, huyện và xã theo tên
         const provinceRecord = await strapi.db
@@ -61,15 +72,12 @@ module.exports = {
           .findOne({
             where: {
               WardName: {
-                $contains: addressDetails.ward, // Tìm kiếm xã/phường
+                $contains: normalizedWard, // Tìm kiếm xã/phường
               },
               District: districtRecord.id,
             },
           });
 
-        strapi.log.info(
-          `Found Province: ${provinceRecord ? provinceRecord.id : "Not Found"}, District: ${districtRecord ? districtRecord.id : "Not Found"}, Ward: ${wardRecord ? wardRecord.id : "Not Found"}`
-        );
 
         if (provinceRecord) {
           Province = provinceRecord;
@@ -119,11 +127,38 @@ module.exports = {
 };
 
 // Hàm chuẩn hóa tên tỉnh, huyện và xã (loại bỏ tiền tố như "Thành phố", "Tỉnh")
-function normalizeLocationName(locationName) {
+function normalizeProvinceName(locationName) {
   const prefixes = ["Thành phố", "Tỉnh"];
   let normalizedName = locationName.trim();
 
   // Loại bỏ các tiền tố như "Thành phố", "Tỉnh"
+  prefixes.forEach((prefix) => {
+    if (normalizedName.startsWith(prefix)) {
+      normalizedName = normalizedName.replace(prefix, "").trim();
+    }
+  });
+
+  return normalizedName;
+}
+function normalizeDistrictName(locationName) {
+  const prefixes = ["Quận", "Huyện", "Thị xã"];
+  let normalizedName = locationName.trim();
+
+  // Loại bỏ các tiền tố như "Quận", "Huyện", "Thị xã"
+  prefixes.forEach((prefix) => {
+    if (normalizedName.startsWith(prefix)) {
+      normalizedName = normalizedName.replace(prefix, "").trim();
+    }
+  });
+
+  return normalizedName;
+}
+
+function normalizeWardName(wardName) {
+  const prefixes = ["Phường", "Xã", "Thị trấn"];
+  let normalizedName = wardName.trim();
+
+  // Loại bỏ các tiền tố như "Phường", "Xã"
   prefixes.forEach((prefix) => {
     if (normalizedName.startsWith(prefix)) {
       normalizedName = normalizedName.replace(prefix, "").trim();

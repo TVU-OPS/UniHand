@@ -59,7 +59,7 @@ const sendEmailNotification = async (sosRequest, supportOrganization, provinceRe
 
   try {
     await transporter.sendMail(mailOptions);
-    strapi.log.info(`Email sent to ${supportOrganization.NotificationEmail} for SupportOrganization ${supportOrganization.Name}`);
+    strapi.log.info(`Email sent to SOS ${sosRequest.id} for SupportOrganization ${supportOrganization.Name}`);
   } catch (error) {
     strapi.log.error(`Error sending email to ${supportOrganization.NotificationEmail}:`, error);
   }
