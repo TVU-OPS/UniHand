@@ -21,11 +21,15 @@ export const getLocationFromCoordinates = async (lat, lon) => {
       const province = address.state || null; // Tên tỉnh/thành phố
       const district = address.city || null; // Tên quận/huyện
       const ward = address.suburb || null; // Tên phường/xã
+      const road = address.road || null; // Tên đường
+      const amenity = address.amenity || null; // Tên địa điểm
 
       return {
         province: province || "Không xác định",  // Nếu không có tỉnh, trả về thông báo mặc định
         district: district || "Không xác định", // Nếu không có quận/huyện, trả về thông báo mặc định
         ward: ward || "Không xác định",         // Nếu không có phường/xã, trả về thông báo mặc định
+        road: road || null,         // Nếu không có tên đường, trả về thông báo mặc định
+        amenity: amenity || null,   // Nếu không có tên địa điểm, trả về thông báo mặc định
       };
     }
 

@@ -12,6 +12,7 @@ export default factories.createCoreController(
         let Province = ctx.request.body.data.Province;
         let District = ctx.request.body.data.District;
         let Ward = ctx.request.body.data.Ward;
+
         const { Location } = ctx.request.body.data;
 
         // Nếu không có ID tỉnh, thì lấy tọa độ từ body request
@@ -21,9 +22,21 @@ export default factories.createCoreController(
             const { lat, lng } = Location;
             const addressDetails = await getLocationFromCoordinates(lat, lng);
 
-             // Chuẩn hóa tên tỉnh, huyện, xã trước khi tìm kiếm
-             const normalizedProvince = normalizeLocationName(addressDetails.province);
-             const normalizedDistrict = normalizeLocationName(addressDetails.district);
+            // Nếu có thông tin về đường và địa điểm thì lưu
+            if (addressDetails.road !== null) {
+              ctx.request.body.data.Road = addressDetails.road;
+            }
+            if (addressDetails.amenity !== null) {
+              ctx.request.body.data.Amenity = addressDetails.amenity;
+            }
+
+            // Chuẩn hóa tên tỉnh, huyện, xã trước khi tìm kiếm
+            const normalizedProvince = normalizeLocationName(
+              addressDetails.province
+            );
+            const normalizedDistrict = normalizeLocationName(
+              addressDetails.district
+            );
 
             // Tìm kiếm trong cơ sở dữ liệu để lấy id của tỉnh, huyện và xã theo tên
             const provinceRecord = await strapi.db
@@ -100,43 +113,59 @@ export default factories.createCoreController(
           const { lat, lng } = Location;
           const addressDetails = await getLocationFromCoordinates(lat, lng);
 
-           // Chuẩn hóa tên tỉnh, huyện, xã trước khi tìm kiếm
-           const normalizedProvince = normalizeLocationName(addressDetails.province);
-           const normalizedDistrict = normalizeLocationName(addressDetails.district);
+          // Nếu có thông tin về đường và địa điểm thì lưu
+          if (addressDetails.road !== null) {
+            ctx.request.body.data.Road = addressDetails.road;
+          }
+          if (addressDetails.amenity !== null) {
+            ctx.request.body.data.Amenity = addressDetails.amenity;
+          }
+
+          // Chuẩn hóa tên tỉnh, huyện, xã trước khi tìm kiếm
+          const normalizedProvince = normalizeLocationName(
+            addressDetails.province
+          );
+          const normalizedDistrict = normalizeLocationName(
+            addressDetails.district
+          );
 
           const provinceRecord = await strapi.db
-          .query("api::province.province")
-          .findOne({
-            where: {
-              ProvinceName: {
-                $contains: normalizedProvince, // Tìm kiếm tỉnh/thành phố
+            .query("api::province.province")
+            .findOne({
+              where: {
+                ProvinceName: {
+                  $contains: normalizedProvince, // Tìm kiếm tỉnh/thành phố
+                },
               },
-            },
-          });
+            });
 
-        const districtRecord = await strapi.db
-          .query("api::district.district") // Giả sử bạn có bảng district
-          .findOne({
-            where: {
-              DistrictName: {
-                $contains: normalizedDistrict, // Tìm kiếm huyện/quận
+          const districtRecord = await strapi.db
+            .query("api::district.district") // Giả sử bạn có bảng district
+            .findOne({
+              where: {
+                DistrictName: {
+                  $contains: normalizedDistrict, // Tìm kiếm huyện/quận
+                },
+                Province: provinceRecord.id,
               },
-              Province: provinceRecord.id,
-            },
-          });
+            });
 
-        const wardRecord = await strapi.db
-          .query("api::ward.ward") // Giả sử bạn có bảng ward
-          .findOne({
-            where: {
-              WardName: {
-                $contains: addressDetails.ward, // Tìm kiếm xã/phường
+          const wardRecord = await strapi.db
+            .query("api::ward.ward") // Giả sử bạn có bảng ward
+            .findOne({
+              where: {
+                WardName: {
+                  $contains: addressDetails.ward, // Tìm kiếm xã/phường
+                },
+                District: districtRecord.id,
               },
-              District: districtRecord.id,
-            },
-          });
+            });
 
-          if (provinceRecord.id !== Province || districtRecord.id !== District || wardRecord.id !== Ward) {
+          if (
+            provinceRecord.id !== Province ||
+            districtRecord.id !== District ||
+            wardRecord.id !== Ward
+          ) {
             return ctx.badRequest(
               "Province, District, Ward và Location không trùng khớp."
             );
@@ -212,13 +241,13 @@ export default factories.createCoreController(
 
 // Hàm chuẩn hóa tên tỉnh, huyện và xã (loại bỏ tiền tố như "Thành phố", "Tỉnh")
 function normalizeLocationName(locationName) {
-  const prefixes = ['Thành phố', 'Tỉnh'];
+  const prefixes = ["Thành phố", "Tỉnh"];
   let normalizedName = locationName.trim();
 
   // Loại bỏ các tiền tố như "Thành phố", "Tỉnh"
-  prefixes.forEach(prefix => {
+  prefixes.forEach((prefix) => {
     if (normalizedName.startsWith(prefix)) {
-      normalizedName = normalizedName.replace(prefix, '').trim();
+      normalizedName = normalizedName.replace(prefix, "").trim();
     }
   });
 

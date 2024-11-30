@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2024-11-29T08:44:55.699Z"
+    "x-generation-date": "2024-11-30T10:03:56.127Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -13912,6 +13912,12 @@
                   }
                 }
               },
+              "Road": {
+                "type": "string"
+              },
+              "Amenity": {
+                "type": "string"
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -17273,6 +17279,12 @@
                 ],
                 "example": "string or id"
               },
+              "Road": {
+                "type": "string"
+              },
+              "Amenity": {
+                "type": "string"
+              },
               "locale": {
                 "type": "string"
               },
@@ -18993,6 +19005,12 @@
               }
             }
           },
+          "Road": {
+            "type": "string"
+          },
+          "Amenity": {
+            "type": "string"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -19388,6 +19406,12 @@
                       "type": "string"
                     }
                   }
+                },
+                "Road": {
+                  "type": "string"
+                },
+                "Amenity": {
+                  "type": "string"
                 },
                 "createdAt": {
                   "type": "string",

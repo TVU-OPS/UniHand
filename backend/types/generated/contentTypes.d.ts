@@ -716,6 +716,7 @@ export interface ApiSosRequestSosRequest extends Struct.CollectionTypeSchema {
       'oneToOne',
       'api::support-organization.support-organization'
     >;
+    Amenity: Schema.Attribute.String;
     AudioFile: Schema.Attribute.Media<'files' | 'audios', true>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -740,6 +741,7 @@ export interface ApiSosRequestSosRequest extends Struct.CollectionTypeSchema {
     Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
     publishedAt: Schema.Attribute.DateTime;
     RequestDescription: Schema.Attribute.Text;
+    Road: Schema.Attribute.String;
     State: Schema.Attribute.Boolean;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
