@@ -90,6 +90,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::support-organization.support-organization"
+    },
+    "Road": {
+      "type": "string"
+    },
+    "Amenity": {
+      "type": "string"
     }
   }
 }
