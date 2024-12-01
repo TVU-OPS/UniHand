@@ -18,18 +18,18 @@ export const getLocationFromCoordinates = async (lat, lon) => {
     const address = response.data.address;
 
     if (address) {
-      const province = address.state || null; // Tên tỉnh/thành phố
-      const district = address.city || null; // Tên quận/huyện
-      const ward = address.suburb || null; // Tên phường/xã
+      const province = address.state || null; // Tên Tỉnh / Thành phố
+      const district = address.city || address.county || null; // Tên quận / Huyện / Thị xã / Thành phố trực thuộc tỉnh
+      const ward = address.suburb || address.village || address.town || null; // Tên phường/ Xã / Thị trấn
       const road = address.road || null; // Tên đường
-      const amenity = address.amenity || null; // Tên địa điểm
+      const amenity = address.amenity || address.hamlet || null; // Tên địa điểm / Thôn
 
       return {
-        province: province || "Không xác định",  // Nếu không có tỉnh, trả về thông báo mặc định
-        district: district || "Không xác định", // Nếu không có quận/huyện, trả về thông báo mặc định
-        ward: ward || "Không xác định",         // Nếu không có phường/xã, trả về thông báo mặc định
-        road: road || null,         // Nếu không có tên đường, trả về thông báo mặc định
-        amenity: amenity || null,   // Nếu không có tên địa điểm, trả về thông báo mặc định
+        province: province || null, // Nếu không có tỉnh, trả về thông báo mặc định
+        district: district || null, // Nếu không có quận/huyện, trả về thông báo mặc định
+        ward: ward || null, // Nếu không có phường/xã, trả về thông báo mặc định
+        road: road || null, // Nếu không có tên đường, trả về thông báo mặc định
+        amenity: amenity || null, // Nếu không có tên địa điểm, trả về thông báo mặc định
       };
     }
 
