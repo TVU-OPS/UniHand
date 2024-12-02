@@ -6,9 +6,9 @@ module.exports = {
   async handleConvert(ctx) {
     try {
       const { Location } = ctx.request.body.data;
-      let Province = null;
-      let District = null;
-      let Ward = null;
+      let provinceRecord = null;
+      let districtRecord = null;
+      let wardRecord = null;
       let Road = null;
       let Amenity = null;
 
@@ -46,41 +46,58 @@ module.exports = {
         const normalizedWard = normalizeWardName(addressDetails.ward);
 
         // Tìm kiếm trong cơ sở dữ liệu để lấy id của tỉnh, huyện và xã theo tên
-        const provinceRecord = await strapi.db
-          .query("api::province.province")
+        provinceRecord = await strapi.db
+        .query("api::province.province")
           .findOne({
             where: {
-              FullName: {
-                $contains: normalizedProvince, // Tìm kiếm tỉnh/thành phố
-              },
+              $or: [
+                { FullName: { $eq: normalizedProvince } }, // Bằng chính xác
+                { FullName: { $contains: normalizedProvince } }, // Chứa chuỗi con
+                { Name: { $eq: normalizedProvince } }, // Bằng chính xác
+                { Name: { $contains: normalizedProvince } }, // Chứa chuỗi con
+              ],
             },
           });
-
-        const districtRecord = await strapi.db
-          .query("api::district.district") // Giả sử bạn có bảng district
+          districtRecord = await strapi.db
+          .query("api::district.district")
           .findOne({
             where: {
-              FullName: {
-                $contains: normalizedDistrict, // Tìm kiếm huyện/quận
-              },
-              Province: provinceRecord.id,
+              $and: [
+                {
+                  Province: provinceRecord.id, // Kiểm tra thuộc quận
+                },
+                {
+                  $or: [
+                    { FullName: { $eq: normalizedDistrict } }, // Bằng
+                    { FullName: { $contains: normalizedDistrict } }, // Chứa
+                    { Name: { $eq: normalizedDistrict } }, // Bằng chính xác
+                    { Name: { $contains: normalizedDistrict } }, // Chứa chuỗi con
+                  ],
+                },
+              ]
             },
           });
-
-        const wardRecord = await strapi.db
-          .query("api::ward.ward") // Giả sử bạn có bảng ward
-          .findOne({
+          wardRecord = await strapi.db.query("api::ward.ward").findOne({
             where: {
-              FullName: {
-                $contains: normalizedWard, // Tìm kiếm xã/phường
-              },
-              District: districtRecord.id,
+              $and: [
+                {
+                  District: districtRecord.id, // Kiểm tra thuộc quận
+                },
+                {
+                  $or: [
+                    { FullName: { $eq: normalizedWard } }, // Bằng
+                    { FullName: { $contains: normalizedWard } }, // Chứa
+                    { Name: { $eq: normalizedWard } }, // Bằng chính xác
+                    { Name: { $contains: normalizedWard } }, // Chứa chuỗi con
+                  ],
+                },
+              ]
             },
           });
 
 
         if (provinceRecord) {
-          Province = provinceRecord;
+          provinceRecord = provinceRecord;
         } else {
           return ctx.badRequest(
             `Province '${addressDetails.province}' not found in the database.`
@@ -88,7 +105,7 @@ module.exports = {
         }
 
         if (districtRecord) {
-          District = districtRecord;
+          districtRecord = districtRecord;
         } else {
           return ctx.badRequest(
             `District '${addressDetails.district}' not found in the database.`
@@ -96,7 +113,7 @@ module.exports = {
         }
 
         if (wardRecord) {
-          Ward = wardRecord;
+          wardRecord = wardRecord;
         } else {
           return ctx.badRequest(
             `Ward '${addressDetails.ward}' not found in the database.`
@@ -112,9 +129,9 @@ module.exports = {
       ctx.send({
         message: "Conversion successful!",
         data: {
-          Province,
-          District,
-          Ward,
+          Province: provinceRecord,
+          District: districtRecord,
+          Ward: wardRecord,
           Road,
           Amenity,
         },

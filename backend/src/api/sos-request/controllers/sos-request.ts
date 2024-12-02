@@ -56,6 +56,8 @@ export default factories.createCoreController(
             ctx.request.body.data.Amenity = addressDetails.amenity;
           }
 
+
+
           // Chuẩn hóa tên tỉnh, huyện, xã trước khi tìm kiếm
           const normalizedProvince = normalizeProvinceName(
             addressDetails.province
@@ -65,34 +67,56 @@ export default factories.createCoreController(
           );
           const normalizedWard = normalizeWardName(addressDetails.ward);
 
+          
           // Tìm kiếm trong cơ sở dữ liệu để lấy id của tỉnh, huyện và xã theo tên
           provinceRecord = await strapi.db
-            .query("api::province.province")
+          .query("api::province.province")
             .findOne({
               where: {
-                FullName: {
-                  $contains: normalizedProvince,
-                },
+                $or: [
+                  { FullName: { $eq: normalizedProvince } }, // Bằng chính xác
+                  { FullName: { $contains: normalizedProvince } }, // Chứa chuỗi con
+                  { Name: { $eq: normalizedProvince } }, // Bằng chính xác
+                  { Name: { $contains: normalizedProvince } }, // Chứa chuỗi con
+                ],
               },
             });
-          districtRecord = await strapi.db
+            districtRecord = await strapi.db
             .query("api::district.district")
             .findOne({
               where: {
-                DistrictName: {
-                  $contains: normalizedDistrict,
-                },
-                Province: provinceRecord.id,
+                $and: [
+                  {
+                    Province: provinceRecord.id, // Kiểm tra thuộc quận
+                  },
+                  {
+                    $or: [
+                      { FullName: { $eq: normalizedDistrict } }, // Bằng
+                      { FullName: { $contains: normalizedDistrict } }, // Chứa
+                      { Name: { $eq: normalizedDistrict } }, // Bằng chính xác
+                      { Name: { $contains: normalizedDistrict } }, // Chứa chuỗi con
+                    ],
+                  },
+                ]
               },
             });
-          wardRecord = await strapi.db.query("api::ward.ward").findOne({
-            where: {
-              WardName: {
-                $contains: normalizedWard,
+            wardRecord = await strapi.db.query("api::ward.ward").findOne({
+              where: {
+                $and: [
+                  {
+                    District: districtRecord.id, // Kiểm tra thuộc quận
+                  },
+                  {
+                    $or: [
+                      { FullName: { $eq: normalizedWard } }, // Bằng
+                      { FullName: { $contains: normalizedWard } }, // Chứa
+                      { Name: { $eq: normalizedWard } }, // Bằng chính xác
+                      { Name: { $contains: normalizedWard } }, // Chứa chuỗi con
+                    ],
+                  },
+                ]
               },
-              District: districtRecord.id,
-            },
-          });
+            });
 
           // Nếu tìm thấy tỉnh, huyện, xã theo convert Location thì lưu vào body request
           // để thay thế có tỉnh, huyện, xã không có. Không tìm dược => convert thất bại => báo lỗi
@@ -113,6 +137,7 @@ export default factories.createCoreController(
         //// Tạo SOSRequest từ hàm create mặc định
         const response = await super.create(ctx);
         const sosRequest = response.data;
+
 
         // Tìm tất cả các SupportOrganization có Province trùng với SOSRequest
         const provinceSend = provinceRecord?.id || Province;
@@ -169,7 +194,7 @@ export default factories.createCoreController(
       } catch (error) {
         strapi.log.error("Error creating SOSRequest or Notifications:", error);
         return ctx.internalServerError(
-          "An error occurred while creating SOSRequest and Notifications"
+          `An error occurred while creating SOSRequest and Notifications: ${error}`
         );
       }
     },
@@ -191,7 +216,7 @@ function normalizeProvinceName(locationName) {
   return normalizedName;
 }
 function normalizeDistrictName(locationName) {
-  const prefixes = ["Quận", "Huyện", "Thị xã"];
+  const prefixes = ["Thành phố","Quận", "Huyện", "Thị xã"];
   let normalizedName = locationName.trim();
 
   // Loại bỏ các tiền tố như "Quận", "Huyện", "Thị xã"
