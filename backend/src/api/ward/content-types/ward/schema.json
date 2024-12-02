@@ -12,13 +12,28 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "WardName": {
+    "Name": {
       "type": "string"
     },
     "District": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::district.district"
+    },
+    "NameEn": {
+      "type": "string"
+    },
+    "FullName": {
+      "type": "string"
+    },
+    "FullNameEn": {
+      "type": "string"
+    },
+    "Latitude": {
+      "type": "string"
+    },
+    "Longitude": {
+      "type": "string"
     }
   }
 }

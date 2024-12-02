@@ -15,7 +15,7 @@
     "Title": {
       "type": "string",
       "required": true,
-      "unique": true
+      "unique": false
     },
     "Content": {
       "type": "text"

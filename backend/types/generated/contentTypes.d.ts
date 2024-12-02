@@ -521,13 +521,18 @@ export interface ApiDistrictDistrict extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    DistrictName: Schema.Attribute.String & Schema.Attribute.Required;
+    FullName: Schema.Attribute.String;
+    FullNameEn: Schema.Attribute.String;
+    Latitude: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::district.district'
     > &
       Schema.Attribute.Private;
+    Longitude: Schema.Attribute.String;
+    Name: Schema.Attribute.String & Schema.Attribute.Required;
+    NameEn: Schema.Attribute.String;
     Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -658,9 +663,7 @@ export interface ApiPostPost extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::post.post'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    Title: Schema.Attribute.String &
-      Schema.Attribute.Required &
-      Schema.Attribute.Unique;
+    Title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -686,13 +689,18 @@ export interface ApiProvinceProvince extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::disaster.disaster'
     >;
+    FullName: Schema.Attribute.String;
+    FullNameEn: Schema.Attribute.String;
+    Latitude: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::province.province'
     > &
       Schema.Attribute.Private;
-    ProvinceName: Schema.Attribute.String & Schema.Attribute.Required;
+    Longitude: Schema.Attribute.String;
+    Name: Schema.Attribute.String & Schema.Attribute.Required;
+    NameEn: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -810,14 +818,19 @@ export interface ApiWardWard extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
+    FullName: Schema.Attribute.String;
+    FullNameEn: Schema.Attribute.String;
+    Latitude: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::ward.ward'> &
       Schema.Attribute.Private;
+    Longitude: Schema.Attribute.String;
+    Name: Schema.Attribute.String;
+    NameEn: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    WardName: Schema.Attribute.String;
   };
 }
 

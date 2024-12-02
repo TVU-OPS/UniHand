@@ -50,7 +50,7 @@ module.exports = {
           .query("api::province.province")
           .findOne({
             where: {
-              ProvinceName: {
+              FullName: {
                 $contains: normalizedProvince, // Tìm kiếm tỉnh/thành phố
               },
             },
@@ -60,7 +60,7 @@ module.exports = {
           .query("api::district.district") // Giả sử bạn có bảng district
           .findOne({
             where: {
-              DistrictName: {
+              FullName: {
                 $contains: normalizedDistrict, // Tìm kiếm huyện/quận
               },
               Province: provinceRecord.id,
@@ -71,7 +71,7 @@ module.exports = {
           .query("api::ward.ward") // Giả sử bạn có bảng ward
           .findOne({
             where: {
-              WardName: {
+              FullName: {
                 $contains: normalizedWard, // Tìm kiếm xã/phường
               },
               District: districtRecord.id,

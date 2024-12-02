@@ -36,7 +36,7 @@ const sendEmailNotification = async (sosRequest, supportOrganization, provinceRe
                 - Thực phẩm: <span>${sosRequest.NeedFood ? "Có" : "Không"}</span><br>
                 - Y tế: <span>${sosRequest.NeedMedical ? "Có" : "Không"}</span><br>
                 <strong>Mô tả:</strong> <span style="display: inline-block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; max-width: calc(100% - 60px); vertical-align: middle;">${sosRequest.RequestDescription || "Không rõ"}</span><br>
-                <strong>Địa chỉ:</strong> <span>${provinceRecord.ProvinceName || "Không rõ"}, ${districtRecord.DistrictName || "Không rõ"}, ${wardRecord.WardName || "Không rõ"}${sosRequest.Road ? `, ${sosRequest.Road}` : ""}${sosRequest.Amenity ? `, ${sosRequest.Amenity}` : ""}</span><br>
+                <strong>Địa chỉ:</strong> <span>${provinceRecord.FullName || "Không rõ"}, ${districtRecord.DistrictName || "Không rõ"}, ${wardRecord.WardName || "Không rõ"}${sosRequest.Road ? `, ${sosRequest.Road}` : ""}${sosRequest.Amenity ? `, ${sosRequest.Amenity}` : ""}</span><br>
                 <strong>Vị trí:</strong> <span>Lat: ${sosRequest.Location?.lat || "Không rõ"}, Lng: ${sosRequest.Location?.lng || "Không rõ"}</span><br>
                 <strong>Số điện thoại:</strong> <span>${sosRequest.PhoneNumber}</span><br>
                 <strong>Email:</strong> <span>${provinceRecord.Email || "Không rõ"},</span>
