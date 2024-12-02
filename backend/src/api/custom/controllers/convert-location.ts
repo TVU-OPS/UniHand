@@ -47,18 +47,25 @@ module.exports = {
 
         // Tìm kiếm trong cơ sở dữ liệu để lấy id của tỉnh, huyện và xã theo tên
         provinceRecord = await strapi.db
-        .query("api::province.province")
+          .query("api::province.province")
           .findOne({
             where: {
               $or: [
-                { FullName: { $eq: normalizedProvince } }, // Bằng chính xác
-                { FullName: { $contains: normalizedProvince } }, // Chứa chuỗi con
                 { Name: { $eq: normalizedProvince } }, // Bằng chính xác
                 { Name: { $contains: normalizedProvince } }, // Chứa chuỗi con
+                { FullName: { $eq: normalizedProvince } }, // Bằng chính xác
+                { FullName: { $contains: normalizedProvince } }, // Chứa chuỗi con
               ],
             },
           });
-          districtRecord = await strapi.db
+
+        if (!provinceRecord) {
+          return ctx.badRequest(
+            `Province '${addressDetails.province}' not found in the database.`
+          );
+        }
+
+        districtRecord = await strapi.db
           .query("api::district.district")
           .findOne({
             where: {
@@ -68,53 +75,41 @@ module.exports = {
                 },
                 {
                   $or: [
-                    { FullName: { $eq: normalizedDistrict } }, // Bằng
-                    { FullName: { $contains: normalizedDistrict } }, // Chứa
                     { Name: { $eq: normalizedDistrict } }, // Bằng chính xác
                     { Name: { $contains: normalizedDistrict } }, // Chứa chuỗi con
+                    { FullName: { $eq: normalizedDistrict } }, // Bằng
+                    { FullName: { $contains: normalizedDistrict } }, // Chứa
                   ],
                 },
-              ]
-            },
-          });
-          wardRecord = await strapi.db.query("api::ward.ward").findOne({
-            where: {
-              $and: [
-                {
-                  District: districtRecord.id, // Kiểm tra thuộc quận
-                },
-                {
-                  $or: [
-                    { FullName: { $eq: normalizedWard } }, // Bằng
-                    { FullName: { $contains: normalizedWard } }, // Chứa
-                    { Name: { $eq: normalizedWard } }, // Bằng chính xác
-                    { Name: { $contains: normalizedWard } }, // Chứa chuỗi con
-                  ],
-                },
-              ]
+              ],
             },
           });
 
-
-        if (provinceRecord) {
-          provinceRecord = provinceRecord;
-        } else {
-          return ctx.badRequest(
-            `Province '${addressDetails.province}' not found in the database.`
-          );
-        }
-
-        if (districtRecord) {
-          districtRecord = districtRecord;
-        } else {
+        if (!districtRecord) {
           return ctx.badRequest(
             `District '${addressDetails.district}' not found in the database.`
           );
         }
 
-        if (wardRecord) {
-          wardRecord = wardRecord;
-        } else {
+        wardRecord = await strapi.db.query("api::ward.ward").findOne({
+          where: {
+            $and: [
+              {
+                District: districtRecord.id, // Kiểm tra thuộc quận
+              },
+              {
+                $or: [
+                  { Name: { $eq: normalizedWard } }, // Bằng chính xác
+                  { Name: { $contains: normalizedWard } }, // Chứa chuỗi con
+                  { FullName: { $eq: normalizedWard } }, // Bằng
+                  { FullName: { $contains: normalizedWard } }, // Chứa
+                ],
+              },
+            ],
+          },
+        });
+
+        if (!wardRecord) {
           return ctx.badRequest(
             `Ward '${addressDetails.ward}' not found in the database.`
           );
@@ -158,7 +153,7 @@ function normalizeProvinceName(locationName) {
   return normalizedName;
 }
 function normalizeDistrictName(locationName) {
-  const prefixes = ["Quận", "Huyện", "Thị xã"];
+  const prefixes = ["Thành phố","Quận", "Huyện", "Thị xã"];
   let normalizedName = locationName.trim();
 
   // Loại bỏ các tiền tố như "Quận", "Huyện", "Thị xã"

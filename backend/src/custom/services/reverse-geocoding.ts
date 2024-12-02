@@ -19,10 +19,29 @@ export const getLocationFromCoordinates = async (lat, lon) => {
 
     if (address) {
       const province = address.state || address.city || null; // Tên Tỉnh / Thành phố
-      const district = address.city || address.county || null; // Tên quận / Huyện / Thị xã / Thành phố trực thuộc tỉnh
-      const ward = address.suburb || address.village || address.town || null; // Tên phường/ Xã / Thị trấn
+
+      const district =
+        province === address.city // Nếu `province` đã nhận `address.city`, bỏ qua nó cho `district`
+          ? address.county || address.suburb || null
+          : address.city || address.county || address.suburb || null; // Nếu chưa nhận, dùng bình thường
+
+      const ward =
+        district == address.suburb
+          ? address.village || address.town || address.hamlet || null
+          : address.village ||
+            address.town ||
+            address.quarter ||
+            address.suburb ||
+            null; // Tên phường/ Xã / Thị trấn
+
       const road = address.road || null; // Tên đường
-      const amenity = address.amenity || address.hamlet || null; // Tên địa điểm / Thôn
+
+      const amenity =
+        address.amenity ||
+        address.hamlet ||
+        address.house_number ||
+        address.building ||
+        null; // Tên địa điểm / Thôn
 
       return {
         province: province || null, // Nếu không có tỉnh, trả về thông báo mặc định

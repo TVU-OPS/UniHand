@@ -56,8 +56,6 @@ export default factories.createCoreController(
             ctx.request.body.data.Amenity = addressDetails.amenity;
           }
 
-
-
           // Chuẩn hóa tên tỉnh, huyện, xã trước khi tìm kiếm
           const normalizedProvince = normalizeProvinceName(
             addressDetails.province
@@ -67,10 +65,9 @@ export default factories.createCoreController(
           );
           const normalizedWard = normalizeWardName(addressDetails.ward);
 
-          
           // Tìm kiếm trong cơ sở dữ liệu để lấy id của tỉnh, huyện và xã theo tên
           provinceRecord = await strapi.db
-          .query("api::province.province")
+            .query("api::province.province")
             .findOne({
               where: {
                 $or: [
@@ -81,7 +78,14 @@ export default factories.createCoreController(
                 ],
               },
             });
-            districtRecord = await strapi.db
+
+          if (!provinceRecord) {
+            return ctx.badRequest(
+              `Province '${addressDetails.province}' không tồn tại trong hệ thống. Vui lòng nhập ID tỉnh.`
+            );
+          }
+
+          districtRecord = await strapi.db
             .query("api::district.district")
             .findOne({
               where: {
@@ -97,9 +101,17 @@ export default factories.createCoreController(
                       { Name: { $contains: normalizedDistrict } }, // Chứa chuỗi con
                     ],
                   },
-                ]
+                ],
               },
             });
+
+          if (!districtRecord) {
+            return ctx.badRequest(
+              `District '${addressDetails.district}' không tồn tại trong hệ thống. Vui lòng nhập ID huyện.`
+            );
+          }
+
+          if (districtRecord) {
             wardRecord = await strapi.db.query("api::ward.ward").findOne({
               where: {
                 $and: [
@@ -114,16 +126,23 @@ export default factories.createCoreController(
                       { Name: { $contains: normalizedWard } }, // Chứa chuỗi con
                     ],
                   },
-                ]
+                ],
               },
             });
+          }
+
+          if (!wardRecord) {
+            return ctx.badRequest(
+              `Ward '${addressDetails.ward}' không tồn tại trong hệ thống. Vui lòng nhập ID xã.`
+            );
+          }
 
           // Nếu tìm thấy tỉnh, huyện, xã theo convert Location thì lưu vào body request
           // để thay thế có tỉnh, huyện, xã không có. Không tìm dược => convert thất bại => báo lỗi
           if (provinceRecord && districtRecord && wardRecord) {
-            ctx.request.body.data.Province = provinceRecord.id;
             ctx.request.body.data.District = districtRecord.id;
             ctx.request.body.data.Ward = wardRecord.id;
+            ctx.request.body.data.Province = provinceRecord.id;
             Province = provinceRecord.id;
             Ward = wardRecord.id;
             District = districtRecord.id;
@@ -137,7 +156,6 @@ export default factories.createCoreController(
         //// Tạo SOSRequest từ hàm create mặc định
         const response = await super.create(ctx);
         const sosRequest = response.data;
-
 
         // Tìm tất cả các SupportOrganization có Province trùng với SOSRequest
         const provinceSend = provinceRecord?.id || Province;
@@ -216,7 +234,7 @@ function normalizeProvinceName(locationName) {
   return normalizedName;
 }
 function normalizeDistrictName(locationName) {
-  const prefixes = ["Thành phố","Quận", "Huyện", "Thị xã"];
+  const prefixes = ["Thành phố", "Quận", "Huyện", "Thị xã"];
   let normalizedName = locationName.trim();
 
   // Loại bỏ các tiền tố như "Quận", "Huyện", "Thị xã"
