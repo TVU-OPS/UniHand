@@ -12,7 +12,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "ProvinceName": {
+    "Name": {
       "type": "string",
       "required": true
     },
@@ -21,6 +21,21 @@
       "relation": "manyToMany",
       "target": "api::disaster.disaster",
       "mappedBy": "Provinces"
+    },
+    "NameEn": {
+      "type": "string"
+    },
+    "FullName": {
+      "type": "string"
+    },
+    "FullNameEn": {
+      "type": "string"
+    },
+    "Latitude": {
+      "type": "string"
+    },
+    "Longitude": {
+      "type": "string"
     }
   }
 }

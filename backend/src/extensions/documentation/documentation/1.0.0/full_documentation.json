@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2024-11-30T20:41:58.054Z"
+    "x-generation-date": "2024-12-02T12:33:02.938Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -8508,7 +8508,7 @@
                     "documentId": {
                       "type": "string"
                     },
-                    "ProvinceName": {
+                    "Name": {
                       "type": "string"
                     },
                     "disasters": {
@@ -8524,6 +8524,21 @@
                           }
                         }
                       }
+                    },
+                    "NameEn": {
+                      "type": "string"
+                    },
+                    "FullName": {
+                      "type": "string"
+                    },
+                    "FullNameEn": {
+                      "type": "string"
+                    },
+                    "Latitude": {
+                      "type": "string"
+                    },
+                    "Longitude": {
+                      "type": "string"
                     },
                     "createdAt": {
                       "type": "string",
@@ -9752,7 +9767,7 @@
                   "documentId": {
                     "type": "string"
                   },
-                  "ProvinceName": {
+                  "Name": {
                     "type": "string"
                   },
                   "disasters": {
@@ -9913,6 +9928,21 @@
                       }
                     }
                   },
+                  "NameEn": {
+                    "type": "string"
+                  },
+                  "FullName": {
+                    "type": "string"
+                  },
+                  "FullNameEn": {
+                    "type": "string"
+                  },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time"
@@ -9975,7 +10005,7 @@
                   "documentId": {
                     "type": "string"
                   },
-                  "DistrictName": {
+                  "Name": {
                     "type": "string"
                   },
                   "Province": {
@@ -9988,6 +10018,21 @@
                         "type": "string"
                       }
                     }
+                  },
+                  "NameEn": {
+                    "type": "string"
+                  },
+                  "FullName": {
+                    "type": "string"
+                  },
+                  "FullNameEn": {
+                    "type": "string"
+                  },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
                   },
                   "createdAt": {
                     "type": "string",
@@ -10051,7 +10096,7 @@
                   "documentId": {
                     "type": "string"
                   },
-                  "WardName": {
+                  "Name": {
                     "type": "string"
                   },
                   "District": {
@@ -10064,6 +10109,21 @@
                         "type": "string"
                       }
                     }
+                  },
+                  "NameEn": {
+                    "type": "string"
+                  },
+                  "FullName": {
+                    "type": "string"
+                  },
+                  "FullNameEn": {
+                    "type": "string"
+                  },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
                   },
                   "createdAt": {
                     "type": "string",
@@ -10778,7 +10838,7 @@
                 "documentId": {
                   "type": "string"
                 },
-                "ProvinceName": {
+                "Name": {
                   "type": "string"
                 },
                 "disasters": {
@@ -10884,6 +10944,21 @@
                       }
                     }
                   }
+                },
+                "NameEn": {
+                  "type": "string"
+                },
+                "FullName": {
+                  "type": "string"
+                },
+                "FullNameEn": {
+                  "type": "string"
+                },
+                "Latitude": {
+                  "type": "string"
+                },
+                "Longitude": {
+                  "type": "string"
                 },
                 "createdAt": {
                   "type": "string",
@@ -11467,11 +11542,11 @@
         "properties": {
           "data": {
             "required": [
-              "DistrictName"
+              "Name"
             ],
             "type": "object",
             "properties": {
-              "DistrictName": {
+              "Name": {
                 "type": "string"
               },
               "Province": {
@@ -11484,6 +11559,21 @@
                   }
                 ],
                 "example": "string or id"
+              },
+              "NameEn": {
+                "type": "string"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "FullNameEn": {
+                "type": "string"
+              },
+              "Latitude": {
+                "type": "string"
+              },
+              "Longitude": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -11544,7 +11634,7 @@
       "District": {
         "type": "object",
         "required": [
-          "DistrictName"
+          "Name"
         ],
         "properties": {
           "id": {
@@ -11553,7 +11643,7 @@
           "documentId": {
             "type": "string"
           },
-          "DistrictName": {
+          "Name": {
             "type": "string"
           },
           "Province": {
@@ -11565,7 +11655,7 @@
               "documentId": {
                 "type": "string"
               },
-              "ProvinceName": {
+              "Name": {
                 "type": "string"
               },
               "disasters": {
@@ -11978,6 +12068,21 @@
                   }
                 }
               },
+              "NameEn": {
+                "type": "string"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "FullNameEn": {
+                "type": "string"
+              },
+              "Latitude": {
+                "type": "string"
+              },
+              "Longitude": {
+                "type": "string"
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -12031,6 +12136,21 @@
               }
             }
           },
+          "NameEn": {
+            "type": "string"
+          },
+          "FullName": {
+            "type": "string"
+          },
+          "FullNameEn": {
+            "type": "string"
+          },
+          "Latitude": {
+            "type": "string"
+          },
+          "Longitude": {
+            "type": "string"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -12079,7 +12199,7 @@
                 "documentId": {
                   "type": "string"
                 },
-                "DistrictName": {
+                "Name": {
                   "type": "string"
                 },
                 "Province": {
@@ -12092,6 +12212,21 @@
                       "type": "string"
                     }
                   }
+                },
+                "NameEn": {
+                  "type": "string"
+                },
+                "FullName": {
+                  "type": "string"
+                },
+                "FullNameEn": {
+                  "type": "string"
+                },
+                "Latitude": {
+                  "type": "string"
+                },
+                "Longitude": {
+                  "type": "string"
                 },
                 "createdAt": {
                   "type": "string",
@@ -13033,7 +13168,7 @@
                   "documentId": {
                     "type": "string"
                   },
-                  "ProvinceName": {
+                  "Name": {
                     "type": "string"
                   },
                   "disasters": {
@@ -13194,6 +13329,21 @@
                       }
                     }
                   },
+                  "NameEn": {
+                    "type": "string"
+                  },
+                  "FullName": {
+                    "type": "string"
+                  },
+                  "FullNameEn": {
+                    "type": "string"
+                  },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time"
@@ -13256,7 +13406,7 @@
                   "documentId": {
                     "type": "string"
                   },
-                  "DistrictName": {
+                  "Name": {
                     "type": "string"
                   },
                   "Province": {
@@ -13269,6 +13419,21 @@
                         "type": "string"
                       }
                     }
+                  },
+                  "NameEn": {
+                    "type": "string"
+                  },
+                  "FullName": {
+                    "type": "string"
+                  },
+                  "FullNameEn": {
+                    "type": "string"
+                  },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
                   },
                   "createdAt": {
                     "type": "string",
@@ -13332,7 +13497,7 @@
                   "documentId": {
                     "type": "string"
                   },
-                  "WardName": {
+                  "Name": {
                     "type": "string"
                   },
                   "District": {
@@ -13345,6 +13510,21 @@
                         "type": "string"
                       }
                     }
+                  },
+                  "NameEn": {
+                    "type": "string"
+                  },
+                  "FullName": {
+                    "type": "string"
+                  },
+                  "FullNameEn": {
+                    "type": "string"
+                  },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
                   },
                   "createdAt": {
                     "type": "string",
@@ -16516,11 +16696,11 @@
         "properties": {
           "data": {
             "required": [
-              "ProvinceName"
+              "Name"
             ],
             "type": "object",
             "properties": {
-              "ProvinceName": {
+              "Name": {
                 "type": "string"
               },
               "disasters": {
@@ -16536,6 +16716,21 @@
                   ],
                   "example": "string or id"
                 }
+              },
+              "NameEn": {
+                "type": "string"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "FullNameEn": {
+                "type": "string"
+              },
+              "Latitude": {
+                "type": "string"
+              },
+              "Longitude": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -16596,7 +16791,7 @@
       "Province": {
         "type": "object",
         "required": [
-          "ProvinceName"
+          "Name"
         ],
         "properties": {
           "id": {
@@ -16605,7 +16800,7 @@
           "documentId": {
             "type": "string"
           },
-          "ProvinceName": {
+          "Name": {
             "type": "string"
           },
           "disasters": {
@@ -16961,7 +17156,7 @@
                       "documentId": {
                         "type": "string"
                       },
-                      "ProvinceName": {
+                      "Name": {
                         "type": "string"
                       },
                       "disasters": {
@@ -16977,6 +17172,21 @@
                             }
                           }
                         }
+                      },
+                      "NameEn": {
+                        "type": "string"
+                      },
+                      "FullName": {
+                        "type": "string"
+                      },
+                      "FullNameEn": {
+                        "type": "string"
+                      },
+                      "Latitude": {
+                        "type": "string"
+                      },
+                      "Longitude": {
+                        "type": "string"
                       },
                       "createdAt": {
                         "type": "string",
@@ -17085,6 +17295,21 @@
                 }
               }
             }
+          },
+          "NameEn": {
+            "type": "string"
+          },
+          "FullName": {
+            "type": "string"
+          },
+          "FullNameEn": {
+            "type": "string"
+          },
+          "Latitude": {
+            "type": "string"
+          },
+          "Longitude": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
@@ -18126,7 +18351,7 @@
               "documentId": {
                 "type": "string"
               },
-              "ProvinceName": {
+              "Name": {
                 "type": "string"
               },
               "disasters": {
@@ -18287,6 +18512,21 @@
                   }
                 }
               },
+              "NameEn": {
+                "type": "string"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "FullNameEn": {
+                "type": "string"
+              },
+              "Latitude": {
+                "type": "string"
+              },
+              "Longitude": {
+                "type": "string"
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -18349,7 +18589,7 @@
               "documentId": {
                 "type": "string"
               },
-              "DistrictName": {
+              "Name": {
                 "type": "string"
               },
               "Province": {
@@ -18362,6 +18602,21 @@
                     "type": "string"
                   }
                 }
+              },
+              "NameEn": {
+                "type": "string"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "FullNameEn": {
+                "type": "string"
+              },
+              "Latitude": {
+                "type": "string"
+              },
+              "Longitude": {
+                "type": "string"
               },
               "createdAt": {
                 "type": "string",
@@ -18425,7 +18680,7 @@
               "documentId": {
                 "type": "string"
               },
-              "WardName": {
+              "Name": {
                 "type": "string"
               },
               "District": {
@@ -18438,6 +18693,21 @@
                     "type": "string"
                   }
                 }
+              },
+              "NameEn": {
+                "type": "string"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "FullNameEn": {
+                "type": "string"
+              },
+              "Latitude": {
+                "type": "string"
+              },
+              "Longitude": {
+                "type": "string"
               },
               "createdAt": {
                 "type": "string",
@@ -20609,7 +20879,7 @@
                       "documentId": {
                         "type": "string"
                       },
-                      "ProvinceName": {
+                      "Name": {
                         "type": "string"
                       },
                       "disasters": {
@@ -20770,6 +21040,21 @@
                           }
                         }
                       },
+                      "NameEn": {
+                        "type": "string"
+                      },
+                      "FullName": {
+                        "type": "string"
+                      },
+                      "FullNameEn": {
+                        "type": "string"
+                      },
+                      "Latitude": {
+                        "type": "string"
+                      },
+                      "Longitude": {
+                        "type": "string"
+                      },
                       "createdAt": {
                         "type": "string",
                         "format": "date-time"
@@ -20832,7 +21117,7 @@
                       "documentId": {
                         "type": "string"
                       },
-                      "DistrictName": {
+                      "Name": {
                         "type": "string"
                       },
                       "Province": {
@@ -20845,6 +21130,21 @@
                             "type": "string"
                           }
                         }
+                      },
+                      "NameEn": {
+                        "type": "string"
+                      },
+                      "FullName": {
+                        "type": "string"
+                      },
+                      "FullNameEn": {
+                        "type": "string"
+                      },
+                      "Latitude": {
+                        "type": "string"
+                      },
+                      "Longitude": {
+                        "type": "string"
                       },
                       "createdAt": {
                         "type": "string",
@@ -20908,7 +21208,7 @@
                       "documentId": {
                         "type": "string"
                       },
-                      "WardName": {
+                      "Name": {
                         "type": "string"
                       },
                       "District": {
@@ -20921,6 +21221,21 @@
                             "type": "string"
                           }
                         }
+                      },
+                      "NameEn": {
+                        "type": "string"
+                      },
+                      "FullName": {
+                        "type": "string"
+                      },
+                      "FullNameEn": {
+                        "type": "string"
+                      },
+                      "Latitude": {
+                        "type": "string"
+                      },
+                      "Longitude": {
+                        "type": "string"
                       },
                       "createdAt": {
                         "type": "string",
@@ -21198,7 +21513,7 @@
           "data": {
             "type": "object",
             "properties": {
-              "WardName": {
+              "Name": {
                 "type": "string"
               },
               "District": {
@@ -21211,6 +21526,21 @@
                   }
                 ],
                 "example": "string or id"
+              },
+              "NameEn": {
+                "type": "string"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "FullNameEn": {
+                "type": "string"
+              },
+              "Latitude": {
+                "type": "string"
+              },
+              "Longitude": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -21277,7 +21607,7 @@
           "documentId": {
             "type": "string"
           },
-          "WardName": {
+          "Name": {
             "type": "string"
           },
           "District": {
@@ -21289,7 +21619,7 @@
               "documentId": {
                 "type": "string"
               },
-              "DistrictName": {
+              "Name": {
                 "type": "string"
               },
               "Province": {
@@ -21301,7 +21631,7 @@
                   "documentId": {
                     "type": "string"
                   },
-                  "ProvinceName": {
+                  "Name": {
                     "type": "string"
                   },
                   "disasters": {
@@ -21714,6 +22044,21 @@
                       }
                     }
                   },
+                  "NameEn": {
+                    "type": "string"
+                  },
+                  "FullName": {
+                    "type": "string"
+                  },
+                  "FullNameEn": {
+                    "type": "string"
+                  },
+                  "Latitude": {
+                    "type": "string"
+                  },
+                  "Longitude": {
+                    "type": "string"
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time"
@@ -21766,6 +22111,21 @@
                     }
                   }
                 }
+              },
+              "NameEn": {
+                "type": "string"
+              },
+              "FullName": {
+                "type": "string"
+              },
+              "FullNameEn": {
+                "type": "string"
+              },
+              "Latitude": {
+                "type": "string"
+              },
+              "Longitude": {
+                "type": "string"
               },
               "createdAt": {
                 "type": "string",
@@ -21820,6 +22180,21 @@
               }
             }
           },
+          "NameEn": {
+            "type": "string"
+          },
+          "FullName": {
+            "type": "string"
+          },
+          "FullNameEn": {
+            "type": "string"
+          },
+          "Latitude": {
+            "type": "string"
+          },
+          "Longitude": {
+            "type": "string"
+          },
           "createdAt": {
             "type": "string",
             "format": "date-time"
@@ -21868,7 +22243,7 @@
                 "documentId": {
                   "type": "string"
                 },
-                "WardName": {
+                "Name": {
                   "type": "string"
                 },
                 "District": {
@@ -21881,6 +22256,21 @@
                       "type": "string"
                     }
                   }
+                },
+                "NameEn": {
+                  "type": "string"
+                },
+                "FullName": {
+                  "type": "string"
+                },
+                "FullNameEn": {
+                  "type": "string"
+                },
+                "Latitude": {
+                  "type": "string"
+                },
+                "Longitude": {
+                  "type": "string"
                 },
                 "createdAt": {
                   "type": "string",

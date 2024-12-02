@@ -18,7 +18,7 @@ export const getLocationFromCoordinates = async (lat, lon) => {
     const address = response.data.address;
 
     if (address) {
-      const province = address.state || null; // Tên Tỉnh / Thành phố
+      const province = address.state || address.city || null; // Tên Tỉnh / Thành phố
       const district = address.city || address.county || null; // Tên quận / Huyện / Thị xã / Thành phố trực thuộc tỉnh
       const ward = address.suburb || address.village || address.town || null; // Tên phường/ Xã / Thị trấn
       const road = address.road || null; // Tên đường

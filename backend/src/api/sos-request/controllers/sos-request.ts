@@ -70,7 +70,7 @@ export default factories.createCoreController(
             .query("api::province.province")
             .findOne({
               where: {
-                ProvinceName: {
+                FullName: {
                   $contains: normalizedProvince,
                 },
               },

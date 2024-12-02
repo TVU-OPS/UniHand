@@ -12,7 +12,7 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "DistrictName": {
+    "Name": {
       "type": "string",
       "required": true
     },
@@ -20,6 +20,21 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::province.province"
+    },
+    "NameEn": {
+      "type": "string"
+    },
+    "FullName": {
+      "type": "string"
+    },
+    "FullNameEn": {
+      "type": "string"
+    },
+    "Latitude": {
+      "type": "string"
+    },
+    "Longitude": {
+      "type": "string"
     }
   }
 }
