@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Display a map on a webpage</title>
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <link
+      href="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.8.0/mapbox-gl.js"></script>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.1/mapbox-gl-directions.css" rel="stylesheet" />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script>
+      mapboxgl.accessToken =
+        "pk.eyJ1IjoiZGluaHRhbm1haSIsImEiOiJjbGd0ZzF5OGwwbWUxM2RwNW1ld2pnbHg1In0.yMvXYOmfbA5sZqvpHqQqZg";
+      
+
+      if (!navigator.geolocation) {
+        alert("Trình duyệt của bạn không hỗ trợ định vị.");
+        // return;
+    }
+    const map = new mapboxgl.Map({
+        style: "mapbox://styles/dinhtanmai/cm3rg8pep006d01qwf2pqhwxi", // stylesheet location
+        container: "map", // container ID
+        center: [107.3139033, 16.4278446], // starting position [lng, lat]. Note that lat must be set between -90 and 90
+        zoom: 18, // starting zoom
+    });
+
+    const marker = new mapboxgl.Marker()
+        // .setLngLat([0, 0]) // Vị trí
+        // .addTo(map); // Thêm vào bản đồ
+    const marker2 = new mapboxgl.Marker({ color: 'red' })
+        .setLngLat([106.348231, 9.9229538]) // Vị trí
+        .addTo(map); // Thêm vào bản đồ
+
+    const popup = new mapboxgl.Popup({ offset: 25, closeOnClick: false, closeButton: false })
+        // set luôn hiển thị popup
+        // .setText("Dương Văn Hiệp, 0373496609");
+        .setHTML('<p style="font-size: 20px; font-weight: bold">Dương Văn Hiệp</p><a style="font-size: 16px; display: block; border: 1px solid #000; padding-left: 8px; padding-top: 5px; padding-bottom: 5px; border-radius: 5px; background-color: green; font-weight: bold; color: white" href="tel://0373496609"> Gọi: 0373496609</a>')
+        .addTo(map);
+
+    marker2.setPopup(popup);
+
+    // const directions = new MapboxDirections({
+    //     accessToken: mapboxgl.accessToken,
+    //     unit: 'metric', // Đơn vị đo (metric hoặc imperial)
+    //     profile: 'mapbox/driving', // Loại phương tiện (driving, walking, cycling)
+    //     controls: { instructions: true } // Hiển thị hướng dẫn chỉ đường
+    // });
+    // map.addControl(directions, "top-left");
+
+    // directions.setDestination([106.348231, 9.9229538]);
+
+    function updatePosition(position) {
+        const { latitude, longitude } = position.coords;
+        marker.setLngLat([longitude, latitude]);
+        // popup.setLngLat([longitude, latitude]);
+
+        getRoute([longitude, latitude], [106.348231, 9.9229538]);
+
+        // alert("Vị trí mới: " + latitude + ", " + longitude);
+            
+        // map.flyTo({ center: [longitude, latitude] });
+        console.log("Vị trí mới:", latitude, longitude);
+    }
+
+    async function getRoute(start, end) {
+        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start.join('%2C')}%3B${end.join('%2C')}?geometries=geojson&language=vi&access_token=${mapboxgl.accessToken}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        // Lấy dữ liệu tuyến đường (geometry)
+        const route = data.routes[0].geometry;
+
+        // Thêm tuyến đường vào bản đồ
+        map.addSource('route', {
+            type: 'geojson',
+            data: {
+                type: 'Feature',
+                geometry: route
+            }
+        });
+
+        // Hiển thị tuyến đường với layer
+        map.addLayer({
+            id: 'route',
+            type: 'line',
+            source: 'route',
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': '#007aff', // Màu của tuyến đường
+                'line-width': 5 // Độ dày của tuyến đường
+            }
+        });
+    }
+
+    navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+
+        map.flyTo({ center: [longitude, latitude], zoom: 16 });
+
+        marker.setLngLat([longitude, latitude]).addTo(map);
+        // popup.setLngLat([longitude, latitude]).addTo(map);
+        // directions.setOrigin([longitude, latitude]);
+        getRoute([longitude, latitude], [106.348231, 9.9229538]);
+
+        navigator.geolocation.watchPosition(
+            updatePosition, // Hàm gọi mỗi khi vị trí thay đổi
+            (error) => {
+                console.error("Lỗi lấy vị trí:", error);
+            },
+            {
+                enableHighAccuracy: true, // Sử dụng GPS chính xác
+                maximumAge: 300 // Thời gian cache (ms)
+            }
+        );
+        
+
+        // Tạo popup khi nhấn vào marker
+        
+    });
+
+    
+
+    //   const locations = [
+    //         { lng: 105.841171, lat: 21.028511, description: 'Dương Văn HIệp, 0373496609' },
+    //         { lng: 105.854444, lat: 21.035511, description: 'Vị trí 2' },
+    //         { lng: 105.86277, lat: 21.023511, description: 'Vị trí 3' },
+    //         { lng: 105.86271, lat: 21.023514, description: 'Vị trí 3' },
+    //         { lng: 105.86771, lat: 21.023516, description: 'Vị trí 3' },
+    //         { lng: 105.82771, lat: 21.023518, description: 'Vị trí 3' },
+    //         { lng: 105.831171, lat: 21.028511, description: 'Vị trí 4' },
+    //         { lng: 105.832171, lat: 21.029511, description: 'Vị trí 5' },
+    //         { lng: 105.833171, lat: 21.030511, description: 'Vị trí 6' },
+    //         { lng: 105.834171, lat: 21.031511, description: 'Vị trí 7' },
+    //         { lng: 105.835171, lat: 21.032511, description: 'Vị trí 8' },
+    //         { lng: 105.836171, lat: 21.033511, description: 'Vị trí 9' },
+    //         { lng: 105.837171, lat: 21.034511, description: 'Vị trí 10' },
+    //     ];
+
+        // Ghim các vị trí
+        // locations.forEach(location => {
+        //     // Tạo marker
+        //     const marker = new mapboxgl.Marker()
+        //         .setLngLat([location.lng, location.lat]) // Vị trí
+        //         .addTo(map); // Thêm vào bản đồ
+
+        //     // Tạo popup khi nhấn vào marker
+        //     const popup = new mapboxgl.Popup({ offset: 25 })
+        //         .setText(location.description);
+        //     marker.setPopup(popup);
+        // });
+        
+    </script>
+  </body>
+</html>
+
+
+<!-- pk.eyJ1IjoiZGluaHRhbm1haSIsImEiOiJjbGd0ZzF5OGwwbWUxM2RwNW1ld2pnbHg1In0.yMvXYOmfbA5sZqvpHqQqZg -->
