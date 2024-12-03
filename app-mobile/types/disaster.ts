@@ -1,4 +1,5 @@
 import { DisasterType } from "./disasterType";
+import { Province } from "./province";
 
 export type Disaster = {
     id: number;
@@ -8,7 +9,8 @@ export type Disaster = {
     StartDate: string;
     EndDate: string;
     createdAt: string;
-    DisasterType: DisasterType;
+    DisasterType?: DisasterType;
+    Provinces?: Province[];
 }
 
 export type DisasterData = {

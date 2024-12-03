@@ -27,7 +27,7 @@ export default function SosRequestsScreen() {
         );
         setNotifications(res.data);
       }
-    } catch (error) {
+    } catch (error: any) {
       if(error.response.status === 403) {
         Alert.alert("Thông báo", "Bạn không có quyền truy cập chức năng này. Có thể do tổ chức của bạn chưa được duyệt.");
       }
