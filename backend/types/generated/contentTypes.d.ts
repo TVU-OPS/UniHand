@@ -578,69 +578,6 @@ export interface ApiNotificationNotification
   };
 }
 
-export interface ApiPostCategoryPostCategory
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'post_categories';
-  info: {
-    description: '';
-    displayName: 'PostCategory';
-    pluralName: 'post-categories';
-    singularName: 'post-category';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    CategoryName: Schema.Attribute.String & Schema.Attribute.Unique;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::post-category.post-category'
-    > &
-      Schema.Attribute.Private;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
-export interface ApiPostToCategoryPostToCategory
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'post_to_categories';
-  info: {
-    displayName: 'PostToCategory';
-    pluralName: 'post-to-categories';
-    singularName: 'post-to-category';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::post-to-category.post-to-category'
-    > &
-      Schema.Attribute.Private;
-    Post: Schema.Attribute.Relation<'oneToOne', 'api::post.post'>;
-    PostCategory: Schema.Attribute.Relation<
-      'oneToOne',
-      'api::post-category.post-category'
-    >;
-    publishedAt: Schema.Attribute.DateTime;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-  };
-}
-
 export interface ApiPostPost extends Struct.CollectionTypeSchema {
   collectionName: 'posts';
   info: {
@@ -1353,8 +1290,6 @@ declare module '@strapi/strapi' {
       'api::disaster.disaster': ApiDisasterDisaster;
       'api::district.district': ApiDistrictDistrict;
       'api::notification.notification': ApiNotificationNotification;
-      'api::post-category.post-category': ApiPostCategoryPostCategory;
-      'api::post-to-category.post-to-category': ApiPostToCategoryPostToCategory;
       'api::post.post': ApiPostPost;
       'api::province.province': ApiProvinceProvince;
       'api::sos-request.sos-request': ApiSosRequestSosRequest;
