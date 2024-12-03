@@ -70,36 +70,79 @@ export default factories.createCoreController(
             .query("api::province.province")
             .findOne({
               where: {
-                FullName: {
-                  $contains: normalizedProvince,
-                },
+                $or: [
+                  { FullName: { $eq: normalizedProvince } }, // Bằng chính xác
+                  { FullName: { $contains: normalizedProvince } }, // Chứa chuỗi con
+                  { Name: { $eq: normalizedProvince } }, // Bằng chính xác
+                  { Name: { $contains: normalizedProvince } }, // Chứa chuỗi con
+                ],
               },
             });
+
+          if (!provinceRecord) {
+            return ctx.badRequest(
+              `Province '${addressDetails.province}' không tồn tại trong hệ thống. Vui lòng nhập ID tỉnh.`
+            );
+          }
+
           districtRecord = await strapi.db
             .query("api::district.district")
             .findOne({
               where: {
-                DistrictName: {
-                  $contains: normalizedDistrict,
-                },
-                Province: provinceRecord.id,
+                $and: [
+                  {
+                    Province: provinceRecord.id, // Kiểm tra thuộc quận
+                  },
+                  {
+                    $or: [
+                      { FullName: { $eq: normalizedDistrict } }, // Bằng
+                      { FullName: { $contains: normalizedDistrict } }, // Chứa
+                      { Name: { $eq: normalizedDistrict } }, // Bằng chính xác
+                      { Name: { $contains: normalizedDistrict } }, // Chứa chuỗi con
+                    ],
+                  },
+                ],
               },
             });
-          wardRecord = await strapi.db.query("api::ward.ward").findOne({
-            where: {
-              WardName: {
-                $contains: normalizedWard,
+
+          if (!districtRecord) {
+            return ctx.badRequest(
+              `District '${addressDetails.district}' không tồn tại trong hệ thống. Vui lòng nhập ID huyện.`
+            );
+          }
+
+          if (districtRecord) {
+            wardRecord = await strapi.db.query("api::ward.ward").findOne({
+              where: {
+                $and: [
+                  {
+                    District: districtRecord.id, // Kiểm tra thuộc quận
+                  },
+                  {
+                    $or: [
+                      { FullName: { $eq: normalizedWard } }, // Bằng
+                      { FullName: { $contains: normalizedWard } }, // Chứa
+                      { Name: { $eq: normalizedWard } }, // Bằng chính xác
+                      { Name: { $contains: normalizedWard } }, // Chứa chuỗi con
+                    ],
+                  },
+                ],
               },
-              District: districtRecord.id,
-            },
-          });
+            });
+          }
+
+          if (!wardRecord) {
+            return ctx.badRequest(
+              `Ward '${addressDetails.ward}' không tồn tại trong hệ thống. Vui lòng nhập ID xã.`
+            );
+          }
 
           // Nếu tìm thấy tỉnh, huyện, xã theo convert Location thì lưu vào body request
           // để thay thế có tỉnh, huyện, xã không có. Không tìm dược => convert thất bại => báo lỗi
           if (provinceRecord && districtRecord && wardRecord) {
-            ctx.request.body.data.Province = provinceRecord.id;
             ctx.request.body.data.District = districtRecord.id;
             ctx.request.body.data.Ward = wardRecord.id;
+            ctx.request.body.data.Province = provinceRecord.id;
             Province = provinceRecord.id;
             Ward = wardRecord.id;
             District = districtRecord.id;
@@ -169,7 +212,7 @@ export default factories.createCoreController(
       } catch (error) {
         strapi.log.error("Error creating SOSRequest or Notifications:", error);
         return ctx.internalServerError(
-          "An error occurred while creating SOSRequest and Notifications"
+          `An error occurred while creating SOSRequest and Notifications: ${error}`
         );
       }
     },
@@ -191,7 +234,7 @@ function normalizeProvinceName(locationName) {
   return normalizedName;
 }
 function normalizeDistrictName(locationName) {
-  const prefixes = ["Quận", "Huyện", "Thị xã"];
+  const prefixes = ["Thành phố", "Quận", "Huyện", "Thị xã"];
   let normalizedName = locationName.trim();
 
   // Loại bỏ các tiền tố như "Quận", "Huyện", "Thị xã"

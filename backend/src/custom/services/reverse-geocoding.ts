@@ -18,15 +18,73 @@ export const getLocationFromCoordinates = async (lat, lon) => {
     const address = response.data.address;
 
     if (address) {
-      const province = address.state || address.city || null; // Tên Tỉnh / Thành phố
-      const district = address.city || address.county || null; // Tên quận / Huyện / Thị xã / Thành phố trực thuộc tỉnh
-      const ward = address.suburb || address.village || address.town || null; // Tên phường/ Xã / Thị trấn
+      
+      let rawProvince = address.state || '';
+      let rawDistrict = '';
+      let ward = '';
+
+      if (!rawProvince) {
+          rawProvince = address.city || '';
+
+          rawDistrict = address.county || '';
+          if (!rawDistrict) {
+              rawDistrict = address.suburb || '';
+              ward = address.village || '';
+              if (!ward) {
+                  ward = address.quarter || '';
+              }
+          } else {
+              ward = address.suburb || '';
+              if (!ward) {
+                  ward = address.village || '';
+                  if (!ward) {
+                      ward = address.quarter || '';
+                  }
+              }
+          }
+
+      } else {
+          rawDistrict = address.county || '';
+          if (!rawDistrict) {
+              rawDistrict = address.city || '';
+          }
+          ward = address.village || '';
+          if (!ward) {
+              ward = address.suburb || '';
+              if (!ward) {
+                  ward = address.quarter || '';
+              }
+          }
+      }
+
+      // const province = address.state || address.city || null; // Tên Tỉnh / Thành phố
+
+      // const district =
+      //   province === address.city // Nếu `province` đã nhận `address.city`, bỏ qua nó cho `district`
+      //     ? address.county || address.suburb || null
+      //     : address.city || address.county || address.suburb || null; // Nếu chưa nhận, dùng bình thường
+
+      // const ward =
+      //   district == address.suburb
+      //     ? address.village || address.town || address.hamlet || null
+      //     : address.village ||
+      //       address.town ||
+      //       address.quarter ||
+      //       address.suburb ||
+      //       null; // Tên phường/ Xã / Thị trấn
+
       const road = address.road || null; // Tên đường
-      const amenity = address.amenity || address.hamlet || null; // Tên địa điểm / Thôn
+
+      const amenity =
+        address.amenity ||
+        address.hamlet ||
+        address.house_number ||
+        address.building ||
+        null; // Tên địa điểm / Thôn
 
       return {
-        province: province || null, // Nếu không có tỉnh, trả về thông báo mặc định
-        district: district || null, // Nếu không có quận/huyện, trả về thông báo mặc định
+        province: rawProvince || null, // Nếu không có tỉnh, trả về thông báo mặc định
+        district: rawDistrict || null, // Nếu không có quận/huyện, trả về thông báo mặc định
         ward: ward || null, // Nếu không có phường/xã, trả về thông báo mặc định
         road: road || null, // Nếu không có tên đường, trả về thông báo mặc định
         amenity: amenity || null, // Nếu không có tên địa điểm, trả về thông báo mặc định
