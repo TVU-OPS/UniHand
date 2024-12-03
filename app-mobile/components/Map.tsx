@@ -1,60 +1,57 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, Platform } from "react-native";
 import { WebView } from "react-native-webview";
 import * as Location from "expo-location";
 import { Ionicons } from "@expo/vector-icons";
 import { SosRequest } from "@/types/sos-request";
+import { Notification } from "@/types/notification";
+import { useFocusEffect } from "expo-router";
+import { Disaster } from "@/types/disaster";
 
-// type MapProps = {
-//     const sosRequests: SosRequest[] = [
-//     {
-//       id: 1,
-//       FullName: "John Doe",
-//       Location: { lat: 9.918968, lng: 106.33812354 },
-//     },
-//     {
-//       id: 2,
-//       FullName: "Jane Smith",
-//       Location: { lat: 16.4289446, lng: 106.335133 },
-//     },
-//     {
-//       id: 3,
-//       FullName: "Alice Johnson",
-//       Location: { lat: 16.4299446, lng: 107.3129033 },
-//     },
-//   ];
-// };
+// const provinces = [
+//   // Có chữ Tỉnh với Thành phố hay không cũng đc, ví dụ Tỉnh Trà Vinh hay Trà Vinh đều được
+//   { name: "Tỉnh Trà Vinh", location: { lng: 106.34449, lat: 9.81274 } },
+//   { name: "Tỉnh Bến Tre", location: { lng: 106.4811559, lat: 10.1093637 } },
+//   { name: "Tỉnh Vĩnh Long", location: { lng: 105.9669665, lat: 10.1203043 } },
+//   {
+//     name: "Thành phố Cần Thơ",
+//     location: { lng: 105.7875821, lat: 10.0364634 },
+//   },
+// ];
+interface MapProps {
+  notification: Notification[];
+  disasters: Disaster[];
+}
+type Province = {
+  name: string;
+  location: {
+    lng: number;
+    lat: number;
+  };
+};
 
-const sosRequests = [
-  {
-    id: 1,
-    FullName: "John Doe",
-    Location: { lat: 9.918968, lng: 106.33812354 },
-  },
-  {
-    id: 2,
-    FullName: "Jane Smith",
-    Location: { lat: 16.4289446, lng: 106.335134 },
-  },
-  {
-    id: 3,
-    FullName: "Alice Johnson",
-    Location: { lat: 16.4299446, lng: 107.3129033 },
-  },
-];
-
-const provinces = [
-  { name: "Tỉnh Trà Vinh", location: { lng: 106.342848, lat: 9.937956 } },
-  { name: "Tỉnh Bến Tre", location: { lng: 106.4811559, lat: 10.1093637 } },
-  {
-    name: "Thành phố Cần Thơ",
-    location: { lng: 105.7875821, lat: 10.0364634 },
-  },
-];
-
-export default function Map() {
+export default function Map(props: MapProps) {
+  const provinces: Province[] = [];
   const webviewRef = useRef(null);
+  const [selectedDisaster, setSelectedDisaster] = useState<string | undefined>(undefined);
 
+  props.disasters?.forEach((disaster: any) => {
+    if (disaster.Provinces && Array.isArray(disaster.Provinces)) {
+      disaster.Provinces.forEach((province: any) => {
+        if (province.Name && province.Latitude && province.Longitude) {
+          provinces.push({
+            name: `Tỉnh ${province.Name}`,
+            location: {
+              lng: parseFloat(province.Longitude),
+              lat: parseFloat(province.Latitude),
+            },
+          });
+        }
+      });
+    }
+  });
+
+  // Gửi message tới WebView
   const sendMessageToWebView = (data: any) => {
     if (webviewRef.current) {
       webviewRef.current.postMessage(JSON.stringify(data));
@@ -91,23 +88,29 @@ export default function Map() {
     );
   };
 
+  // Lấy vị trí
   useEffect(() => {
     getCurrentLocation();
   }, []);
 
   // Gửi mảng SOS request vào WebView
-  useEffect(() => {
-    if (sosRequests.length > 0) {
-      const sosRequestsWithPopupContent = sosRequests.map((request) => ({
-        ...request,
-        popupContent: generatePopupContent(request.FullName), // Add the popup content dynamically
-      }));
-      sendMessageToWebView({
-        action: "add_markers",
-        sosRequests: sosRequestsWithPopupContent,
-      });
-    }
-  }, [sosRequests]);
+  useFocusEffect(
+    React.useCallback(() => {
+      if (props?.notification?.length > 0) {
+        const sosRequestsWithPopupContent = props.notification.map(
+          (notifi) => ({
+            ...notifi,
+            popupContent: generatePopupContent(notifi?.SOSRequest?.FullName), // Add the popup content dynamically
+          })
+        );
+
+        sendMessageToWebView({
+          action: "add_markers",
+          notification: sosRequestsWithPopupContent,
+        });
+      }
+    }, [props?.notification]) // Dependency array để re-run khi notification thay đổi
+  );
 
   // Generate the popup content for each SOS request
   const generatePopupContent = (FullName: string) => {
@@ -120,6 +123,7 @@ export default function Map() {
     `;
   };
 
+  
   const handleZoomIn = () => {
     sendMessageToWebView({ action: "zoom_in" });
   };
@@ -171,13 +175,14 @@ export default function Map() {
     <script>
 
        
-       const provinces = [
-            // Có chữ Tỉnh với Thành phố hay không cũng đc, ví dụ Tỉnh Trà Vinh hay Trà Vinh đều được
-            { name: 'Tỉnh Trà Vinh', location: { lng: 106.34449, lat: 9.81274 } },
-            { name: 'Tỉnh Bến Tre', location: { lng: 106.4811559, lat: 10.1093637 } },
-            { name: 'Tỉnh Vĩnh Long', location: { lng: 105.9669665, lat: 10.1203043 } },
-            { name: 'Thành phố Cần Thơ', location: { lng: 105.7875821, lat: 10.0364634 } },
-        ];
+      const provinces = ${JSON.stringify(provinces)};
+      //  const provinces = [
+      //       // Có chữ Tỉnh với Thành phố hay không cũng đc, ví dụ Tỉnh Trà Vinh hay Trà Vinh đều được
+      //       { name: 'Tỉnh Trà Vinh', location: { lng: 106.34449, lat: 9.81274 } },
+      //       { name: 'Tỉnh Bến Tre', location: { lng: 106.4811559, lat: 10.1093637 } },
+      //       { name: 'Tỉnh Vĩnh Long', location: { lng: 105.9669665, lat: 10.1203043 } },
+      //       { name: 'Thành phố Cần Thơ', location: { lng: 105.7875821, lat: 10.0364634 } },
+      //   ];
        // Toàn bộ khúc dưới không sửa
 
         function calculateCenter(points) {
@@ -430,8 +435,9 @@ export default function Map() {
       const markers = {};
 
       document.addEventListener("message", (event) => {
+      // alert("message")
         const data = JSON.parse(event.data);
-        const { latitude, longitude, action, sosRequests } = data;
+        const { latitude, longitude, action, notification } = data;
 
         if (action === "update" || action === "move") {
           if (!markers["currentLocation"]) {
@@ -449,23 +455,35 @@ export default function Map() {
           map.zoomIn();
         } else if (action === "zoom_out") {
           map.zoomOut();
-        } else if (action === "add_markers" && sosRequests) {
-          sosRequests.forEach(({ id, FullName, Location, popupContent }) => {
-            if (!markers[id]) {
-              const marker = new mapboxgl.Marker({ color: 'red' })
-                .setLngLat([Location.lng, Location.lat])
-                .addTo(map);
+        } else if (action === "add_markers") {
 
+        //  const marker = new mapboxgl.Marker({ color: 'red' })
+        //         .setLngLat([106.3483784, 9.9198494])
+        //         .addTo(map);
+        
+        notification.forEach(({ SOSRequest, popupContent }) => {
+          // if (!markers[id]) {
+            // const marker = new mapboxgl.Marker({ color: 'red' })
+            // .setLngLat([SOSRequest.Location.lng, SOSRequest.Location.lat])
+            // .addTo(map);
+
+            
+         const marker = new mapboxgl.Marker({ color: 'red' })
+                .setLngLat([SOSRequest.Location.lng, SOSRequest.Location.lat])
+                .addTo(map);
+            
+            // alert(SOSRequest.Location.lng);
               // Create popup for the marker with dynamic content
               const popup = new mapboxgl.Popup({ offset: 25, closeOnClick: false, closeButton: false })
                 .setHTML(popupContent);
 
               marker.setPopup(popup); // Attach the popup to the marker
 
-              markers[id] = marker;
+              // markers[id] = marker;
               
-            }
+            // }
           });
+
         }
       });
     </script>
@@ -485,6 +503,8 @@ export default function Map() {
         }}
         originWhitelist={["https://*", "http://*", "file://*", "sms://*"]}
         setSupportMultipleWindows={true}
+        startInLoadingState={true}
+        scalesPageToFit={true}
       />
       <View style={styles.controls}>
         <TouchableOpacity

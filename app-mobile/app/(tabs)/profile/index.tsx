@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     alignItems: "center",
     justifyContent: "center",
+    minWidth: "100%",
   },
   header: {
     fontSize: 20,

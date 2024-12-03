@@ -99,8 +99,8 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
           <Ionicons name="location" size={16} color="#0ea5e9" />
         </Text>
         <Text style={styles.highlightText}>
-          {item.Province?.ProvinceName}, {item.District?.DistrictName},{" "}
-          {item.Ward?.WardName}
+          {item.Province?.FullName}, {item.District?.FullName},{" "}
+          {item.Ward?.FullName}
         </Text>
       </View>
       <View style={styles.highlightRow}>
@@ -152,6 +152,7 @@ const styles = StyleSheet.create({
     elevation: 3,
     borderWidth: 1,
     borderColor: "#ccc",
+    minWidth: "100%",
   },
   header: {
     flexDirection: "row",
