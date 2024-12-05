@@ -22,12 +22,29 @@ import * as Location from "expo-location";
 import { Ionicons } from "@expo/vector-icons"; // Import icon library
 import { Disaster } from "@/types/disaster";
 import disasterApi from "@/api/disasterApi";
-import DropDownPicker from "react-native-dropdown-picker";
 import { CreateSosRequest } from "@/types/sos-request";
 import sosRequestApi from "@/api/sosRequestApi";
 import { ThemedView } from "@/components/ThemedView";
 import { LogBox } from "react-native";
 import { ThemedText } from "@/components/ThemedText";
+import { Link, useFocusEffect } from "expo-router";
+import locationApi from "@/api/locationApi";
+import provinceApi from "@/api/provinceApi";
+import { Province } from "@/types/province";
+import districtApi from "@/api/district";
+import { District } from "@/types/district";
+import { Ward } from "@/types/ward";
+import wardApi from "@/api/ward";
+import RNPickerSelect from "react-native-picker-select";
+import * as ImagePicker from "expo-image-picker";
+import * as DocumentPicker from "expo-document-picker";
+import { Audio } from "expo-av";
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withTiming,
+} from "react-native-reanimated";
+import uploadApi from "@/api/upload";
 
 export default function SOSScreen() {
   const [fullName, setFullName] = useState("");
@@ -37,20 +54,127 @@ export default function SOSScreen() {
   const [needFood, setNeedFood] = useState(false);
   const [needMedical, setNeedMedical] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
-  const [address, setAddress] = useState("");
+  const [lat, setLat] = useState<string | null>(null);
+  const [lng, setLng] = useState<string | null>(null);
+  const [address, setAddress] = useState<string | null>(null);
   const [loadingLocation, setLoadingLocation] = useState(false);
-
-  const [disasters, setDisasters] = useState<Disaster[]>([]);
-  const [selectedDisaster, setSelectedDisaster] = useState<number | null>(null);
-  const [openDropdown, setOpenDropdown] = useState(false);
-
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [images, setImages] = useState<string[] | null[]>([
+    null,
+    null,
+    null,
+    null,
+  ]);
+
+  // Audio recording
+  const [audioFiles, setAudioFiles] = useState<string[]>([]);
+  const [recording, setRecording] = useState<Audio.Recording | null>(null);
+  const [recordingUri, setRecordingUri] = useState<string | null>(null);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+  const [sound, setSound] = useState<Audio.Sound | null>(null);
+
+  // Dropdown for disasters
+  const [disasters, setDisasters] =
+    useState<{ label: string; value: number }[]>();
+  const [selectedDisaster, setSelectedDisaster] = useState<number | null>(null);
+
+  // Dropdown for provinces
+  const [provinces, setProvinces] =
+    useState<{ label: string; value: number }[]>();
+  const [selectedProvince, setSelectedProvince] = useState<number | null>(null);
+
+  // Dropdown for districts
+  const [districts, setDistricts] =
+    useState<{ label: string; value: number }[]>();
+  const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
+
+  // Dropdown for wards
+  const [wards, setWards] = useState<{ label: string; value: number }[]>();
+  const [selectedWard, setSelectedWard] = useState<number | null>(null);
+
+  // Extra address details
+  const [road, setRoad] = useState<string | null>(null);
+  const [amenity, setAmenity] = useState<string | null>(null);
+  const [addressDetail, setAddressDetail] = useState<string | null>(null);
+
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpandedAdress, setExpandedAdress] = useState(false);
+  const heightValue = useSharedValue(0);
+  const heightValueAdress = useSharedValue(0);
+
+  const toggleAccordion = () => {
+    setIsExpanded(!isExpanded);
+    heightValue.value = isExpanded ? 0 : 240; // Đặt chiều cao cho accordion
+  };
+
+  const toggleAccordionAdress = () => {
+    setExpandedAdress(!isExpandedAdress);
+    heightValueAdress.value = isExpandedAdress ? 0 : 110; // Đặt chiều cao cho accordion
+  };
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    height: withTiming(heightValue.value, { duration: 300 }),
+    overflow: "hidden",
+  }));
+
+  const animatedStyleAdress = useAnimatedStyle(() => ({
+    height: withTiming(heightValueAdress.value, { duration: 300 }),
+    overflow: "hidden",
+  }));
+
   // Tắt cảnh báo về VirtualizedLists
   LogBox.ignoreLogs([
     "VirtualizedLists should never be nested inside plain ScrollViews",
   ]);
+
+  const fetchProvinces = async () => {
+    try {
+      const res = await provinceApi.getProvinces();
+      const provinceOptions = res.data.map((province: Province) => ({
+        label: province.FullName,
+        value: province.id,
+      }));
+      setProvinces(provinceOptions);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchDistricts = async () => {
+    if (!selectedProvince) {
+      return;
+    }
+    try {
+      const res = await districtApi.getDistrictsByProvinceId(
+        selectedProvince.toString()
+      );
+      const districtOptions = res.data.map((district: District) => ({
+        label: district.FullName,
+        value: district.id,
+      }));
+      setDistricts(districtOptions);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchWards = async () => {
+    if (!selectedDistrict) {
+      return;
+    }
+    try {
+      const res = await wardApi.getWardsByDistrictId(
+        selectedDistrict.toString()
+      );
+      const wardOptions = res.data.map((ward: Ward) => ({
+        label: ward.FullName,
+        value: ward.id,
+      }));
+      setWards(wardOptions);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const fetchDisasters = async () => {
     try {
@@ -60,10 +184,14 @@ export default function SOSScreen() {
         value: disaster.id, // Assuming `id` is the disaster ID
       }));
       setDisasters(disasterOptions);
+      if(selectedDisaster === null) {
+        setSelectedDisaster(disasterOptions[0].value);
+      }
     } catch (error) {
       console.error(error);
     }
   };
+
   const getLocation = async () => {
     setLoadingLocation(true);
     try {
@@ -84,10 +212,30 @@ export default function SOSScreen() {
         longitude,
       });
 
-      if (reverseGeocode.length > 0) {
-        const { city, region, street, country } = reverseGeocode[0];
-        const formattedAddress = `${street}, ${city}, ${region}, ${country}`;
-        setAddress(formattedAddress);
+      const res = await locationApi.convertLocation(
+        latitude.toString(),
+        longitude.toString()
+      );
+
+      setAddress(
+        `${res.data?.Province?.FullName}, ${res.data?.District?.FullName}, ${
+          res.data?.Ward?.FullName
+        } ${res.data?.Road !== null ? `, ${res.data?.Road}` : null}, ${
+          res.data?.Amenity !== null ? `, ${res.data?.Amenity}` : null
+        }`
+      );
+      setSelectedProvince(res.data.Province.id);
+      setSelectedDistrict(res.data.District.id);
+      setSelectedWard(res.data.Ward.id);
+
+      const { Road, Amenity } = res.data;
+      if (Road) {
+        setRoad(Road);
+        setAddressDetail(Road);
+      }
+      if (Amenity) {
+        setAmenity(Amenity);
+        setAddressDetail((prev) => (prev ? `${prev}, ${Amenity}` : Amenity));
       }
 
       setLoadingLocation(false);
@@ -98,16 +246,116 @@ export default function SOSScreen() {
     }
   };
 
+  const pickImage = async (index: number) => {
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        const selectedImage = result.assets[0].uri;
+
+        // Thay thế ảnh tại vị trí index
+        const newImages = [...images];
+        newImages[index] = selectedImage;
+        setImages(newImages);
+      }
+    } catch (error) {
+      Alert.alert("Lỗi", "Không thể chọn ảnh, vui lòng thử lại!");
+      console.error(error);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    const newImages = [...images];
+    newImages[index] = null; // Đặt lại giá trị `null` cho ảnh tại vị trí index
+    setImages(newImages);
+  };
+
+  const startRecording = async () => {
+    try {
+      const permission = await Audio.requestPermissionsAsync();
+      if (permission.status !== "granted") {
+        Alert.alert(
+          "Permission Denied",
+          "Audio recording permission is required."
+        );
+        return;
+      }
+
+      const { recording } = await Audio.Recording.createAsync({
+        ...Audio.RecordingOptionsPresets.HIGH_QUALITY,
+        outputFormat: ".mp3",
+      });
+      setRecording(recording);
+    } catch (error) {
+      console.error("Failed to start recording:", error);
+    }
+  };
+
+  const stopRecording = async () => {
+    try {
+      if (recording) {
+        await recording.stopAndUnloadAsync();
+        const uri = recording.getURI();
+        setRecordingUri(uri);
+        setAudioFiles((prev) => [...prev, uri]);
+        setRecording(null);
+      }
+    } catch (error) {
+      console.error("Failed to stop recording:", error);
+    }
+  };
+
+  const playAudio = async (uri: string, index: number) => {
+    try {
+      // Nếu đang phát một tệp khác, dừng nó trước
+      if (sound) {
+        await sound.unloadAsync();
+        setSound(null);
+        setPlayingIndex(null);
+      }
+
+      const { sound: newSound } = await Audio.Sound.createAsync({ uri });
+      setSound(newSound);
+      setPlayingIndex(index);
+
+      await newSound.playAsync();
+      newSound.setOnPlaybackStatusUpdate((status) => {
+        if (status.isLoaded && status.didJustFinish) {
+          // Dừng phát khi hoàn tất
+          setPlayingIndex(null);
+          setSound(null);
+        }
+      });
+    } catch (error) {
+      console.error("Lỗi khi phát âm thanh:", error);
+      Alert.alert("Lỗi", "Không thể phát tệp âm thanh.");
+    }
+  };
+
+  const removeAudioFile = (index: number) => {
+    const newAudioFiles = [...audioFiles];
+    newAudioFiles.splice(index, 1); // Xóa file tại vị trí index
+    setAudioFiles(newAudioFiles);
+  };
+
   const handleSubmit = async () => {
-    if (
-      !fullName ||
-      !phoneNumber ||
-      !selectedDisaster ||
-      !lat ||
-      !lng ||
-      !peopleCount
-    ) {
+    if (!fullName || !phoneNumber || !selectedDisaster || !peopleCount) {
       Alert.alert("Lỗi", "Vui lòng điền đầy đủ thông tin bắt buộc (*).");
+      return;
+    }
+
+    if (
+      // !lat ||
+      // !lng ||
+      !selectedProvince ||
+      !selectedDistrict ||
+      !selectedWard
+    ) {
+      Alert.alert("Lỗi", "Vui lòng chọn vị trí hoặc nhập");
       return;
     }
 
@@ -120,13 +368,52 @@ export default function SOSScreen() {
         NeedFood: needFood,
         NeedMedical: needMedical,
         PhoneNumber: phoneNumber,
-        Location: { lat, lng },
         Disaster: selectedDisaster,
       },
     };
 
+    if (lat && lng) {
+      requestData.data.Location = {
+        lat: lat?.toString(),
+        lng: lng?.toString(),
+      };
+    }
+
+    if (selectedProvince && selectedDistrict && selectedWard) {
+      requestData.data.Province = selectedProvince;
+      requestData.data.District = selectedDistrict;
+      requestData.data.Ward = selectedWard;
+    }
+
+    if (road) {
+      requestData.data.Road = road;
+    }
+    if (amenity) {
+      requestData.data.Amenity = amenity;
+    }
+    if (addressDetail) {
+      requestData.data.Amenity = addressDetail;
+      delete requestData.data.Road;
+    }
+
     setIsSubmitting(true); // Bắt đầu quay vòng
     try {
+      let imageIds = [];
+      let audioIds = [];
+      const imageUrl = images.filter((image) => image !== null);
+      if (imageUrl?.length > 0) {
+        console.log("images");
+        const res = await uploadApi.uploadImageFiles(imageUrl);
+        imageIds = res.map((file) => file.id);
+        requestData.data.DamageImage = imageIds;
+      }
+      if (audioFiles?.length > 0) {
+        console.log("images");
+        const res = await uploadApi.uploadAudioFiles(audioFiles);
+        audioIds = res.map((file) => file.id);
+        requestData.data.AudioFile = audioIds;
+      }
+
       const response = await sosRequestApi.createSosRequest(requestData);
       Alert.alert(
         "Thành công",
@@ -144,16 +431,49 @@ export default function SOSScreen() {
       setLng(null);
       setAddress("");
       setSelectedDisaster(null);
-    } catch (error : any) {
+      setImages([null, null, null, null]);
+      setAudioFiles([]);
+      setRecording(null);
+      setRecordingUri(null);
+      setPlayingIndex(null);
+      setSound(null);
+      setIsExpanded(false);
+      setExpandedAdress(false);
+      setRoad(null);
+      setAmenity(null);
+      setAddressDetail(null);
+      setProvinces([]);
+      setDistricts([]);
+      setWards([]);
+      setSelectedProvince(null);
+      setSelectedDistrict(null);
+      setSelectedWard(null);
+    } catch (error: any) {
       console.log(error?.response?.data || error);
-      Alert.alert("Error", "Failed to send request.");
+      Alert.alert("Lỗi", "Đã xảy ra lỗi khi gửi yêu cầu hỗ trợ.");
     } finally {
       setIsSubmitting(false); // Kết thúc quay vòng
     }
   };
 
   useEffect(() => {
+    fetchDistricts();
+    setWards([]);
+  }, [selectedProvince]);
+
+  useEffect(() => {
+    fetchWards();
+  }, [selectedDistrict]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchDisasters();
+    }, [])
+  );
+
+  useEffect(() => {
     fetchDisasters();
+    fetchProvinces();
   }, []);
 
   return (
@@ -191,7 +511,7 @@ export default function SOSScreen() {
               value={fullName}
               onChangeText={setFullName}
             />
-            
+
             <TextInput
               style={styles.input}
               placeholder="Số điện thoại *"
@@ -207,25 +527,18 @@ export default function SOSScreen() {
               onChangeText={setPeopleCount}
             />
 
-            <DropDownPicker
-              open={openDropdown}
-              value={selectedDisaster}
-              items={disasters}
-              setOpen={setOpenDropdown}
-              setValue={setSelectedDisaster}
-              placeholder="Chọn loại thảm họa *"
-              style={styles.dropdown}
-              placeholderStyle={{ color: "#9ca3af" }}
-              dropDownContainerStyle={{ borderColor: "#ccc", marginTop: 10 }}
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Mô tả hiện trạng, nhu cầu"
-              value={description}
-              onChangeText={setDescription}
-              multiline
-            />
+            <View
+              style={[styles.pickerContainer, { width: "100%", marginTop: 14 }]}
+            >
+              <RNPickerSelect
+                onValueChange={(value) => setSelectedDisaster(value)}
+                items={disasters?.length ? disasters : []}
+                placeholder={{ label: "Chọn thiên tai*", value: null }}
+                style={{
+                  ...pickerSelectStyles,
+                }}
+              />
+            </View>
 
             {/* Address and Pick Button */}
             <View style={styles.addressContainer}>
@@ -234,8 +547,10 @@ export default function SOSScreen() {
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{ flexGrow: 1 }}
               >
-                <Text style={[address ? {} : { color: "#9ca3af" }]}>
-                  {address || "Địa chỉ *"}
+                <Text
+                  style={[address ? {} : { color: "#9ca3af", fontSize: 16 }]}
+                >
+                  {address || "Lấy địa chỉ *"}
                 </Text>
               </ScrollView>
               <TouchableOpacity
@@ -251,29 +566,247 @@ export default function SOSScreen() {
               </TouchableOpacity>
             </View>
 
-            {/* Switches for needs */}
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                marginTop: 6,
-              }}
+            {/* Accordion cho icung cấp thông tin thêm */}
+            <TouchableOpacity
+              style={[
+                {
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 10,
+                  position: "relative",
+                },
+              ]}
+              onPress={toggleAccordionAdress}
             >
-              <View style={styles.switchContainer}>
-                <Text style={styles.switchLabel}>Đồ ăn</Text>
-                <Switch value={needFood} onValueChange={setNeedFood} />
-              </View>
-              <View style={styles.switchContainer}>
-                <Text style={styles.switchLabel}>Nước uống</Text>
-                <Switch value={needWater} onValueChange={setNeedWater} />
-              </View>
+              <Text style={styles.toggleText}>
+                {isExpandedAdress ? "Hoặc nhập địa chỉ*" : "Hoặc nhập địa chỉ*"}
+              </Text>
+              <Ionicons
+                name={isExpandedAdress ? "chevron-up" : "chevron-down"}
+                size={20}
+                color="#0ea5e9"
+                style={{ position: "absolute", right: 4 }}
+              />
+            </TouchableOpacity>
+
+            <Animated.View style={[styles.extraInputs, animatedStyleAdress]}>
+              {/* Dropdown for location */}
+
               <View
-                style={[styles.switchContainer, { justifyContent: "flex-end" }]}
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  marginTop: 14,
+                  justifyContent: "space-between",
+                }}
               >
-                <Text style={styles.switchLabel}>Y tế</Text>
-                <Switch value={needMedical} onValueChange={setNeedMedical} />
+                <View style={[styles.pickerContainer, { width: "48%" }]}>
+                  <RNPickerSelect
+                    onValueChange={(value) => setSelectedProvince(value)}
+                    items={provinces?.length ? provinces : []}
+                    placeholder={{ label: "Chọn tỉnh/thành phố*", value: null }}
+                    style={{
+                      ...pickerSelectStyles,
+                    }}
+                  />
+                </View>
+
+                <View style={[styles.pickerContainer, { width: "48%" }]}>
+                  <RNPickerSelect
+                    onValueChange={(value) => setSelectedDistrict(value)}
+                    items={districts?.length ? districts : []}
+                    placeholder={{ label: "Chọn quận/huyện*", value: null }}
+                    style={{
+                      ...pickerSelectStyles,
+                    }}
+                  />
+                </View>
               </View>
+
+              {/* // Dropdown for wards */}
+              <View
+                style={[
+                  styles.pickerContainer,
+                  { width: "100%", marginTop: 14 },
+                ]}
+              >
+                <RNPickerSelect
+                  onValueChange={(value) => setSelectedWard(value)}
+                  items={wards?.length ? wards : []}
+                  placeholder={{ label: "Chọn phường/xã*", value: null }}
+                  style={{
+                    ...pickerSelectStyles,
+                  }}
+                />
+              </View>
+            </Animated.View>
+
+            <TextInput
+              style={styles.input}
+              placeholder="Địa chỉ chi tiết"
+              value={addressDetail}
+              onChangeText={setAddressDetail}
+            />
+
+            {/* Thanh ngang ghi âm */}
+            <View style={styles.recordBar}>
+              <Text style={styles.statusText}>
+                {recording ? "Đang ghi âm..." : "Ghi âm nhanh nội dung"}
+              </Text>
+              <TouchableOpacity
+                style={recording ? styles.stopButton : styles.startButton}
+                onPress={recording ? stopRecording : startRecording}
+              >
+                <Ionicons
+                  name={recording ? "stop" : "mic-outline"}
+                  size={20}
+                  color="#fff"
+                />
+              </TouchableOpacity>
             </View>
+
+            {/* Danh sách file ghi âm */}
+            <FlatList
+              data={audioFiles}
+              keyExtractor={(item, index) => index.toString()}
+              renderItem={({ item, index }) => (
+                <View style={styles.audioCard}>
+                  <Text
+                    // numberOfLines={1}
+                    style={styles.audioText}
+                  >
+                    {item.split("/").pop()}
+                  </Text>
+                  <View style={styles.cardButtons}>
+                    <TouchableOpacity
+                      style={styles.playButton}
+                      onPress={() => playAudio(item, index)}
+                    >
+                      <Text style={styles.buttonText}>
+                        {playingIndex === index ? (
+                          <Ionicons name="pause" size={16} color="#fff" />
+                        ) : (
+                          <Ionicons name="play" size={16} color="#fff" />
+                        )}
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.deleteButton}
+                      onPress={() => removeAudioFile(index)}
+                    >
+                      <Text style={styles.buttonText}>
+                        <Ionicons name="trash" size={16} color="#fff" />
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+            />
+
+            {/* Accordion cho icung cấp thông tin thêm */}
+            <TouchableOpacity
+              style={[
+                {
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginTop: 12,
+                  position: "relative",
+                },
+              ]}
+              onPress={toggleAccordion}
+            >
+              <Text style={styles.toggleText}>
+                {isExpanded
+                  ? "Cung cấp thêm thông tin"
+                  : "Cung cấp thêm thông tin"}
+              </Text>
+              <Ionicons
+                name={isExpanded ? "chevron-up" : "chevron-down"}
+                size={20}
+                color="#0ea5e9"
+                style={{ position: "absolute", right: 4 }}
+              />
+            </TouchableOpacity>
+
+            <Animated.View style={[styles.extraInputs, animatedStyle]}>
+              <Text
+                style={{
+                  marginTop: 14,
+                  fontSize: 16,
+                  color: "#9ca3af",
+                }}
+              >
+                Thêm ảnh mô tả:{" "}
+              </Text>
+              <View style={styles.grid}>
+                {images.map((image, index) => (
+                  <View key={index} style={styles.imageWrapper}>
+                    {image ? (
+                      <View style={styles.imageContainer}>
+                        <Image
+                          source={{ uri: image }}
+                          style={styles.imagePick}
+                        />
+                        <TouchableOpacity
+                          style={styles.removeButton}
+                          onPress={() => removeImage(index)}
+                        >
+                          <Text style={styles.removeButtonText}>Xóa</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      <TouchableOpacity
+                        onPress={() => pickImage(index)}
+                        style={styles.placeholder}
+                      >
+                        <Ionicons name="image-outline" size={25} color="#ccc" />
+                      </TouchableOpacity>
+                    )}
+                  </View>
+                ))}
+              </View>
+
+              <TextInput
+                // style={styles.input}
+                style={{
+                  ...styles.input,
+                  height: 64,
+                  textAlignVertical: "top",
+                }}
+                placeholder="Mô tả hiện trạng, nhu cầu bằng văn bản"
+                value={description}
+                onChangeText={setDescription}
+                multiline={true}
+                numberOfLines={4}
+              />
+
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                }}
+              >
+                <View style={styles.switchContainer}>
+                  <Text style={styles.switchLabel}>Đồ ăn</Text>
+                  <Switch value={needFood} onValueChange={setNeedFood} />
+                </View>
+                <View style={styles.switchContainer}>
+                  <Text style={styles.switchLabel}>Nước uống</Text>
+                  <Switch value={needWater} onValueChange={setNeedWater} />
+                </View>
+                <View
+                  style={[
+                    styles.switchContainer,
+                    { justifyContent: "flex-end" },
+                  ]}
+                >
+                  <Text style={styles.switchLabel}>Y tế</Text>
+                  <Switch value={needMedical} onValueChange={setNeedMedical} />
+                </View>
+              </View>
+            </Animated.View>
 
             <TouchableOpacity
               style={[
@@ -305,41 +838,38 @@ const styles = StyleSheet.create({
   scrollContainer: {
     padding: 20,
     paddingBottom: 50,
-    paddingTop: 60,
+    paddingTop: 40,
     flexGrow: 1, // Make sure content takes full height
-    // justifyContent: "center", // Center content vertically
   },
   header: {
-    fontSize: 22,
+    fontSize: 18,
     fontWeight: "bold",
-    // color: "#333",
     textAlign: "center",
     textTransform: "uppercase",
-    // marginBottom: 16,
-    marginTop: 12,
+    marginTop: 8,
   },
   textDes: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#6b7280",
     textAlign: "center",
-    marginBottom: 6,
-    marginTop: 6,
+    marginBottom: 4,
+    marginTop: 4,
     paddingHorizontal: 16,
   },
   image: {
-    width: 90,
-    height: 90,
+    width: 80,
+    height: 80,
   },
   input: {
     borderColor: "#ddd",
     borderWidth: 1,
     borderRadius: 8,
-    marginTop: 16,
+    marginTop: 12,
     paddingHorizontal: 12,
     backgroundColor: "#fff",
-    height: 45,
+    height: 44,
+    fontSize: 16,
   },
-
   switchContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -350,10 +880,10 @@ const styles = StyleSheet.create({
   switchLabel: {
     fontSize: 16,
     color: "#6b7280",
-    fontWeight: 600,
+    fontWeight: "600",
   },
   locationCard: {
-    marginTop: 16,
+    marginTop: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 8,
@@ -380,13 +910,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#50bef1",
     paddingVertical: 10,
     borderRadius: 8,
-    marginTop: 16,
+    marginTop: 14,
     alignItems: "center",
   },
-
   buttonText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
   addressContainer: {
@@ -395,33 +924,198 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     borderWidth: 1,
     borderRadius: 8,
-    marginTop: 16,
+    marginTop: 12,
     backgroundColor: "#fff",
-    paddingHorizontal: 10,
-    height: 45,
+    paddingHorizontal: 12,
+    height: 44,
   },
+  // picker
   pickButton: {
     transform: [{ translateX: 4 }],
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-    // width: 40, // Đảm bảo kích thước cố định
-    // height: 40,
   },
-
   inputAddress: {
     flex: 1,
-    // paddingHorizontal: 12,
   },
-
   dropdown: {
-    // marginVertical: 10,
     marginTop: 16,
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,
+    zIndex: 99,
   },
   dropdownList: {
     borderColor: "#ccc",
+  },
+  pickerContainer: {
+    paddingRight: 5,
+    borderWidth: 0.8,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    justifyContent: "center",
+    height: 40,
+    overflow: "hidden",
+  },
+
+  grid: {
+    flexDirection: "row",
+    // flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  imageWrapper: {
+    width: "22%",
+    height: 70,
+    margin: 5,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    overflow: "hidden",
+    position: "relative",
+  },
+  imageContainer: {
+    flex: 1,
+    position: "relative",
+  },
+  imagePick: {
+    width: "100%",
+    height: "100%",
+  },
+  placeholder: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#e9ecef",
+  },
+  removeButton: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+    backgroundColor: "rgba(255, 0, 0, 0.7)",
+    padding: 5,
+    borderRadius: 5,
+  },
+  removeButtonText: {
+    color: "#fff",
+    fontSize: 12,
+  },
+  pickButtonAudio: {
+    backgroundColor: "#007bff",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 14,
+  },
+  pickButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+  },
+
+  // Thêm thông tin
+  toggleText: {
+    fontSize: 16,
+    color: "#0ea5e9",
+    marginLeft: 4,
+    textDecorationLine: "underline",
+  },
+  // Ghi âm
+  recordBar: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    // backgroundColor: "#cccc",
+    borderWidth: 0.6,
+    borderColor: "#ccc",
+    // padding: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+    marginTop: 14,
+  },
+  startButton: {
+    backgroundColor: "#4caf50",
+    padding: 4,
+    borderRadius: 50,
+    // marginRight: 8,
+  },
+  stopButton: {
+    backgroundColor: "#e53935",
+    padding: 4,
+    borderRadius: 50,
+    // marginRight: 16,
+  },
+  statusText: {
+    color: "#9ca3af",
+    fontSize: 16,
+  },
+  audioCard: {
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    elevation: 2,
+    borderWidth: 0.6,
+    borderColor: "#ccc",
+    marginTop: 12,
+    paddingVertical: 2,
+  },
+  audioText: {
+    fontSize: 13,
+    color: "#333",
+    flex: 1,
+    padding: 8,
+  },
+  cardButtons: {
+    flexDirection: "row",
+  },
+  playButton: {
+    backgroundColor: "#1e88e5",
+    padding: 7,
+    alignContent: "center",
+    borderRadius: "100%",
+    marginRight: 6,
+    width: 30,
+    height: 30,
+  },
+  deleteButton: {
+    backgroundColor: "#e53935",
+    padding: 7,
+    alignContent: "center",
+    borderRadius: "100%",
+    marginRight: 8,
+    width: 30,
+    height: 30,
+  },
+  buttonTextAudio: {
+    color: "#fff",
+    fontSize: 14,
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "black",
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  placeholder: {
+    color: "#9ca3af",
+  },
+  inputAndroid: {
+    fontSize: 12,
+    // paddingHorizontal: 10,
+    // paddingVertical: 8,
+    // borderWidth: 1,
+    // borderColor: "#ccc",
+    // borderRadius: 8,
+    // color: "black",
+    // backgroundColor: "#000",
   },
 });

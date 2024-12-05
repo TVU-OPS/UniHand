@@ -11,11 +11,18 @@ export type CreateSosRequest = {
     NeedFood: boolean;
     NeedMedical: boolean;
     PhoneNumber: string;
-    Location: {
-      lat: number;
-      lng: number;
+    Location?: {
+      lat: string;
+      lng: string;
     };
+    DamageImage?: number[] | string[];
     Disaster: number;
+    Amenity?: string;
+    Road?: string;
+    AudioFile?: number[] | string[];
+    Province?: number;
+    District?: number;
+    Ward?: number;
   };
 };
 

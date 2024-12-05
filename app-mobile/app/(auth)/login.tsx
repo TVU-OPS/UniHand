@@ -36,22 +36,12 @@ export default function LoginScreen() {
       await AsyncStorage.setItem("userInfo",  JSON.stringify(data.user)); 
       await AsyncStorage.setItem("userAccessToken", data.jwt);
       Alert.alert("Thông báo", "Đăng nhập thành công");
-      await fetchOrganization(data.user.id);
       router.back();
     } catch (error) {
-      // console.error("Failed to login:", error);
       Alert.alert("Thông báo", "Đăng nhập thất bại");
     }
   };
 
-  const fetchOrganization = async (userId: number) => {
-    try {
-      const data = await supportOrganizationApi.getSupportOrganizationByUserId(userId);
-      await AsyncStorage.setItem("supportOrganizationInfo",  JSON.stringify(data.data[0])); 
-    } catch (error) {
-      console.error("Failed to fetch organization:", error);
-    }
-  }
 
   return (
     <ThemedView style={styles.container}>
