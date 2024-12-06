@@ -1,4 +1,4 @@
-# ![UniHand](\public\banner.png)
+# ![UniHand](public/banner.png)
 
 **UniHand** là ứng dụng hỗ trợ thảm họa sử dụng nền tảng **Low-Code**, được phát triển trong khuôn khổ cuộc thi [Phần Mềm Nguồn Mở-Olympic Tin học Sinh viên Việt Nam 2024](https://www.olp.vn/procon-pmmn/ph%E1%BA%A7n-m%E1%BB%81m-ngu%E1%BB%93n-m%E1%BB%9F).  
 Ứng dụng nhằm mục tiêu **kết nối cộng đồng**, cung cấp thông tin nhanh chóng, và quản lý hỗ trợ nhân đạo trong các tình huống khẩn cấp.
