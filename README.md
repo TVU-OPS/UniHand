@@ -8,6 +8,8 @@
 
 ---
 
+# ![UniHand Banner](public/banner_review.png)
+
 ## **Mục lục**
 
 1. [Giới thiệu](#giới-thiệu)
@@ -24,35 +26,43 @@
 8. [Cộng đồng và đóng góp](#cộng-đồng-và-đóng-góp)
 9. [Liên hệ](#liên-hệ)
 
-## Giới Thiệu
+## Giới Thiệu (LÀM)
 
-- Mục tiêu của dự án.
-- Những vấn đề dự án giải quyết.
-- Đối tượng người dùng hoặc cộng đồng mục tiêu.
+- Dự án này được phát triển nhằm đáp ứng nhu cầu ứng dụng công nghệ thông tin trong các tình huống khẩn cấp, như thiên tai, đại dịch, hoặc các sự kiện thảm họa khác. Mục tiêu của dự án là xây dựng một hệ thống hỗ trợ cộng đồng trong các hoạt động ứng phó khẩn cấp, cung cấp thông tin nhanh chóng và hỗ trợ nhân đạo sau thảm họa.
+- Ứng dụng này sử dụng nền tảng **Low-Code Development Platform (LCDP)** mã nguồn mở, cho phép phát triển nhanh chóng và triển khai ứng dụng trong thời gian ngắn, đặc biệt quan trọng trong các tình huống khẩn cấp khi thời gian là yếu tố quan trọng.
 
-## Chức Năng
+## **Chức Năng (LÀM)**
 
-- [x] Tính năng A
-- [x] Tính năng B
-- [ ] Tính năng đang phát triển
+- **🌐 Kết nối cộng đồng**: Giúp kết nối các cá nhân và tổ chức trong các hoạt động ứng phó và hỗ trợ khẩn cấp.
+- **⚡ Cung cấp thông tin nhanh chóng**: Cập nhật thông tin kịp thời về tình hình thiên tai, đại dịch và các hoạt động khắc phục hậu quả.
+- **🤝 Hỗ trợ nhân đạo**: Cung cấp các kênh giúp đỡ người dân bị ảnh hưởng sau thảm họa, tình nguyện viên, v.v.
+- **⚙️ Đảm bảo sự linh hoạt và tốc độ phát triển**: Với LCDP, ứng dụng có thể được phát triển nhanh chóng và dễ dàng tùy chỉnh theo yêu cầu cụ thể.
 
 ## ⚙️ Về hệ thống
 
 ### Môi trường Công nghệ và Công cụ dùng để phát triển
 
-- **Git:** Theo dõi và quản lý các thay đổi trong mã nguồn hiệu quả.
-- **NodeJS:** Môi trường chạy JavaScript phía máy chủ.
-- **Noodl Editor:** Xây dựng ứng dụng full-stack thông qua giao diện các khối kéo thả **(Low-Code)**.
-- **Strapi:** Xây dựng API nhanh gắp nhiều lần thông qua giao diện **(Low-Code)**.
-- **MySQL:** Hệ quản trị cơ sở dữ liệu quan hệ.
-- **Docker:** Tạo, triển khai và chạy các ứng dụng trong container.
-- **Docker Compose:** Định nghĩa và quản lý nhiều container trong một ứng dụng.
-- **React Native:** Cho phép xây dựng ứng dụng di động đa nền tảng (Android và iOS).
-- Xem thêm chi tiết tại [UniHand Documentation](https://docs.unihand.org.vn/getting-started/environment-software).
+- [Git](https://git-scm.com): Theo dõi và quản lý các thay đổi trong mã nguồn hiệu quả.
+- [NodeJS](https://nodejs.org): Môi trường chạy JavaScript phía máy chủ.
+- [Noodl Editor](https://www.noodl.net): Xây dựng ứng dụng full-stack thông qua giao diện các khối kéo thả **(Low-Code)**.
+- [Strapi](https://strapi.io): Xây dựng API nhanh gắp nhiều lần thông qua giao diện **(Low-Code)**.
+- [MySQL](https://www.mysql.com) Hệ quản trị cơ sở dữ liệu quan hệ.
+- [Docker](https://www.docker.com) Tạo, triển khai và chạy các ứng dụng trong container.
+- [Docker Compose](https://docs.docker.com/compose) Định nghĩa và quản lý nhiều container trong một ứng dụng.
+- [React Native:](https://reactnative.dev) Cho phép xây dựng ứng dụng di động đa nền tảng (Android và iOS).
 
-### Sơ đồ hoạt động
+- Xem thêm chi tiết tại [UniHand Documentation](https://docs.unihand.site/getting-started/environment-software).
+
+### Sơ đồ hoạt động (LÀM)
 
 bla bla
+
+## Cấu trúc thư mục
+
+- [App Mobile](https://github.com/TVU-OPS/UniHand/tree/main/app-mobile): Mã nguồn ứng dụng di động.
+- [Backend](https://github.com/TVU-OPS/UniHand/tree/main/backend): Mã nguồn backend, bao gồm cấu hình hệ thống, cơ sở dữ liệu, mã nguồn chính và các tệp cấu hình.
+- [Web admin](https://github.com/TVU-OPS/UniHand/tree/main/web-admin): Mã nguồn trang quản trị.
+- [Web home](https://github.com/TVU-OPS/UniHand/tree/main/web-home): Mã nguồn trang chủ.
 
 ## 🔧 Cách Cài Đặt
 
@@ -61,7 +71,7 @@ bla bla
 - **Git:** phiên bản mới nhất, chi tiết và cài đặt trên trang chủ [Git](https://git-scm.com).
 - **NodeJS:** phiên bản 20 trở lên, chi tiết và cài đặt trên [NodeJS Download Package Manager](https://nodejs.org/en/download/package-manager).
 - **Docker và Docker Compose:** chi tiết và cài đặt trên trang chủ [Docker](https://www.docker.com).
-- Xem thêm các công cụ khác nếu bạn muốn tham gia phát triển dự án tại [UniHand Documentation](https://docs.unihand.org.vn/getting-started/environment-software)
+- Xem thêm các công cụ khác nếu bạn muốn tham gia phát triển dự án tại [UniHand Documentation](https://docs.unihand.site/getting-started/environment-software)
 
 ### Cài Đặt
 
@@ -82,6 +92,7 @@ npm run genv
 docker compose up -d
 
 ```
+
 Mặc định hệ thống sẽ chạy trên:
 
 - Trang chủ: [http://localhost](http://localhost).
@@ -131,15 +142,15 @@ Mặc định hệ thống sẽ chạy trên:
 
 ##### Chúng tôi hoan nghênh mọi đóng góp!
 
-- [⛔ Báo Cáo Lỗi](https://github.com/TVU-OPS/UniHand/issues/new?template=bug_report.md)
-- [🆕 Yêu Cầu Tính Năng](https://github.com/TVU-OPS/UniHand/issues/new?template=feature_request.md)
+- [⛔ Báo Cáo Lỗi](https://github.com/TVU-OPS/UniHand/issues/new?template=bug_report.md&title=[Bug])
+- [🆕 Yêu Cầu Tính Năng](https://github.com/TVU-OPS/UniHand/issues/new?template=feature_request.md&title=[Feature+Request])
 
-## Tài Liệu Hỗ Trợ
+##### Tài Liệu Hỗ Trợ
 
 - [Hướng Dẫn Đóng Góp](.github/CONTRIBUTING.md)
 - [CODE_OF_CONDUCT.md](.github/CODE_OF_CONDUCT.md)
 
-## License
+## 📃 License
 
 Được phân phối theo Giấy phép AGPLv3. Xem [`LICENSE.md`](https://github.com/TVU-OPS/UniHand/blob/main/LICENSE) để biết thêm thông tin.
 

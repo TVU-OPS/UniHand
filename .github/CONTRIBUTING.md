@@ -78,7 +78,7 @@ Nếu bạn muốn sửa lỗi hoặc thêm tính năng, làm theo các bước 
 # Tài Nguyên Hỗ Trợ
 
 - Hướng dẫn cài đặt dự án: [README.md](https://github.com/TVU-OPS/UniHand/blob/main/README.md).
-- Hoặc chi tiết trên [UniHand Documentation](https://docs.unihand.org.vn)
+- Hoặc chi tiết trên [UniHand Documentation](https://docs.unihand.site)
 - [⛔ Báo cáo lỗi](https://github.com/TVU-OPS/UniHand/issues/new?template=bug_report.md) hoặc [🆕 Yêu cầu tính năng](https://github.com/TVU-OPS/UniHand/issues/new?template=feature_request.md).
 - Liên hệ:
   - Email: unihand.ops@gmail.com
