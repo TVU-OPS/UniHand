@@ -41,7 +41,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="about/index"
+        name="post/index"
         options={{
           title: "Tin tức",
           tabBarIcon: ({ color }) => (

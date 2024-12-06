@@ -11,7 +11,6 @@ const supportOrganizationApi = {
                 },
             }
         );
-        console.log(res.request);
         return res.data;
     }
 }

@@ -74,13 +74,13 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
       <Text style={styles.description}>
         {truncateDescription(item?.RequestDescription, 100)}
       </Text>
-      <View style={{ display: "flex", flexDirection: "row" , gap: 3}}>
+      <View style={{ display: "flex", flexDirection: "row", gap: 3 }}>
         <View style={styles.highlightRow}>
           <Text style={styles.label}>
             <Ionicons name="people" size={16} color="#0ea5e9" />
           </Text>
           <Text style={styles.highlightText}>
-            {item?.PeopleCount} người cần hỗ trợ  |
+            {item?.PeopleCount} người cần hỗ trợ |
           </Text>
         </View>
         <View style={styles.highlightRow}>
@@ -131,6 +131,7 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
       ListEmptyComponent={
         <Text style={styles.emptyText}>Không có yêu cầu SOS nào.</Text>
       }
+      showsVerticalScrollIndicator={false}
     />
   );
 };
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#f3f4f6",
     minWidth: "100%",
   },
   header: {

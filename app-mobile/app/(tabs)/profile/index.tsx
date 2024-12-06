@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -15,6 +15,7 @@ import { ThemedView } from "@/components/ThemedView";
 import { SupportOrganization } from "@/types/supportOrganization";
 import { User } from "@/types/user";
 import { Link } from "expo-router";
+import supportOrganizationApi from "@/api/supportOrganization";
 
 export default function ProfileScreen() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -23,30 +24,20 @@ export default function ProfileScreen() {
     useState<SupportOrganization | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const checkAccessToken = async () => {
-        try {
-          const userToken = await AsyncStorage.getItem("userAccessToken");
-          const userInfo = await AsyncStorage.getItem("userInfo");
-          const organizationInfo = await AsyncStorage.getItem(
-            "supportOrganizationInfo"
-          );
-          const organization = organizationInfo
-            ? JSON.parse(organizationInfo)
-            : null;
-          const user = userInfo ? JSON.parse(userInfo) : null;
-          setAccessToken(userToken);
-          setUserInfo(user);
-          setOrganizationInfo(organization);
-        } catch (error) {
-          console.error("Failed to fetch data from AsyncStorage", error);
-        }
-      };
-
-      checkAccessToken();
-    }, [])
-  );
+  const fetchOrganization = async (userId: number) => {
+    try {
+      const data = await supportOrganizationApi.getSupportOrganizationByUserId(
+        userId
+      );
+      await AsyncStorage.setItem(
+        "supportOrganizationInfo",
+        JSON.stringify(data.data[0])
+      );
+      setOrganizationInfo(data.data[0]);
+    } catch (error) {
+      console.error("Failed to fetch organization:", error);
+    }
+  };
 
   const handleSaveChanges = async () => {
     // Xử lý lưu thông tin chỉnh sửa
@@ -66,6 +57,34 @@ export default function ProfileScreen() {
     }
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const checkAccessToken = async () => {
+        try {
+          const userToken = await AsyncStorage.getItem("userAccessToken");
+          const userInfo = await AsyncStorage.getItem("userInfo");
+          // const organizationInfo = await AsyncStorage.getItem(
+          //   "supportOrganizationInfo"
+          // );
+          // const organization = organizationInfo
+          //   ? JSON.parse(organizationInfo)
+          //   : null;
+          const user = userInfo ? JSON.parse(userInfo) : null;
+          setAccessToken(userToken);
+          setUserInfo(user);
+        } catch (error) {
+          console.error("Failed to fetch data from AsyncStorage", error);
+        }
+      };
+
+      checkAccessToken();
+    }, [])
+  );
+
+  useEffect(() => {
+    if (userInfo) fetchOrganization(userInfo?.id);
+  }, [userInfo]);
+
   const handleLogout = () => {
     AsyncStorage.removeItem("userInfo");
     AsyncStorage.removeItem("userAccessToken");
@@ -76,7 +95,10 @@ export default function ProfileScreen() {
   return (
     <ThemedView style={styles.container}>
       {accessToken ? (
-        <ScrollView contentContainerStyle={styles.content}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.content}
+        >
           <Text style={styles.header}>Thông tin tổ chức</Text>
           <View style={styles.orgAvatarContainer}>
             <Image
@@ -99,13 +121,18 @@ export default function ProfileScreen() {
               </TouchableOpacity>
             )}
             <TouchableOpacity
-              style={[styles.editButton, { backgroundColor: isEditing ? "#f87171" : "#50bef1" }] }
+              style={[
+                styles.editButton,
+                { backgroundColor: isEditing ? "#f87171" : "#50bef1" },
+              ]}
               onPress={() => setIsEditing(!isEditing)}
             >
-              {
-                isEditing ? <Ionicons name="close" size={16} color="#fff" /> : <Ionicons name="create-outline" size={16} color="#fff" />
-              }
-              <Text style={[styles.editButtonText ]}>
+              {isEditing ? (
+                <Ionicons name="close" size={16} color="#fff" />
+              ) : (
+                <Ionicons name="create-outline" size={16} color="#fff" />
+              )}
+              <Text style={[styles.editButtonText]}>
                 {isEditing ? "Hủy" : "Chỉnh sửa thông tin"}
               </Text>
             </TouchableOpacity>
@@ -195,7 +222,11 @@ export default function ProfileScreen() {
                 }
               />
             ) : (
-              <Text style={styles.value}>{organizationInfo?.Province?.FullName}, {organizationInfo?.District?.FullName}, {organizationInfo?.Ward?.FullName}</Text>
+              <Text style={styles.value}>
+                {organizationInfo?.Province?.FullName},{" "}
+                {organizationInfo?.District?.FullName},{" "}
+                {organizationInfo?.Ward?.FullName}
+              </Text>
             )}
           </View>
           <View style={styles.infoContainer}>
@@ -269,6 +300,7 @@ const styles = StyleSheet.create({
   content: {
     alignItems: "center",
     paddingBottom: 30,
+    width: "100vw",
   },
   avatarContainer: {
     position: "absolute",
@@ -363,7 +395,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     display: "flex",
-    flexDirection: "row", 
+    flexDirection: "row",
     gap: 4,
     backgroundColor: "#4ade80",
     paddingVertical: 8,

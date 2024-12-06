@@ -11,3 +11,15 @@ export type District = {
     updatedAt: string | null;
     publishedAt: string | null;
 };
+
+export type DistrictData = {
+    data: District[];
+    meta: {
+        pagination: {
+            page: number;
+            pageSize: number;
+            pageCount: number;
+            total: number;
+        }
+    }
+}

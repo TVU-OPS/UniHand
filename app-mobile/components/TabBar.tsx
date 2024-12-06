@@ -51,7 +51,7 @@ export function CustomTabBar({ state, descriptors, navigation }: BottomTabBarPro
             testID={options.tabBarTestID}
             onPress={onPress}
             onLongPress={onLongPress}
-            style={[styles.tab, index === 2 && styles.middleTab, isFocused && styles.focusedTab, index !== 2 && styles.sideTab, index === 1 && { marginRight: 30 }, index === 3 && { marginLeft: 30 }]}
+            style={[styles.tab, index === 2 && styles.middleTab, isFocused && styles.focusedTab, index !== 2 && styles.sideTab, index === 1 && { marginRight: 38 }, index === 3 && { marginLeft: 38 }]}
           >
             {iconName}
             <Text style={{ color: index === 2 ? '#fff' : isFocused ? activeTintColor : inactiveTintColor , fontWeight: '600', fontSize: 12}}>
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
   middleTab: {
     position: 'absolute',  
-    top: -22,              
+    top: -10,              
     left: '50%',           
     transform: [{ translateX: -35 }],
     height:75,            

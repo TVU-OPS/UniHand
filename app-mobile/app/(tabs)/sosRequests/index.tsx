@@ -23,13 +23,17 @@ export default function SosRequestsScreen() {
       if (organizationInfo && accessToken) {
         const res = await notificationApi.getNotificationsBySupportOrganization(
           organizationInfo.id,
-          accessToken
+          accessToken,
+          false
         );
         setNotifications(res.data);
       }
     } catch (error: any) {
-      if(error.response.status === 403) {
-        Alert.alert("Thông báo", "Bạn không có quyền truy cập chức năng này. Có thể do tổ chức của bạn chưa được duyệt.");
+      if (error.response.status === 403) {
+        Alert.alert(
+          "Thông báo",
+          "Bạn không có quyền truy cập chức năng này. Có thể do tổ chức của bạn chưa được duyệt."
+        );
       }
       console.log("Failed to fetch notifications:", error);
     }
@@ -73,9 +77,9 @@ export default function SosRequestsScreen() {
     <ThemedView style={styles.container}>
       {accessToken ? (
         <>
-          <View style={styles.containerHeader}>
+          {/* <View style={styles.containerHeader}>
             <Text style={styles.header}>Danh sách yêu cầu hỗ trợ</Text>
-          </View>
+          </View> */}
           <SosRequestsList
             notifications={notifications}
             onPressRequest={handleRequestPress}
@@ -98,14 +102,16 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    paddingTop: 20,
+    // backgroundColor: "#ccc",
   },
-  containerHeader : {
+  containerHeader: {
     width: "100%",
     paddingHorizontal: 20,
     paddingTop: 40,
     paddingBottom: 4,
     borderBottomWidth: 1,
-    borderColor: "#d1d5db",
+    borderColor: "#e5e7eb",
   },
   header: {
     fontSize: 20,

@@ -11,3 +11,15 @@ export type Province = {
     updatedAt: string | null;
     publishedAt: string | null;
 };
+
+export type ProvinceData = {
+    data: Province[];
+    meta: {
+        pagination: {
+            page: number;
+            pageSize: number;
+            pageCount: number;
+            total: number;
+        }
+    }
+}
