@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  mysql-server:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    container_name: mysql-server
+    restart: always
+    ports:
+      - "3306:3306" # Expose cổng MySQL
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}      # Tự động tạo database khi khởi động
+      MYSQL_USER: ${DATABASE_USERNAME}        # Tạo user mới
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}   # Mật khẩu cho user mới
+    # volumes:
+    #   - mysql-data:/var/lib/mysql     # Lưu trữ dữ liệu MySQL
+    networks:
+      - unihand-network
+  server-strapi:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: server-strapi
+    ports:
+      - "1337:1337"  # Map cổng 1337 của container ra cổng 1337 của máy host
+    restart: always
+    environment:
+      API_TOKEN_SALT: ${API_TOKEN_SALT}
+      ADMIN_JWT_SECRET: ${ADMIN_JWT_SECRET}
+      JWT_SECRET: ${JWT_SECRET}
+      DATABASE_HOST: mysql-server
+      DATABASE_PORT: 3306
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      EMAIL_USER: ${EMAIL_USER}
+      EMAIL_PASS: ${EMAIL_PASS}
+    depends_on:
+      - mysql-server
+    command: npm run start:pro
+    networks:
+      - unihand-network
+  web-admin:
+    build:
+      context: ./web-admin
+      dockerfile: Dockerfile
+    ports:
+      - "81:80"
+    networks:
+      - unihand-network
+    restart: always
+  web-home:
+    build:
+      context: ./web-home
+      dockerfile: Dockerfile
+    ports:
+      - "82:80"
+    networks:
+      - unihand-network
+    restart: always
+  domain:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        HOME_DOMAIN: ${HOME_DOMAIN}
+        ADMIN_DOMAIN: ${ADMIN_DOMAIN}
+    ports:
+      - "80:80"
+    environment:
+      HOME_DOMAIN: ${HOME_DOMAIN}
+      ADMIN_DOMAIN: ${ADMIN_DOMAIN}
+    networks:
+      - unihand-network
+    restart: always
+    
+# volumes:
+#   mysql-data:
+
+networks:
+  unihand-network:
+    driver: bridge

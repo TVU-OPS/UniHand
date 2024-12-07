@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "genv": "node generate-env.js"
+    }
+}
