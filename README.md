@@ -26,12 +26,12 @@
 8. [Cộng đồng và đóng góp](#cộng-đồng-và-đóng-góp)
 9. [Liên hệ](#liên-hệ)
 
-## Giới Thiệu (LÀM)
+## Giới Thiệu
 
 - Dự án này được phát triển nhằm đáp ứng nhu cầu ứng dụng công nghệ thông tin trong các tình huống khẩn cấp, như thiên tai, đại dịch, hoặc các sự kiện thảm họa khác. Mục tiêu của dự án là xây dựng một hệ thống hỗ trợ cộng đồng trong các hoạt động ứng phó khẩn cấp, cung cấp thông tin nhanh chóng và hỗ trợ nhân đạo sau thảm họa.
 - Ứng dụng này sử dụng nền tảng **Low-Code Development Platform (LCDP)** mã nguồn mở, cho phép phát triển nhanh chóng và triển khai ứng dụng trong thời gian ngắn, đặc biệt quan trọng trong các tình huống khẩn cấp khi thời gian là yếu tố quan trọng.
 
-## **Chức Năng (LÀM)**
+## Chức Năng
 
 - **🌐 Kết nối cộng đồng**: Giúp kết nối các cá nhân và tổ chức trong các hoạt động ứng phó và hỗ trợ khẩn cấp.
 - **⚡ Cung cấp thông tin nhanh chóng**: Cập nhật thông tin kịp thời về tình hình thiên tai, đại dịch và các hoạt động khắc phục hậu quả.
@@ -53,9 +53,9 @@
 
 - Xem thêm chi tiết tại [UniHand Documentation](https://docs.unihand.site/getting-started/environment-software).
 
-### Sơ đồ hoạt động (LÀM)
+### Sơ đồ hoạt động
 
-bla bla
+# ![UniHand Banner](public/so_do.png)
 
 ## Cấu trúc thư mục
 
