@@ -10,8 +10,8 @@
     "newArchEnabled": true,
     "ios": {
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "We need your location to send SOS requests.",
-        "NSLocationAlwaysUsageDescription": "We need your location to provide better assistance."
+        "NSLocationWhenInUseUsageDescription": "Chúng tôi cần vị trí của bạn để gửi yêu cầu SOS.",
+        "NSLocationAlwaysUsageDescription": "Chúng tôi cần vị trí của bạn để cung cấp sự trợ giúp tốt hơn."
       },
       "supportsTablet": true
     },

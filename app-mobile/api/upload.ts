@@ -5,14 +5,12 @@ const uploadApi = {
   async uploadAudioFiles(filesUrl: string[]): Promise<FileUpload[]> {
     const formData = new FormData();
     filesUrl.forEach((filesUrl) => {
-      // Lấy tên file từ URI
       const fileName = filesUrl.split("/").pop();
       const type = fileName?.split(".").pop();
-      // Đóng gói file vào FormData
       formData.append("files", {
         uri: filesUrl,
         name: fileName || "recording.mp4",
-        type: `audio/${type}`, // Hoặc loại MIME phù hợp
+        type: `audio/${type}`,
       });
     });
 
@@ -27,14 +25,13 @@ const uploadApi = {
   async uploadImageFiles(filesUrl: string[]): Promise<FileUpload[]> {
     const formData = new FormData();
     filesUrl.forEach((filesUrl) => {
-      // Lấy tên file từ URI
       const fileName = filesUrl.split("/").pop();
       const type = fileName?.split(".").pop();
-      // Đóng gói file vào FormData
+
       formData.append("files", {
         uri: filesUrl,
         name: fileName || "image",
-        type: `image/${type}`, // Hoặc loại MIME phù hợp
+        type: `image/${type}`, 
       });
     });
 

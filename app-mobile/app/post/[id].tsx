@@ -20,11 +20,7 @@ export default function PostDetailScreen() {
       console.log("Failed to fetch post:", error);
     }
   };
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     fetchPost();
-  //   }, [local.id])
-  // );
+
 
   useEffect(() => {
     fetchPost();

@@ -5,31 +5,42 @@ const notificationApi = {
   async getNotificationsBySupportOrganization(
     id: number,
     token: string,
+    page: number,
+    pageSize: number,
+    acceptedBy?: boolean | null,
     state?: boolean | null
   ): Promise<NotificationData> {
-    // Tạo query dựa trên state
-    const query =
-      state !== null
-        ? {"filters[SOSRequest][AcceptedBy][$notNull]": state }
+   
+    const query: { [key: string]: any } =
+    acceptedBy !== null
+        ? { "filters[SOSRequest][AcceptedBy][$notNull]": acceptedBy }
         : {};
 
-    // Gộp params và query
+    if (state == null || state == false) {
+      query["filters[$or][1][SOSRequest][State]"] = false;
+      query["filters[$or][2][SOSRequest][State][$null]"] = true;
+    }
+
+    if (state !== null && state == true) {
+      query["filters[$or][1][SOSRequest][State]"] = true;
+      query["filters[$or][2][SOSRequest][State][$null]"] = false;
+    }
+
     const params = {
       sort: "createdAt:desc",
       "filters[SupportOrganization]": id,
-      // "filters[SOSRequest][AcceptedBy][$notNull]": true,
+      "pagination[page]": page,
+      "pagination[pageSize]": pageSize,
       "populate[SOSRequest][populate]": "*",
-      ...query, // Thêm điều kiện từ query vào params
+      ...query, 
     };
 
-    // Gửi request với axios
     const res = await axiosConfig.get("/notifications", {
       params,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-
     return res.data;
   },
 };

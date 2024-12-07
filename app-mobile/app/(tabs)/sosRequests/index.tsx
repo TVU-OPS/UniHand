@@ -1,4 +1,11 @@
-import { Alert, StyleSheet, Text, View } from "react-native";
+import {
+  Alert,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Link, useFocusEffect } from "expo-router";
@@ -10,6 +17,14 @@ import { User } from "@/types/user";
 import { Notification } from "@/types/notification";
 import notificationApi from "@/api/notificationApi";
 import SosRequestsList from "@/components/Notification";
+import { Ionicons } from "@expo/vector-icons";
+import RNPickerSelect from "react-native-picker-select";
+import sosRequestApi from "@/api/sosRequestApi";
+
+const status = [
+  { label: "Đang hỗ trợ", value: 0 },
+  { label: "Đã hỗ trợ", value: 1 },
+];
 
 export default function SosRequestsScreen() {
   const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -17,6 +32,19 @@ export default function SosRequestsScreen() {
   const [organizationInfo, setOrganizationInfo] =
     useState<SupportOrganization | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingItem, setIsLoadingItem] = useState("");
+
+  const [statusFilter, setStatusFilter] =
+    useState<{ label: string; value: number }[]>(status);
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState<
+    number | null
+  >(null);
+
+  const [acceptedBy, setAcceptedBy] = useState<boolean | null>(null);
+  const [state, setState] = useState<boolean | null>(null);
 
   const fetchNotifications = async () => {
     try {
@@ -24,9 +52,13 @@ export default function SosRequestsScreen() {
         const res = await notificationApi.getNotificationsBySupportOrganization(
           organizationInfo.id,
           accessToken,
-          false
+          page,
+          5,
+          acceptedBy,
+          state
         );
         setNotifications(res.data);
+        setTotalPages(res.meta.pagination.pageCount);
       }
     } catch (error: any) {
       if (error.response.status === 403) {
@@ -37,6 +69,92 @@ export default function SosRequestsScreen() {
       }
       console.log("Failed to fetch notifications:", error);
     }
+  };
+
+  const handleAcceptSOSRequest = async (documentId: string) => {
+    try {
+      setIsLoading(true);
+      setIsLoadingItem(documentId);
+      if (organizationInfo && accessToken) {
+        const res = await sosRequestApi.acceptSosRequest(
+          organizationInfo.id,
+          documentId,
+          accessToken
+        );
+        fetchNotifications();
+      }
+    } catch (error: any) {
+      console.log("Failed to accept SOS Request:", error);
+    } finally {
+      setIsLoading(false);
+      setIsLoadingItem(documentId);
+    }
+  };
+  const handleDoneSOSRequest = async (documentId: string) => {
+    try {
+      setIsLoading(true);
+      setIsLoadingItem(documentId);
+      if (organizationInfo && accessToken) {
+        const res = await sosRequestApi.doneSosRequest(
+          organizationInfo.id,
+          documentId,
+          accessToken
+        );
+        fetchNotifications();
+      }
+    } catch (error: any) {
+      console.log("Failed to accept SOS Request:", error);
+    } finally {
+      setIsLoading(false);
+      setIsLoadingItem(documentId);
+    }
+  };
+
+  const renderPagination = () => {
+    const pages = [];
+    const startPage = Math.max(1, page - 1);
+    const endPage = Math.min(totalPages, page + 1);
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <Pressable
+          key={i}
+          onPress={() => setPage(i)}
+          style={[styles.pageButton, page === i && styles.activePageButton]}
+        >
+          <Text
+            style={[
+              page === i ? { color: "#fff" } : { color: "#52525b" },
+              { fontWeight: 600 },
+            ]}
+          >
+            {i}
+          </Text>
+        </Pressable>
+      );
+    }
+
+    return (
+      <View style={styles.paginationContainer}>
+        <TouchableOpacity
+          onPress={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
+          style={styles.pageButton}
+          disabled={page === 1}
+        >
+          <Ionicons name="chevron-back-outline" size={20} color="#a1a1aa" />
+        </TouchableOpacity>
+        {pages}
+        <TouchableOpacity
+          onPress={() =>
+            setPage((prevPage) => Math.min(prevPage + 1, totalPages))
+          }
+          style={styles.pageButton}
+          disabled={page === totalPages}
+        >
+          <Ionicons name="chevron-forward-outline" size={20} color="#a1a1aa" />
+        </TouchableOpacity>
+      </View>
+    );
   };
 
   useFocusEffect(
@@ -52,11 +170,17 @@ export default function SosRequestsScreen() {
             ? JSON.parse(organizationInfo)
             : null;
           const user = userInfo ? JSON.parse(userInfo) : null;
+          if (!userToken || !user || !organization) {
+            setAccessToken(null);
+            setUserInfo(null);
+            setOrganizationInfo(null);
+            return;
+          }
           setAccessToken(userToken);
           setUserInfo(user);
           setOrganizationInfo(organization);
         } catch (error) {
-          console.error("Failed to fetch data from AsyncStorage", error);
+          console.log("Failed to fetch data from AsyncStorage", error);
         }
       };
 
@@ -68,21 +192,75 @@ export default function SosRequestsScreen() {
   };
 
   useEffect(() => {
+    setPage(1);
+    setAcceptedBy(false);
+    setState(null);
+    setStatusFilter(status);
+    setSelectedStatusFilter(null);
+    fetchNotifications();
+  }, []);
+
+  useEffect(() => {
     if (organizationInfo) {
       fetchNotifications();
     }
   }, [organizationInfo]);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchNotifications();
+    }, [])
+  );
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [page, acceptedBy, state]);
+
+  useEffect(() => {
+    if (selectedStatusFilter === null) {
+      setPage(1);
+      setAcceptedBy(false);
+      setState(null);
+    }
+    if (selectedStatusFilter === 0) {
+      setPage(1);
+      setAcceptedBy(true);
+      setState(false);
+    }
+    if (selectedStatusFilter === 1) {
+      setPage(1);
+      setAcceptedBy(true);
+      setState(true);
+    }
+  }, [selectedStatusFilter]);
+
   return (
     <ThemedView style={styles.container}>
       {accessToken ? (
         <>
-          {/* <View style={styles.containerHeader}>
-            <Text style={styles.header}>Danh sách yêu cầu hỗ trợ</Text>
-          </View> */}
+          <View style={styles.header}>
+            <View
+              style={[styles.pickerContainer, { width: "45%", marginTop: 14 }]}
+            >
+              <RNPickerSelect
+                value={selectedStatusFilter}
+                onValueChange={(value) => setSelectedStatusFilter(value)}
+                items={statusFilter?.length ? statusFilter : []}
+                placeholder={{ label: "Chưa hỗ trợ", value: null }}
+                style={{
+                  ...pickerSelectStyles,
+                }}
+              />
+            </View>
+            {renderPagination()}
+          </View>
           <SosRequestsList
             notifications={notifications}
             onPressRequest={handleRequestPress}
+            handleAcceptSOSRequest={handleAcceptSOSRequest}
+            isLoading={isLoading}
+            isLoadingItem={isLoadingItem}
+            handleDoneSOSRequest={handleDoneSOSRequest}
           />
         </>
       ) : (
@@ -90,7 +268,9 @@ export default function SosRequestsScreen() {
           <Link href="/(auth)/login" style={styles.button}>
             <Text style={styles.buttonText}>Đăng nhập</Text>
           </Link>
-          <Text style={styles.orgText}>Chức năng chỉ dành cho tổ chức.</Text>
+          <Text style={styles.orgText}>
+            Chức năng chỉ dành cho tài khoản của tổ chức.
+          </Text>
         </>
       )}
     </ThemedView>
@@ -102,8 +282,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 20,
-    // backgroundColor: "#ccc",
+    paddingTop: 50,
   },
   containerHeader: {
     width: "100%",
@@ -114,9 +293,13 @@ const styles = StyleSheet.create({
     borderColor: "#e5e7eb",
   },
   header: {
-    fontSize: 20,
-    fontWeight: "bold",
-    paddingBottom: 10,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
   orgText: {
     marginTop: 20,
@@ -135,5 +318,58 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+
+  // Pagination
+  paginationContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  pageButton: {
+    margin: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#fff",
+    borderRadius: 5,
+    height: 40,
+    width: 30,
+    color: "#000",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
+  },
+  activePageButton: {
+    backgroundColor: "#50bef1",
+  },
+
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#9ca3af",
+    borderRadius: 8,
+    justifyContent: "center",
+    height: 32,
+    overflow: "hidden",
+  },
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    fontSize: 16,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 4,
+    color: "black",
+    paddingRight: 30,
+  },
+  placeholder: {
+    color: "",
+  },
+  inputAndroid: {
+    fontSize: 12,
   },
 });
