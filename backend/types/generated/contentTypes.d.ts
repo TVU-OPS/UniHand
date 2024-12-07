@@ -712,6 +712,7 @@ export interface ApiSupportOrganizationSupportOrganization
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    Description: Schema.Attribute.Text;
     District: Schema.Attribute.Relation<'oneToOne', 'api::district.district'>;
     Image: Schema.Attribute.Media<'images' | 'files', true> &
       Schema.Attribute.Required;
@@ -725,6 +726,7 @@ export interface ApiSupportOrganizationSupportOrganization
       Schema.Attribute.Required &
       Schema.Attribute.Unique;
     NotificationEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    PhoneNumber: Schema.Attribute.String;
     Province: Schema.Attribute.Relation<'oneToOne', 'api::province.province'>;
     publishedAt: Schema.Attribute.DateTime;
     Representative: Schema.Attribute.String & Schema.Attribute.Required;

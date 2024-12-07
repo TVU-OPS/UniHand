@@ -14,7 +14,7 @@
       "name": "Apache 2.0",
       "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
     },
-    "x-generation-date": "2024-12-03T09:08:28.749Z"
+    "x-generation-date": "2024-12-07T18:29:38.761Z"
   },
   "x-strapi-config": {
     "plugins": [
@@ -9170,6 +9170,12 @@
                 "type": "string",
                 "format": "email"
               },
+              "Description": {
+                "type": "string"
+              },
+              "PhoneNumber": {
+                "type": "string"
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -13027,6 +13033,12 @@
                     "type": "string",
                     "format": "email"
                   },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "PhoneNumber": {
+                    "type": "string"
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time"
@@ -16790,6 +16802,12 @@
                 "type": "string",
                 "format": "email"
               },
+              "Description": {
+                "type": "string"
+              },
+              "PhoneNumber": {
+                "type": "string"
+              },
               "createdAt": {
                 "type": "string",
                 "format": "date-time"
@@ -17403,6 +17421,12 @@
               "NotificationEmail": {
                 "type": "string",
                 "format": "email"
+              },
+              "Description": {
+                "type": "string"
+              },
+              "PhoneNumber": {
+                "type": "string"
               },
               "locale": {
                 "type": "string"
@@ -18862,6 +18886,12 @@
                     "type": "string",
                     "format": "email"
                   },
+                  "Description": {
+                    "type": "string"
+                  },
+                  "PhoneNumber": {
+                    "type": "string"
+                  },
                   "createdAt": {
                     "type": "string",
                     "format": "date-time"
@@ -19007,6 +19037,12 @@
           "NotificationEmail": {
             "type": "string",
             "format": "email"
+          },
+          "Description": {
+            "type": "string"
+          },
+          "PhoneNumber": {
+            "type": "string"
           },
           "createdAt": {
             "type": "string",
