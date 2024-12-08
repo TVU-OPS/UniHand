@@ -145,7 +145,7 @@ export default function Map(props: MapProps) {
         setSelectedDisaster(res.data[0]?.id);
       }
     } catch (error: any) {
-      console.log("Failed to fetch ongoing disasters:", error);
+      console.error("Failed to fetch ongoing disasters:", error);
     }
   };
 
