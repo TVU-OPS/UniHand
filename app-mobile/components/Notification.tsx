@@ -80,7 +80,7 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
         )}
         <View style={styles.header}>
           <Text style={styles.fullName}>
-            #{item?.id}-{item?.FullName}
+            #{item?.id} - {item?.FullName}
           </Text>
         </View>
         <View style={styles.buttonContainer}>
