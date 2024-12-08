@@ -14,7 +14,7 @@
 
 1. [Giới thiệu](#giới-thiệu)
 2. [Chức năng](#chức-năng)
-3. [⚙️ Về hệ thống](#-về-hệ-thống)
+3. [🔎 Về hệ thống](#-về-hệ-thống)
    - [Môi trường, Công nghệ và Công cụ](#môi-trường-công-nghệ-và-công-cụ-dùng-để-phát-triển)
    - [Sơ đồ hoạt động](#sơ-đồ-hoạt-động)
 4. [🔧 Cách cài đặt](#-cách-cài-đặt)
@@ -38,7 +38,7 @@
 - **🤝 Hỗ trợ nhân đạo**: Cung cấp các kênh giúp đỡ người dân bị ảnh hưởng sau thảm họa, tình nguyện viên, v.v.
 - **⚙️ Đảm bảo sự linh hoạt và tốc độ phát triển**: Với LCDP, ứng dụng có thể được phát triển nhanh chóng và dễ dàng tùy chỉnh theo yêu cầu cụ thể.
 
-## ⚙️ Về hệ thống
+## 🔎 Về hệ thống
 
 ### Môi trường Công nghệ và Công cụ dùng để phát triển
 
