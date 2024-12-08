@@ -48,5 +48,5 @@ Trước khi bắt đầu, hãy đảm bảo hệ thống của bạn đáp ứn
 - Trong giao diện Noodl, chọn Open Project.
 - Duyệt đến thư mục **UniHand/web-admin**.
 ## **Bước 4: Chạy dự án**
-Dự án sẽ chạy mặc định tại địa chỉ:
+Dự án sẽ tự động chạy mặc định tại địa chỉ:
  - http://localhost:8574
