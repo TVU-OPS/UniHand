@@ -22,7 +22,7 @@
    - [Cài Đặt](#cài-đặt)
 5. [🎁 Đóng góp](#🎁-đóng-góp)
 6. [Tài Liệu Hỗ Trợ](#tài-liệu-hỗ-trợ)
-7. [License](#license)
+7. [License](#-license)
 8. [Cộng đồng và đóng góp](#cộng-đồng-và-đóng-góp)
 9. [Liên hệ](#liên-hệ)
 
