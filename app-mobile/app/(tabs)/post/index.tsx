@@ -7,6 +7,7 @@ import {
   FlatList,
   ActivityIndicator,
   TouchableOpacity,
+  Pressable,
 } from "react-native";
 import { Post, PostData } from "@/types/post";
 import { Link, useFocusEffect } from "expo-router";
@@ -47,49 +48,48 @@ export default function NewsScreen() {
 
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
-        <TouchableOpacity
+        <Pressable
           key={i}
           onPress={() => setPage(i)}
           style={[styles.pageButton, page === i && styles.activePageButton]}
         >
-          <Text style={styles.pageButtonText}>{i}</Text>
-        </TouchableOpacity>
+          <Text
+            style={[
+              page === i ? { color: "#fff" } : { color: "#52525b" },
+              { fontWeight: 600 },
+            ]}
+          >
+            {i}
+          </Text>
+        </Pressable>
       );
     }
 
     return (
       <View style={styles.paginationContainer}>
-        <TouchableOpacity
+        <Pressable
           onPress={() => setPage((prevPage) => Math.max(prevPage - 1, 1))}
           style={styles.pageButton}
           disabled={page === 1}
         >
-          <Text
-            style={[styles.pageButtonText, { paddingTop: 5, paddingRight: 3 }]}
-          >
-            <Ionicons name="chevron-back-outline" size={24} color="fff" />
-          </Text>
-        </TouchableOpacity>
+          <Ionicons name="chevron-back-outline" size={16} color="#52525b" />
+        </Pressable>
         {pages}
-        <TouchableOpacity
+        <Pressable
           onPress={() =>
             setPage((prevPage) => Math.min(prevPage + 1, totalPages))
           }
           style={styles.pageButton}
           disabled={page === totalPages}
         >
-          <Text
-            style={[styles.pageButtonText, { paddingTop: 5, paddingLeft: 3 }]}
-          >
-            <Ionicons name="chevron-forward-outline" size={24} color="fff" />
-          </Text>
-        </TouchableOpacity>
+          <Ionicons name="chevron-forward-outline" size={16} color="#52525b" />
+        </Pressable>
       </View>
     );
   };
 
   const renderItem = ({ item }: { item: Post }) => (
-    <Link style={{marginTop: 10}} href={`/post/${item.documentId}`}>
+    <Link style={{ marginTop: 10 }} href={`/post/${item?.documentId}`}>
       <View style={styles.postContainer}>
         <Image
           source={{
@@ -101,18 +101,18 @@ export default function NewsScreen() {
         />
         <View style={styles.textContainer}>
           <Text style={styles.title} numberOfLines={2}>
-            {item.Title}
+            {item?.Title}
           </Text>
           <Text style={styles.content} numberOfLines={2}>
-            {item.Content}
+            {item?.Content}
           </Text>
           <Text style={styles.author} numberOfLines={2}>
-            Theo: {item.Author}
+            Theo: {item?.Author}
           </Text>
           <View style={styles.dateContainer}>
             <Ionicons name="calendar-outline" color="#000" />
             <Text style={styles.date}>
-              {new Date(item.createdAt).toLocaleString()}
+              {new Date(item?.createdAt).toLocaleString()}
             </Text>
           </View>
         </View>
@@ -122,12 +122,12 @@ export default function NewsScreen() {
 
   return (
     <View style={styles.container}>
+      {renderPagination()}
       <FlatList
         data={posts}
         renderItem={renderItem}
         keyExtractor={(item) => item.id.toString()}
         showsVerticalScrollIndicator={false}
-        ListFooterComponent={renderPagination}
       />
     </View>
   );
@@ -138,6 +138,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     paddingTop: 40,
+    
   },
   postContainer: {
     flexDirection: "row",
@@ -195,8 +196,8 @@ const styles = StyleSheet.create({
 
   paginationContainer: {
     flexDirection: "row",
-    justifyContent: "center",
-    // marginTop: 10,
+    justifyContent: "flex-end",
+    marginTop: 10,
   },
   pageButton: {
     margin: 5,
@@ -208,6 +209,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     height: 40,
     width: 30,
+    color: "#000",
     // padding: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -221,7 +223,7 @@ const styles = StyleSheet.create({
   pageButtonText: {
     lineHeight: 0,
     fontSize: 16,
-    color: "#fff",
+    color: "#000",
     fontWeight: "bold",
   },
 });

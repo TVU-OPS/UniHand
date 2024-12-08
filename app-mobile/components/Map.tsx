@@ -20,19 +20,7 @@ import { User } from "@/types/user";
 import { SupportOrganization } from "@/types/supportOrganization";
 import notificationApi from "@/api/notificationApi";
 
-// const provinces = [
-//   // Có chữ Tỉnh với Thành phố hay không cũng đc, ví dụ Tỉnh Trà Vinh hay Trà Vinh đều được
-//   { name: "Tỉnh Trà Vinh", location: { lng: 106.34449, lat: 9.81274 } },
-//   { name: "Tỉnh Bến Tre", location: { lng: 106.4811559, lat: 10.1093637 } },
-//   { name: "Tỉnh Vĩnh Long", location: { lng: 105.9669665, lat: 10.1203043 } },
-//   {
-//     name: "Thành phố Cần Thơ",
-//     location: { lng: 105.7875821, lat: 10.0364634 },
-//   },
-// ];
-interface MapProps {
-  // disasters: Disaster[];
-}
+interface MapProps {}
 type Province = {
   name: string;
   location: {
@@ -58,8 +46,9 @@ export default function Map(props: MapProps) {
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [organizationInfo, setOrganizationInfo] =
     useState<SupportOrganization | null>(null);
+
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [loading, setLoading] = useState(true); // Quản lý trạng thái tải
+  const [loading, setLoading] = useState(true);
 
   // Gửi message tới WebView
   const sendMessageToWebView = (data: any) => {
@@ -133,13 +122,8 @@ export default function Map(props: MapProps) {
         popupContent: generatePopupContent(
           notifi?.SOSRequest?.FullName,
           notifi?.SOSRequest?.PhoneNumber
-        ), // Add the popup content dynamically
+        ),
       }));
-
-      console.log(
-        "Fetching notifications..." +
-          sosRequestsWithPopupContent[0].SOSRequest.Ward.FullName
-      );
 
       sendMessageToWebView({
         action: "add_markers",
@@ -148,13 +132,12 @@ export default function Map(props: MapProps) {
     }
   };
 
-  // Fetch ongoing disasters
   const fetchOngoingDisasters = async () => {
     try {
       const res = await disasterApi.getOngoingDisasters();
       const disasterOptions = res.data.map((disaster: Disaster) => ({
-        label: disaster.Name, // Assuming `name` is the disaster name
-        value: disaster.id, // Assuming `id` is the disaster ID
+        label: disaster.Name,
+        value: disaster.id,
       }));
       setDisasters(res.data);
       setDisastersDropDown(disasterOptions);
@@ -173,18 +156,14 @@ export default function Map(props: MapProps) {
         const res = await notificationApi.getNotificationsBySupportOrganization(
           organizationInfo.id,
           accessToken,
-          false
+          1,
+          100,
+          false,
+          null
         );
         setNotifications(res.data);
-        // webviewRef.current.reload()
       }
     } catch (error: any) {
-      if (error.response.status === 403) {
-        // Alert.alert(
-        //   "Thông báo",
-        //   "Bạn không có quyền truy cập chức năng này. Có thể do tổ chức của bạn chưa được duyệt."
-        // );
-      }
       console.log("Failed to fetch notifications:", error);
     }
   };
@@ -205,9 +184,8 @@ export default function Map(props: MapProps) {
       setAccessToken(userToken);
       setUserInfo(user);
       setOrganizationInfo(organization);
-      console.log("Checking access token...2222");
     } catch (error) {
-      console.error("Failed to fetch data from AsyncStorage", error);
+      console.log("Failed to fetch data from AsyncStorage", error);
     }
   };
 
@@ -253,6 +231,10 @@ export default function Map(props: MapProps) {
     handleDisplayDisaster();
   }, [loading]);
 
+  useEffect(() => {
+    handleMoveToCurrentLocation();
+  }, []);
+
   useFocusEffect(
     React.useCallback(() => {
       checkAccessToken();
@@ -262,9 +244,6 @@ export default function Map(props: MapProps) {
       handleDisplayDisaster();
     }, [])
   );
-
-  // webviewRef.current.reload()
-  // console.log("loading", loading);
 
   const mapHTML = `
    <!DOCTYPE html>
@@ -537,7 +516,6 @@ export default function Map(props: MapProps) {
         });
 
       /////////////////////////////  
-    
       const markers = {};
 
       document.addEventListener("message", (event) => {
@@ -563,21 +541,16 @@ export default function Map(props: MapProps) {
         } else if (action === "add_markers") {
 
         notification.forEach(({ SOSRequest, popupContent }) => {
-          // if (!markers[id]) {
+       
          const marker = new mapboxgl.Marker({ color: 'red' })
                 .setLngLat([SOSRequest.Location.lng, SOSRequest.Location.lat])
                 .addTo(map);
-                // alert("Adding marker for:", SOSRequest);
              
               // Create popup for the marker with dynamic content
               const popup = new mapboxgl.Popup({ offset: 25, closeOnClick: false, closeButton: false })
                 .setHTML(popupContent);
 
               marker.setPopup(popup); // Attach the popup to the marker
-
-              // markers[id] = marker;
-              
-            // }
           });
 
         }
@@ -603,9 +576,6 @@ export default function Map(props: MapProps) {
         onLoadStart={() => {
           setLoading(true);
         }}
-        // onLoading={() => {
-        //   setLoading(false);
-        // }}
         onLoadEnd={() => {
           setLoading(false);
         }}
@@ -680,7 +650,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     minWidth: 200,
     fontWeight: "bold",
-    // marginVertical: 10,
     borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 8,

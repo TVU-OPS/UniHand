@@ -59,6 +59,12 @@
     "NotificationEmail": {
       "type": "email",
       "required": true
+    },
+    "Description": {
+      "type": "text"
+    },
+    "PhoneNumber": {
+      "type": "string"
     }
   }
 }

@@ -1,0 +1,25 @@
+# Cấu hình cho domain1
+server {
+    listen 80;
+    server_name ${HOME_DOMAIN};
+
+    location / {
+        proxy_pass http://web-home:80; # Chuyển tiếp tới web-home
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}
+
+# Cấu hình cho domain2
+server {
+    listen 80;
+    server_name ${ADMIN_DOMAIN};
+
+    location / {
+        proxy_pass http://web-admin:80; # Chuyển tiếp tới web-admin
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+}

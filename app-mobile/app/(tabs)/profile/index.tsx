@@ -29,13 +29,15 @@ export default function ProfileScreen() {
       const data = await supportOrganizationApi.getSupportOrganizationByUserId(
         userId
       );
+      if (data.data.length === 0) {
+      }
       await AsyncStorage.setItem(
         "supportOrganizationInfo",
         JSON.stringify(data.data[0])
       );
       setOrganizationInfo(data.data[0]);
     } catch (error) {
-      console.error("Failed to fetch organization:", error);
+      // console.error("Failed to fetch organization:", error);
     }
   };
 
@@ -63,12 +65,6 @@ export default function ProfileScreen() {
         try {
           const userToken = await AsyncStorage.getItem("userAccessToken");
           const userInfo = await AsyncStorage.getItem("userInfo");
-          // const organizationInfo = await AsyncStorage.getItem(
-          //   "supportOrganizationInfo"
-          // );
-          // const organization = organizationInfo
-          //   ? JSON.parse(organizationInfo)
-          //   : null;
           const user = userInfo ? JSON.parse(userInfo) : null;
           setAccessToken(userToken);
           setUserInfo(user);
@@ -89,6 +85,8 @@ export default function ProfileScreen() {
     AsyncStorage.removeItem("userInfo");
     AsyncStorage.removeItem("userAccessToken");
     AsyncStorage.removeItem("supportOrganizationInfo");
+    setUserInfo(null);
+    setOrganizationInfo(null);
     setAccessToken(null);
   };
 
@@ -99,152 +97,156 @@ export default function ProfileScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.content}
         >
-          <Text style={styles.header}>Thông tin tổ chức</Text>
-          <View style={styles.orgAvatarContainer}>
-            <Image
-              source={{
-                uri:
-                  `${process.env.EXPO_PUBLIC_API_URL}${organizationInfo?.Image?.[0]?.url}` ||
-                  "https://via.placeholder.com/150",
-              }}
-              style={styles.orgAvatar}
-            />
-          </View>
-          <View style={styles.editButtonContainer}>
-            {isEditing && (
-              <TouchableOpacity
-                style={styles.saveButton}
-                onPress={handleSaveChanges}
-              >
-                <Ionicons name="save" size={14} color="#fff" />
-                <Text style={styles.saveButtonText}>Lưu thay đổi</Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity
-              style={[
-                styles.editButton,
-                { backgroundColor: isEditing ? "#f87171" : "#50bef1" },
-              ]}
-              onPress={() => setIsEditing(!isEditing)}
-            >
-              {isEditing ? (
-                <Ionicons name="close" size={16} color="#fff" />
-              ) : (
-                <Ionicons name="create-outline" size={16} color="#fff" />
-              )}
-              <Text style={[styles.editButtonText]}>
-                {isEditing ? "Hủy" : "Chỉnh sửa thông tin"}
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <Text style={styles.header}>
+            {organizationInfo == null
+              ? "Thông tin tài khoản"
+              : "Thông tin tổ chức"}
+          </Text>
+          {organizationInfo == null ? (
+            <>
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Email:</Text>
 
-          {/* Thông tin tổ chức */}
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>Tên tổ chức:</Text>
-            {isEditing ? (
-              <TextInput
-                style={styles.input}
-                value={organizationInfo?.Name || ""}
-                onChangeText={(text) =>
-                  setOrganizationInfo((prev) =>
-                    prev ? { ...prev, Name: text } : prev
-                  )
-                }
-              />
-            ) : (
-              <Text style={styles.value}>{organizationInfo?.Name}</Text>
-            )}
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>Đại diện:</Text>
-            {isEditing ? (
-              <TextInput
-                style={styles.input}
-                value={organizationInfo?.Representative || ""}
-                onChangeText={(text) =>
-                  setOrganizationInfo((prev) =>
-                    prev ? { ...prev, Representative: text } : prev
-                  )
-                }
-              />
-            ) : (
-              <Text style={styles.value}>
-                {organizationInfo?.Representative}
-              </Text>
-            )}
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>Email nhận thông báo:</Text>
-            {isEditing ? (
-              <TextInput
-                style={styles.input}
-                value={organizationInfo?.NotificationEmail || ""}
-                onChangeText={(text) =>
-                  setOrganizationInfo((prev) =>
-                    prev ? { ...prev, NotificationEmail: text } : prev
-                  )
-                }
-              />
-            ) : (
-              <Text style={styles.value}>
-                {organizationInfo?.NotificationEmail}
-              </Text>
-            )}
-          </View>
+                <Text style={styles.value}>{userInfo?.email}</Text>
+              </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Tài khoản:</Text>
 
-          {/* Thông tin người dùng */}
-          {/* <View style={styles.infoContainer}>
-            <Text style={styles.label}>Tên tài khoản:</Text>
-            {isEditing ? (
-              <TextInput
-                style={styles.input}
-                value={userInfo?.username || ""}
-                onChangeText={(text) =>
-                  setUserInfo((prev) =>
-                    prev ? { ...prev, username: text } : prev
-                  )
-                }
-              />
-            ) : (
-              <Text style={styles.value}>{userInfo?.username}</Text>
-            )}
-          </View> */}
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>Địa chỉ:</Text>
-            {isEditing ? (
-              <TextInput
-                style={styles.input}
-                // value={organizationInfo?. || ""}
-                onChangeText={(text) =>
-                  setUserInfo((prev) =>
-                    prev ? { ...prev, email: text } : prev
-                  )
-                }
-              />
-            ) : (
-              <Text style={styles.value}>
-                {organizationInfo?.Province?.FullName},{" "}
-                {organizationInfo?.District?.FullName},{" "}
-                {organizationInfo?.Ward?.FullName}
-              </Text>
-            )}
-          </View>
-          <View style={styles.infoContainer}>
-            <Text style={styles.label}>Email:</Text>
-            {isEditing ? (
-              <TextInput
-                style={styles.input}
-                value={userInfo?.email || ""}
-                onChangeText={(text) =>
-                  setUserInfo((prev) =>
-                    prev ? { ...prev, email: text } : prev
-                  )
-                }
-              />
-            ) : (
-              <Text style={styles.value}>{userInfo?.email}</Text>
-            )}
-          </View>
+                <Text style={styles.value}>{userInfo?.username}</Text>
+              </View>
+              <Link href="/(auth)/login" style={styles.button}>
+                <Ionicons name="people" size={16} color="#fff" />
+                <Text style={[styles.buttonText]}> Đăng ký tài khoản tổ chức</Text>
+              </Link>
+            </>
+          ) : (
+            <>
+              <View style={styles.orgAvatarContainer}>
+                <Image
+                  source={{
+                    uri:
+                      `${process.env.EXPO_PUBLIC_API_URL}${organizationInfo?.Image?.[0]?.url}` ||
+                      "https://via.placeholder.com/150",
+                  }}
+                  style={styles.orgAvatar}
+                />
+              </View>
+              <View style={styles.editButtonContainer}>
+                {isEditing && (
+                  <TouchableOpacity
+                    style={styles.saveButton}
+                    onPress={handleSaveChanges}
+                  >
+                    <Ionicons name="save" size={14} color="#fff" />
+                    <Text style={styles.saveButtonText}>Lưu thay đổi</Text>
+                  </TouchableOpacity>
+                )}
+                <TouchableOpacity
+                  style={[
+                    styles.editButton,
+                    { backgroundColor: isEditing ? "#f87171" : "#50bef1" },
+                  ]}
+                  onPress={() => setIsEditing(!isEditing)}
+                >
+                  {isEditing ? (
+                    <Ionicons name="close" size={16} color="#fff" />
+                  ) : (
+                    <Ionicons name="create-outline" size={16} color="#fff" />
+                  )}
+                  <Text style={[styles.editButtonText]}>
+                    {isEditing ? "Hủy" : "Chỉnh sửa thông tin"}
+                  </Text>
+                </TouchableOpacity>
+              </View>
+              {/* Thông tin tổ chức */}
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Tên tổ chức:</Text>
+                {isEditing ? (
+                  <TextInput
+                    style={styles.input}
+                    value={organizationInfo?.Name || ""}
+                    onChangeText={(text) =>
+                      setOrganizationInfo((prev) =>
+                        prev ? { ...prev, Name: text } : prev
+                      )
+                    }
+                  />
+                ) : (
+                  <Text style={styles.value}>{organizationInfo?.Name}</Text>
+                )}
+              </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Trạng thái:</Text>
+                <Text style={styles.value}>
+                  {organizationInfo?.Confirmed == null ||
+                  organizationInfo?.Confirmed == false
+                    ? "Chưa xác thực"
+                    : "Đã xác thực"}
+                </Text>
+              </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Đại diện:</Text>
+                {isEditing ? (
+                  <TextInput
+                    style={styles.input}
+                    value={organizationInfo?.Representative || ""}
+                    onChangeText={(text) =>
+                      setOrganizationInfo((prev) =>
+                        prev ? { ...prev, Representative: text } : prev
+                      )
+                    }
+                  />
+                ) : (
+                  <Text style={styles.value}>
+                    {organizationInfo?.Representative}
+                  </Text>
+                )}
+              </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Email nhận thông báo:</Text>
+                {isEditing ? (
+                  <TextInput
+                    style={styles.input}
+                    value={organizationInfo?.NotificationEmail || ""}
+                    onChangeText={(text) =>
+                      setOrganizationInfo((prev) =>
+                        prev ? { ...prev, NotificationEmail: text } : prev
+                      )
+                    }
+                  />
+                ) : (
+                  <Text style={styles.value}>
+                    {organizationInfo?.NotificationEmail}
+                  </Text>
+                )}
+              </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Địa chỉ:</Text>
+                {isEditing ? (
+                  <TextInput
+                    style={styles.input}
+                    // value={organizationInfo?. || ""}
+                    onChangeText={(text) =>
+                      setUserInfo((prev) =>
+                        prev ? { ...prev, email: text } : prev
+                      )
+                    }
+                  />
+                ) : (
+                  <Text style={styles.value}>
+                    {organizationInfo?.Province?.FullName},{" "}
+                    {organizationInfo?.District?.FullName},{" "}
+                    {organizationInfo?.Ward?.FullName}
+                  </Text>
+                )}
+              </View>
+              <View style={styles.infoContainer}>
+                <Text style={styles.label}>Email:</Text>
+
+                <Text style={styles.value}>{userInfo?.email}</Text>
+              </View>
+            </>
+          )}
 
           <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
             <Ionicons name="log-out-outline" size={16} color="#fff" />
@@ -256,7 +258,7 @@ export default function ProfileScreen() {
           <Link href="/(auth)/login" style={styles.button}>
             <Text style={styles.buttonText}>Đăng nhập</Text>
           </Link>
-          <Text style={styles.orgText}>Chức năng chỉ dành cho tổ chức.</Text>
+          <Text style={styles.orgText}>Vui lòng đăng nhập.</Text>
         </>
       )}
     </ThemedView>
@@ -320,15 +322,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   orgAvatar: {
-    width: 130,
-    height: 130,
+    width: 100,
+    height: 100,
     borderRadius: 75,
     borderWidth: 2,
     borderColor: "#ddd",
   },
   infoContainer: {
     width: "100%",
-    marginTop: 16,
+    marginTop: 8,
     paddingHorizontal: 20,
   },
   label: {

@@ -14,7 +14,7 @@ import { useColorScheme } from "@/hooks/useColorScheme.web";
 import userApi from "@/api/userApi";
 import { UserLogin } from "@/types/user";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { router } from 'expo-router';
+import { Link, router } from "expo-router";
 import supportOrganizationApi from "@/api/supportOrganization";
 
 export default function LoginScreen() {
@@ -22,18 +22,18 @@ export default function LoginScreen() {
   const [password, setPassword] = useState("");
   const colorScheme = useColorScheme();
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     if (!email || !password) {
       Alert.alert("Thông báo", "Vui lòng nhập đầy đủ email và mật khẩu");
       return;
     }
-    const request : UserLogin = {
+    const request: UserLogin = {
       identifier: email,
       password,
     };
     try {
       const data = await userApi.login(request);
-      await AsyncStorage.setItem("userInfo",  JSON.stringify(data.user)); 
+      await AsyncStorage.setItem("userInfo", JSON.stringify(data.user));
       await AsyncStorage.setItem("userAccessToken", data.jwt);
       Alert.alert("Thông báo", "Đăng nhập thành công");
       router.back();
@@ -42,10 +42,9 @@ export default function LoginScreen() {
     }
   };
 
-
   return (
     <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>ĐĂNG NHẬP</ThemedText>
+      <ThemedText style={styles.title}>Đăng nhập</ThemedText>
 
       {/* Email */}
       <View style={styles.inputContainer}>
@@ -90,17 +89,15 @@ export default function LoginScreen() {
         />
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+      <TouchableOpacity style={styles.button} onPress={handleRegister}>
         <Text style={styles.buttonText}>Đăng nhập</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.link}>
-        <Text style={styles.linkText}>Quên mật khẩu?</Text>
-      </TouchableOpacity>
+    
 
-      <TouchableOpacity style={styles.link}>
+      <Link href={"/(auth)/register"} style={styles.link}>
         <Text style={styles.linkText}>Chưa có tài khoản? Đăng ký</Text>
-      </TouchableOpacity>
+      </Link>
     </ThemedView>
   );
 }
@@ -118,7 +115,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 12,
     width: "100%",
   },
   labelContainer: {
@@ -156,6 +153,7 @@ const styles = StyleSheet.create({
   link: {
     marginBottom: 10,
     alignItems: "center",
+    textAlign: "center",
   },
   linkText: {
     color: "#50bef1",
