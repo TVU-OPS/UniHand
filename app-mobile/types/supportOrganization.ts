@@ -12,7 +12,7 @@ export type SupportOrganization = {
     createdAt: string;
     updatedAt: string;
     publishedAt: string;
-    confirmed: boolean;
+    Confirmed: boolean | null;
     NotificationEmail: string;
     Image: Image[];
     user: User;

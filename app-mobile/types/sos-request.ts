@@ -1,5 +1,8 @@
 import { District } from "./district";
+import { Image } from "./image";
 import { Province } from "./province";
+import { SupportOrganization } from "./supportOrganization";
+import { FileUpload } from "./upload";
 import { Ward } from "./ward";
 
 export type CreateSosRequest = {
@@ -39,15 +42,18 @@ export type SosRequest = {
     lat: number;
     lng: number;
   };
+  AudioFile: FileUpload | null;
+  DamageImage: Image[] | null;
   PhoneNumber: string;
   Email: string;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  State: string | null;
+  State: boolean;
   Road: string | null;
   Amenity: string | null;
   Province: Province;
   District: District;
   Ward: Ward;
+  AcceptedBy: SupportOrganization | null;
 };

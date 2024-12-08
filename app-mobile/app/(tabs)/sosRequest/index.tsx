@@ -49,7 +49,7 @@ import uploadApi from "@/api/upload";
 export default function SOSScreen() {
   const [fullName, setFullName] = useState("");
   const [description, setDescription] = useState("");
-  const [peopleCount, setPeopleCount] = useState("");
+  const [peopleCount, setPeopleCount] = useState(1);
   const [needWater, setNeedWater] = useState(false);
   const [needFood, setNeedFood] = useState(false);
   const [needMedical, setNeedMedical] = useState(false);
@@ -97,6 +97,7 @@ export default function SOSScreen() {
   const [amenity, setAmenity] = useState<string | null>(null);
   const [addressDetail, setAddressDetail] = useState<string | null>(null);
 
+  // Accordion state
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpandedAdress, setExpandedAdress] = useState(false);
   const heightValue = useSharedValue(0);
@@ -104,12 +105,12 @@ export default function SOSScreen() {
 
   const toggleAccordion = () => {
     setIsExpanded(!isExpanded);
-    heightValue.value = isExpanded ? 0 : 240; // Đặt chiều cao cho accordion
+    heightValue.value = isExpanded ? 0 : 240; 
   };
 
   const toggleAccordionAdress = () => {
     setExpandedAdress(!isExpandedAdress);
-    heightValueAdress.value = isExpandedAdress ? 0 : 110; // Đặt chiều cao cho accordion
+    heightValueAdress.value = isExpandedAdress ? 0 : 110; 
   };
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -178,14 +179,15 @@ export default function SOSScreen() {
 
   const fetchDisasters = async () => {
     try {
-      const res = await disasterApi.getDisasters();
+      const res = await disasterApi.getOngoingDisasters();
+
       const disasterOptions = res.data.map((disaster: Disaster) => ({
-        label: disaster.Name, // Assuming `name` is the disaster name
-        value: disaster.id, // Assuming `id` is the disaster ID
+        label: disaster.Name, 
+        value: disaster.id, 
       }));
-      setDisasters(disasterOptions);
-      if(selectedDisaster === null) {
-        setSelectedDisaster(disasterOptions[0].value);
+      await setDisasters(disasterOptions);
+      if (selectedDisaster === null) {
+        setSelectedDisaster(disasterOptions[0]?.value);
       }
     } catch (error) {
       console.error(error);
@@ -220,8 +222,8 @@ export default function SOSScreen() {
       setAddress(
         `${res.data?.Province?.FullName}, ${res.data?.District?.FullName}, ${
           res.data?.Ward?.FullName
-        } ${res.data?.Road !== null ? `, ${res.data?.Road}` : null}, ${
-          res.data?.Amenity !== null ? `, ${res.data?.Amenity}` : null
+        } ${res.data?.Road !== null ? `, ${res.data?.Road}` : ""}${
+          res.data?.Amenity !== null ? `, ${res.data?.Amenity}` : ""
         }`
       );
       setSelectedProvince(res.data.Province.id);
@@ -270,7 +272,7 @@ export default function SOSScreen() {
 
   const removeImage = (index: number) => {
     const newImages = [...images];
-    newImages[index] = null; // Đặt lại giá trị `null` cho ảnh tại vị trí index
+    newImages[index] = null; 
     setImages(newImages);
   };
 
@@ -311,7 +313,6 @@ export default function SOSScreen() {
 
   const playAudio = async (uri: string, index: number) => {
     try {
-      // Nếu đang phát một tệp khác, dừng nó trước
       if (sound) {
         await sound.unloadAsync();
         setSound(null);
@@ -363,7 +364,7 @@ export default function SOSScreen() {
       data: {
         FullName: fullName,
         RequestDescription: description,
-        PeopleCount: parseInt(peopleCount),
+        PeopleCount: peopleCount,
         NeedWater: needWater,
         NeedFood: needFood,
         NeedMedical: needMedical,
@@ -419,18 +420,13 @@ export default function SOSScreen() {
         "Thành công",
         "Yêu cầu hỗ trợ của bạn đã được gửi đi. Chúng tôi sẽ liên hệ với bạn sớm nhất có thể."
       );
-      // Reset dữ liệu sau khi gửi thành công
       setFullName("");
       setDescription("");
-      setPeopleCount("");
+      setPeopleCount(1);
       setNeedWater(false);
       setNeedFood(false);
       setNeedMedical(false);
       setPhoneNumber("");
-      setLat(null);
-      setLng(null);
-      setAddress("");
-      setSelectedDisaster(null);
       setImages([null, null, null, null]);
       setAudioFiles([]);
       setRecording(null);
@@ -439,15 +435,6 @@ export default function SOSScreen() {
       setSound(null);
       setIsExpanded(false);
       setExpandedAdress(false);
-      setRoad(null);
-      setAmenity(null);
-      setAddressDetail(null);
-      setProvinces([]);
-      setDistricts([]);
-      setWards([]);
-      setSelectedProvince(null);
-      setSelectedDistrict(null);
-      setSelectedWard(null);
     } catch (error: any) {
       console.log(error?.response?.data || error);
       Alert.alert("Lỗi", "Đã xảy ra lỗi khi gửi yêu cầu hỗ trợ.");
@@ -474,6 +461,10 @@ export default function SOSScreen() {
   useEffect(() => {
     fetchDisasters();
     fetchProvinces();
+    const getLocationCurrent = async () => {
+      await getLocation();
+    }
+    getLocationCurrent();
   }, []);
 
   return (
@@ -522,15 +513,16 @@ export default function SOSScreen() {
             <TextInput
               style={styles.input}
               placeholder="Số người cần hỗ trợ *"
-              value={peopleCount}
+              value={peopleCount.toString()}
               keyboardType="numeric"
-              onChangeText={setPeopleCount}
+              onChangeText={(text) => setPeopleCount(parseInt(text) || 0)}
             />
 
             <View
               style={[styles.pickerContainer, { width: "100%", marginTop: 14 }]}
             >
               <RNPickerSelect
+                value={selectedDisaster}
                 onValueChange={(value) => setSelectedDisaster(value)}
                 items={disasters?.length ? disasters : []}
                 placeholder={{ label: "Chọn thiên tai*", value: null }}
@@ -548,7 +540,7 @@ export default function SOSScreen() {
                 contentContainerStyle={{ flexGrow: 1 }}
               >
                 <Text
-                  style={[address ? {} : { color: "#9ca3af", fontSize: 16 }]}
+                  style={[address ? { fontSize: 16} : { color: "#9ca3af", fontSize: 16 }]}
                 >
                   {address || "Lấy địa chỉ *"}
                 </Text>
@@ -603,6 +595,7 @@ export default function SOSScreen() {
               >
                 <View style={[styles.pickerContainer, { width: "48%" }]}>
                   <RNPickerSelect
+                    value={selectedProvince}
                     onValueChange={(value) => setSelectedProvince(value)}
                     items={provinces?.length ? provinces : []}
                     placeholder={{ label: "Chọn tỉnh/thành phố*", value: null }}
@@ -614,6 +607,7 @@ export default function SOSScreen() {
 
                 <View style={[styles.pickerContainer, { width: "48%" }]}>
                   <RNPickerSelect
+                    value={selectedDistrict}
                     onValueChange={(value) => setSelectedDistrict(value)}
                     items={districts?.length ? districts : []}
                     placeholder={{ label: "Chọn quận/huyện*", value: null }}
@@ -632,6 +626,7 @@ export default function SOSScreen() {
                 ]}
               >
                 <RNPickerSelect
+                value={selectedWard}
                   onValueChange={(value) => setSelectedWard(value)}
                   items={wards?.length ? wards : []}
                   placeholder={{ label: "Chọn phường/xã*", value: null }}
