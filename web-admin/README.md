@@ -31,7 +31,6 @@ Trước khi bắt đầu, hãy đảm bảo hệ thống của bạn đáp ứn
 4. Sau khi tải về, cài đặt Noodl như một ứng dụng thông thường:
    - **Windows**: Nhấn đúp vào tệp `.exe` và làm theo hướng dẫn.
    - **macOS**: Làm theo các bước cài đặt mặc định của hệ điều hành.
-
 ---
 
 ## **Bước 2: Clone dự án `UniHand`**
@@ -40,17 +39,14 @@ Trước khi bắt đầu, hãy đảm bảo hệ thống của bạn đáp ứn
 2. Sao chép mã nguồn từ GitHub:
    ```bash
    git clone https://github.com/TVU-OPS/UniHand.git
-
-3. Chuyển vào thư mục **web-admin**
-    ```base
-    cd UniHand/web-admin
+   ```
 
 ## **Bước 3: Mở dự án bằng Noodl**
 1. Khởi chạy Noodl:
 - Mở ứng dụng Noodl đã cài đặt từ Bước 1.
 2. Mở thư mục dự án trong Noodl:
 - Trong giao diện Noodl, chọn Open Project.
-- Duyệt đến thư mục **UniHand/web-admin** và mở file cấu hình project.json.
+- Duyệt đến thư mục **UniHand/web-admin**.
 ## **Bước 4: Chạy dự án**
-Dự án sẽ chạy trên máy cục bộ tại:
- - URL mặc định: http://localhost:8574
+Dự án sẽ chạy mặc định tại địa chỉ:
+ - http://localhost:8574
