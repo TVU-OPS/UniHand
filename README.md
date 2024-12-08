@@ -14,13 +14,13 @@
 
 1. [Giới thiệu](#giới-thiệu)
 2. [Chức năng](#chức-năng)
-3. [⚙️ Về hệ thống](#⚙️-về-hệ-thống)
+3. [⚙️ Về hệ thống](#-về-hệ-thống)
    - [Môi trường, Công nghệ và Công cụ](#môi-trường-công-nghệ-và-công-cụ-dùng-để-phát-triển)
    - [Sơ đồ hoạt động](#sơ-đồ-hoạt-động)
-4. [🔧 Cách cài đặt](#🔧-cách-cài-đặt)
+4. [🔧 Cách cài đặt](#-cách-cài-đặt)
    - [Yêu cầu hệ thống](#yêu-cầu-hệ-thống)
    - [Cài Đặt](#cài-đặt)
-5. [🎁 Đóng góp](#🎁-đóng-góp)
+5. [🎁 Đóng góp](#-đóng-góp)
 6. [Tài Liệu Hỗ Trợ](#tài-liệu-hỗ-trợ)
 7. [License](#license)
 8. [Cộng đồng và đóng góp](#cộng-đồng-và-đóng-góp)
@@ -75,22 +75,24 @@
 
 ### Cài Đặt
 
+1. Clone dự án
 ```bash
-# 1. Clone dự án
 git clone https://github.com/TVU-OPS/UniHand.git
-
-# 2. Di chuyển vào thư mục dự án
+```
+2. Di chuyển vào thư mục dự án
+```bash
 cd UniHand
-
-# 3. Khởi tạo các biến môi trường cần thiết
+```
+3. Khởi tạo các biến môi trường cần thiết
+```bash
 npm run genv
+```
+- Sau khi khởi tạo xong, bạn có thể truy cập tệp tin .env hệ thống vừa tạo để sửa biến môi trường cho phù hợp.
+- Hoặc hệ thống sẽ lấy giá trị mặc định và vẫn hoạt động bình thường.
 
-# Sau khi khởi tạo xong, bạn có thể truy cập tệp tin .env hệ thống vừa tạo để sửa biến môi trường cho phù hợp.
-# Hoặc hệ thống sẽ lấy giá trị mặc định và vẫn hoạt động bình thường.
-
-# 4. Build và chạy dự án.
+4. Build và chạy dự án.
+```bash
 docker compose up -d
-
 ```
 
 Mặc định hệ thống sẽ chạy trên:
