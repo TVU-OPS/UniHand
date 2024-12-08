@@ -112,7 +112,7 @@ export default function Map(props: MapProps) {
     });
     const { latitude, longitude } = location.coords;
 
-    sendMessageToWebView({ latitude, longitude, zoom: 12, action: "move" });
+    sendMessageToWebView({ latitude, longitude, zoom: 13, action: "move" });
   };
 
   const handleDisplayNotification = async () => {
@@ -232,6 +232,7 @@ export default function Map(props: MapProps) {
   }, [loading]);
 
   useEffect(() => {
+    getCurrentLocation();
     handleMoveToCurrentLocation();
   }, []);
 

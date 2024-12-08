@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Text,
   Alert,
+  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Sử dụng icon từ thư viện Ionicons
 import { ThemedView } from "@/components/ThemedView";
@@ -46,7 +47,23 @@ export default function RegisterScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Đăng Ký</ThemedText>
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          source={require("../../assets/images/Logo.png")}
+          style={styles.image}
+          resizeMode="cover"
+        />
+      </View>
+      <ThemedText style={styles.title}>ĐĂNG KÝ</ThemedText>
+      <ThemedText style={styles.des}>
+        Vui lòng điền thông tin để đăng ký.
+      </ThemedText>
 
       {/* Username */}
       <View style={styles.inputContainer}>
@@ -131,10 +148,24 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 30,
+    fontSize: 18,
+    fontWeight: 500,
+    color: "#4b5563",
+    // marginBottom: 10,
+    marginTop: 4,
     textAlign: "center",
+  },
+  image: {
+    width: 80,
+    height: 80,
+    textAlign: "center",
+  },
+  des: {
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: 400,
+    color: "#6b7280",
+    marginBottom: 30,
   },
   inputContainer: {
     marginBottom: 12,
@@ -147,8 +178,9 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: "bold",
-    marginLeft: 6, // Khoảng cách giữa icon và label
+    fontWeight: 500,
+    marginLeft: 6,
+    color: "#6b7280",
   },
   input: {
     height: 50,
