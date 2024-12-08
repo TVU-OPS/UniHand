@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Text,
   Alert,
-  Image,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons"; // Sử dụng icon từ thư viện Ionicons
 import { ThemedView } from "@/components/ThemedView";
@@ -45,23 +44,8 @@ export default function LoginScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <View
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-        }}
-      >
-        <Image
-          source={require("../../assets/images/Logo.png")}
-          style={styles.image}
-          resizeMode="cover"
-        />
-      </View>
-      <ThemedText style={styles.title}>ĐĂNG NHẬP</ThemedText>
-      <ThemedText style={styles.des}>
-        Vui lòng điền thông tin để đăng nhập.
-      </ThemedText>
+      <ThemedText style={styles.title}>Đăng nhập</ThemedText>
+
       {/* Email */}
       <View style={styles.inputContainer}>
         <View style={styles.labelContainer}>
@@ -109,6 +93,8 @@ export default function LoginScreen() {
         <Text style={styles.buttonText}>Đăng nhập</Text>
       </TouchableOpacity>
 
+    
+
       <Link href={"/(auth)/register"} style={styles.link}>
         <Text style={styles.linkText}>Chưa có tài khoản? Đăng ký</Text>
       </Link>
@@ -123,24 +109,10 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 18,
-    fontWeight: 500,
-    color: "#4b5563",
-    // marginBottom: 10,
-    marginTop: 4,
-    textAlign: "center",
-  },
-  image: {
-    width: 80,
-    height: 80,
-    textAlign: "center",
-  },
-  des: {
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: 400,
-    color: "#6b7280",
+    fontSize: 24,
+    fontWeight: "bold",
     marginBottom: 30,
+    textAlign: "center",
   },
   inputContainer: {
     marginBottom: 12,
@@ -153,9 +125,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: 500,
-    marginLeft: 6, 
-    color: "#6b7280",
+    fontWeight: "bold",
+    marginLeft: 6, // Khoảng cách giữa icon và label
   },
   input: {
     height: 50,
@@ -169,7 +140,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "#50bef1",
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderRadius: 8,
     marginBottom: 20,
     alignItems: "center",

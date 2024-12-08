@@ -44,7 +44,6 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-
 import uploadApi from "@/api/upload";
 
 export default function SOSScreen() {
@@ -244,7 +243,7 @@ export default function SOSScreen() {
       setLoadingLocation(false);
     } catch (error) {
       console.error(error);
-      Alert.alert("Lỗi", "Lỗi lấy vị trí.");
+      Alert.alert("Error", "Failed to fetch location.");
       setLoadingLocation(false);
     }
   };
@@ -404,11 +403,13 @@ export default function SOSScreen() {
       let audioIds = [];
       const imageUrl = images.filter((image) => image !== null);
       if (imageUrl?.length > 0) {
+        console.log("images");
         const res = await uploadApi.uploadImageFiles(imageUrl);
         imageIds = res.map((file) => file.id);
         requestData.data.DamageImage = imageIds;
       }
       if (audioFiles?.length > 0) {
+        console.log("images");
         const res = await uploadApi.uploadAudioFiles(audioFiles);
         audioIds = res.map((file) => file.id);
         requestData.data.AudioFile = audioIds;
@@ -473,7 +474,7 @@ export default function SOSScreen() {
     >
       <ThemedView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView  showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View
               style={{
                 display: "flex",
@@ -667,7 +668,7 @@ export default function SOSScreen() {
               renderItem={({ item, index }) => (
                 <View style={styles.audioCard}>
                   <Text
-                    numberOfLines={1}
+                    // numberOfLines={1}
                     style={styles.audioText}
                   >
                     {item.split("/").pop()}
@@ -732,7 +733,7 @@ export default function SOSScreen() {
                   color: "#9ca3af",
                 }}
               >
-                Thêm ảnh mô tả:
+                Thêm ảnh mô tả:{" "}
               </Text>
               <View style={styles.grid}>
                 {images.map((image, index) => (
@@ -959,8 +960,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   imageWrapper: {
-    width: 74,
-    height: 74,
+    width: "22%",
+    height: 70,
     margin: 5,
     borderRadius: 10,
     borderWidth: 1,
@@ -1053,7 +1054,7 @@ const styles = StyleSheet.create({
     borderWidth: 0.6,
     borderColor: "#ccc",
     marginTop: 12,
-    paddingVertical: 4,
+    paddingVertical: 2,
   },
   audioText: {
     fontSize: 13,

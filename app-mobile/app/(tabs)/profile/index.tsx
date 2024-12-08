@@ -114,12 +114,9 @@ export default function ProfileScreen() {
 
                 <Text style={styles.value}>{userInfo?.username}</Text>
               </View>
-              <Link href="/(auth)/registerOrganization" style={styles.button}>
+              <Link href="/(auth)/login" style={styles.button}>
                 <Ionicons name="people" size={16} color="#fff" />
-                <Text style={[styles.buttonText]}>
-                  {" "}
-                  Đăng ký tài khoản tổ chức
-                </Text>
+                <Text style={[styles.buttonText]}> Đăng ký tài khoản tổ chức</Text>
               </Link>
             </>
           ) : (
@@ -145,13 +142,6 @@ export default function ProfileScreen() {
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity
-                  style={styles.logoutButton}
-                  onPress={handleLogout}
-                >
-                  <Ionicons name="log-out-outline" size={16} color="#fff" />
-                  <Text style={styles.logoutButtonText}>Đăng xuất</Text>
-                </TouchableOpacity>
-                {/* <TouchableOpacity
                   style={[
                     styles.editButton,
                     { backgroundColor: isEditing ? "#f87171" : "#50bef1" },
@@ -166,7 +156,7 @@ export default function ProfileScreen() {
                   <Text style={[styles.editButtonText]}>
                     {isEditing ? "Hủy" : "Chỉnh sửa thông tin"}
                   </Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
               </View>
               {/* Thông tin tổ chức */}
               <View style={styles.infoContainer}>
@@ -231,7 +221,7 @@ export default function ProfileScreen() {
                 )}
               </View>
               <View style={styles.infoContainer}>
-                <Text numberOfLines={2} style={styles.label}>Địa chỉ:</Text>
+                <Text style={styles.label}>Địa chỉ:</Text>
                 {isEditing ? (
                   <TextInput
                     style={styles.input}
@@ -252,18 +242,16 @@ export default function ProfileScreen() {
               </View>
               <View style={styles.infoContainer}>
                 <Text style={styles.label}>Email:</Text>
+
                 <Text style={styles.value}>{userInfo?.email}</Text>
-              </View>
-              <View style={styles.infoContainer}>
-                <Text style={styles.label}>Mô tả:</Text>
-                <Text numberOfLines={3} style={styles.value}>{organizationInfo?.Description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit suscipit laudantium quibusdam. Nam, minima magnam similique nulla explicabo dolore quaerat eos consectetur, doloribus, earum illum beatae voluptas. Ipsam, harum cum.</Text>
-              </View>
-              <View style={styles.infoContainer}>
-                <Text style={styles.label}>Số điện thoại:</Text>
-                <Text numberOfLines={3} style={styles.value}>{organizationInfo?.PhoneNumber}</Text>
               </View>
             </>
           )}
+
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Ionicons name="log-out-outline" size={16} color="#fff" />
+            <Text style={styles.logoutButtonText}>Đăng xuất</Text>
+          </TouchableOpacity>
         </ScrollView>
       ) : (
         <>
@@ -330,7 +318,7 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
   },
   orgAvatarContainer: {
-    marginTop: 8,
+    marginTop: 12,
     alignItems: "center",
   },
   orgAvatar: {
@@ -353,7 +341,7 @@ const styles = StyleSheet.create({
   value: {
     // borderWidth: 1,
     borderWidth: 1,
-    backgroundColor: "#f9fafb",
+    backgroundColor: "#f5f5f4",
     borderColor: "#fff",
     borderRadius: 8,
     padding: 8,
@@ -386,11 +374,11 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     gap: 4,
-    backgroundColor: "#50bef1",
+    backgroundColor: "#9ca3af",
     paddingVertical: 8,
     paddingHorizontal: 14,
     borderRadius: 8,
-    marginTop: 4,
+    marginTop: 20,
     alignItems: "center",
   },
   logoutButtonText: {

@@ -80,7 +80,7 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
         )}
         <View style={styles.header}>
           <Text style={styles.fullName}>
-            #{item?.id} - {item?.FullName}
+            #{item?.id}-{item?.FullName}
           </Text>
         </View>
         <View style={styles.buttonContainer}>
@@ -135,7 +135,7 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
           </Text>
           <Text style={styles.highlightText}>
             {item.Province?.FullName}, {item.District?.FullName},{" "}
-            {item.Ward?.FullName} 
+            {item.Ward?.FullName}
           </Text>
         </View>
         <View style={styles.highlightRow}>
@@ -143,15 +143,7 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
             <Ionicons name="map" size={16} color="#0ea5e9" />
           </Text>
           <Text style={styles.highlightText}>
-            Lat {item?.Location?.lat}
-          </Text>
-        </View>
-        <View style={styles.highlightRow}>
-          <Text style={styles.label}>
-            <Ionicons name="map" size={16} color="#0ea5e9" />
-          </Text>
-          <Text style={styles.highlightText}>
-           Lng {item?.Location?.lng}
+            Lat {item?.Location?.lat}, Lng {item?.Location?.lng}
           </Text>
         </View>
         <View style={styles.highlightRow}>
@@ -220,7 +212,7 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
 const styles = StyleSheet.create({
   list: {
     paddingHorizontal: 15,
-    gap: 16,
+    gap: 10,
   },
   requestCard: {
     backgroundColor: "#fff",
@@ -327,7 +319,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#6b7280",
     fontWeight: "500",
-    maxWidth: "90%",
   },
   address: {
     flexDirection: "row",
