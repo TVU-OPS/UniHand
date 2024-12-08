@@ -8,18 +8,38 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   Pressable,
+  useWindowDimensions,
 } from "react-native";
 import { Post, PostData } from "@/types/post";
 import { Link, useFocusEffect } from "expo-router";
 import postApi from "@/api/postApi";
 import { Ionicons } from "@expo/vector-icons";
 import { transform } from "@babel/core";
+import WebView from "react-native-webview";
+import RenderHtml, { RenderHTML } from "react-native-render-html";
 
 export default function NewsScreen() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const { width } = useWindowDimensions();
+
+  const customRenderers = {
+    figure: ({ TDefaultRenderer, ...props }) => {
+      const videoUrl = props.tnode.children[0]?.attributes?.url;
+      if (videoUrl) {
+        return (
+          <WebView
+            source={{ uri: videoUrl }}
+            style={{ height: 200, width: width - 20 }}
+            javaScriptEnabled={true}
+          />
+        );
+      }
+      return <TDefaultRenderer {...props} />;
+    },
+  };
 
   const fetchPosts = async (page: number) => {
     try {
@@ -65,6 +85,7 @@ export default function NewsScreen() {
       );
     }
 
+    
     return (
       <View style={styles.paginationContainer}>
         <Pressable
@@ -88,6 +109,12 @@ export default function NewsScreen() {
     );
   };
 
+  const htmlToText = (html) : string => {
+    // Loại bỏ tất cả thẻ HTML
+    return html.replace(/<[^>]*>/g, "");
+  }
+
+
   const renderItem = ({ item }: { item: Post }) => (
     <Link style={{ marginTop: 10 }} href={`/post/${item?.documentId}`}>
       <View style={styles.postContainer}>
@@ -104,7 +131,9 @@ export default function NewsScreen() {
             {item?.Title}
           </Text>
           <Text style={styles.content} numberOfLines={2}>
-            {item?.Content}
+            {item?.Content && 
+            htmlToText(item?.Content)
+            }
           </Text>
           <Text style={styles.author} numberOfLines={2}>
             Theo: {item?.Author}
@@ -138,7 +167,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     paddingTop: 40,
-    
   },
   postContainer: {
     flexDirection: "row",

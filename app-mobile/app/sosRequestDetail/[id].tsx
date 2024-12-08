@@ -495,13 +495,14 @@ const provinces = [
        });
 
      /////////////////////////////  
-
+      const markers = {};
      document.addEventListener("message", (event) => {
        const data = JSON.parse(event.data);
        const { latitude, longitude, action, notification, zoom } = data;
 
        if (action === "update" || action === "move") {
-         if (!markers["currentLocation"]) {
+      
+          if (!markers["currentLocation"]) {
            markers["currentLocation"] = new mapboxgl.Marker()
              .setLngLat([longitude, latitude])
              .addTo(map);
@@ -545,9 +546,9 @@ const provinces = [
 
   return (
     <ThemedView style={styles.container}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
+      <GestureHandlerRootView style={{ flex: 1, paddingBottom: 8 }}>
         <ScrollView
-          keyboardShouldPersistTaps="never"
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollContainer}
         >
           <Text style={styles.titleId}> #{sosRequest.id}</Text>
@@ -564,6 +565,7 @@ const provinces = [
               Số người cần hỗ trợ: {sosRequest.PeopleCount}
             </Text>
           </View>
+         
           <View style={styles.infoContainer}>
             <Ionicons name="water" size={20} color="#4CAF50" />
             <Text style={styles.label}>
@@ -611,7 +613,7 @@ const provinces = [
           </View>
           <View style={styles.infoContainer}>
             <Ionicons name="location" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
+            <Text style={[styles.label,{maxWidth: "90%"}]}>
               Địa chỉ chi tiết: {sosRequest.Amenity}
             </Text>
           </View>
@@ -738,6 +740,7 @@ const provinces = [
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     // padding: 16,
   },
   scrollContainer: {
@@ -800,7 +803,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     borderRadius: 8,
   },
-  audioContainer: {},
+  audioContainer: {
+    marginBottom: 8,
+   
+  },
   audioButton: {
     fontSize: 14,
     color: "blue",
@@ -813,8 +819,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
     gap: 4,
+   
   },
-  audioText: {},
+  audioText: {
+    maxWidth: "90%",
+  },
 
   contentContainer: {
     minHeight: 200,

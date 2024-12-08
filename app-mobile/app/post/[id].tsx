@@ -6,21 +6,40 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Image, View, Text} from "react-native";
+import { ScrollView, StyleSheet, Image, View, Text } from "react-native";
+import RenderHtml, { RenderHTML } from "react-native-render-html";
+import { useWindowDimensions } from "react-native";
+import WebView from "react-native-webview";
 
 export default function PostDetailScreen() {
   const [post, setPost] = useState<Post | null>(null);
   const local = useLocalSearchParams();
+  const { width } = useWindowDimensions();
+
+  const customRenderers = {
+    figure: ({ TDefaultRenderer, ...props }) => {
+      const videoUrl = props.tnode.children[0]?.attributes?.url;
+      if (videoUrl) {
+        return (
+          <WebView
+            source={{ uri: videoUrl }}
+            style={{ height: 200, width: width - 20 }}
+            javaScriptEnabled={true}
+          />
+        );
+      }
+      return <TDefaultRenderer {...props} />;
+    },
+  };
 
   const fetchPost = async () => {
     try {
-      const res = await postApi.fetchDetailPost(local.id.toLocaleString());
+      const res = await postApi.fetchDetailPost(local?.id.toLocaleString());
       setPost(res.data);
     } catch (error: any) {
       console.log("Failed to fetch post:", error);
     }
   };
-
 
   useEffect(() => {
     fetchPost();
@@ -34,31 +53,46 @@ export default function PostDetailScreen() {
     );
   }
 
+  // console.log("post", post!.Image);
+
   return (
     <ThemedView style={styles.container}>
-      <ScrollView style={styles.containerScroll} showsVerticalScrollIndicator={false}>
-        {/* Tiêu đề bài viết */}
-        <ThemedText style={styles.title}>{post.Title}</ThemedText>
-        {/* Ngày đăng và cập nhật */}
+      <ScrollView
+        style={styles.containerScroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <ThemedText style={styles.title}>{!!post && post?.Title}</ThemedText>
+
         <View style={styles.createAtContainer}>
-          <Ionicons  name="calendar-outline" color="gray" />
+          <Ionicons name="calendar-outline" color="gray" />
           <ThemedText style={styles.metadata}>
-            Ngày đăng: {new Date(post.createdAt).toLocaleDateString()}
+            Ngày đăng: {new Date(post?.createdAt).toLocaleDateString()}
           </ThemedText>
         </View>
-        <Image
-          source={{
-            uri:
-              `${process.env.EXPO_PUBLIC_API_URL}${post?.Image[0].url}` ||
-              "https://via.placeholder.com/150",
-          }}
-          style={styles.image}
-        />
+        {!!post && post?.Image !== null && (
+          <Image
+            source={{
+              uri:
+                `${process.env.EXPO_PUBLIC_API_URL}${post?.Image[0]?.url}` ||
+                "https://via.placeholder.com/150",
+            }}
+            style={styles.image}
+          />
+        )}
+
+        {!!post && post?.Content && (
+          <RenderHTML
+            contentWidth={width}
+            source={{ html: post?.Content }}
+            renderers={customRenderers}
+            defaultTextProps={{ selectable: true }}
+          />
+        )}
         {/* Nội dung bài viết */}
-        <ThemedText style={styles.content}>{post.Content}</ThemedText>
+        {/* <ThemedText style={styles.content}>{post.Content}</ThemedText> */}
 
         {/* Tác giả */}
-        <ThemedText style={styles.author}>Nguồn: {post.Author}</ThemedText>
+        <ThemedText style={styles.author}>Nguồn: {post?.Author}</ThemedText>
       </ScrollView>
     </ThemedView>
   );
@@ -67,11 +101,10 @@ export default function PostDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
   },
   containerScroll: {
     padding: 16,
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   image: {
     width: "100%",
@@ -80,7 +113,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     objectFit: "cover",
   },
-  createAtContainer : {
+  createAtContainer: {
     display: "flex",
     flexDirection: "row",
     gap: 4,
