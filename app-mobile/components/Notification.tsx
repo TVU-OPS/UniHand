@@ -195,7 +195,7 @@ const SosRequestsList: React.FC<SosRequestsListProps> = ({
             {isLoading && isLoadingItem == item.documentId ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text style={styles.buttonAccceptText}>ĐÃ HỘ TRỢ XONG</Text>
+              <Text style={styles.buttonAccceptText}>HOÀN THÀNH</Text>
             )}
           </Pressable>
         )}
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3,
     borderWidth: 1,
-    borderColor: "#50bef1",
+    borderColor: "#d1d5db",
     width: "100%",
     position: "relative",
   },
@@ -242,9 +242,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerRight: {
+
     fontSize: 14,
     color: "#f97316",
-    fontWeight: "400",
+    fontWeight: "500",
     borderWidth: 1,
     borderColor: "#f97316",
     paddingHorizontal: 8,

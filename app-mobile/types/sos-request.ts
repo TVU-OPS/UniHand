@@ -1,3 +1,4 @@
+import { Disaster } from "./disaster";
 import { District } from "./district";
 import { Image } from "./image";
 import { Province } from "./province";
@@ -55,5 +56,6 @@ export type SosRequest = {
   Province: Province;
   District: District;
   Ward: Ward;
+  Disaster: Disaster;
   AcceptedBy: SupportOrganization | null;
 };

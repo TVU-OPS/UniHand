@@ -208,6 +208,12 @@ export default function Map(props: MapProps) {
     }
   };
 
+  const handleReloadWebView = () => {
+    if (webviewRef.current) {
+      webviewRef.current.reload();
+    }
+  };
+
   useEffect(() => {
     handleDisplayDisaster();
   }, [selectedDisaster]);
@@ -582,6 +588,12 @@ export default function Map(props: MapProps) {
         }}
       />
       <View style={styles.controls}>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#9ca3af" }]}
+          onPress={handleReloadWebView}
+        >
+          <Ionicons name="refresh-outline" size={24} color="#fff" />
+        </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "#9ca3af" }]}
           onPress={handleZoomIn}

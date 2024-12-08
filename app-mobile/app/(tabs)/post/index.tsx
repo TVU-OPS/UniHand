@@ -85,7 +85,6 @@ export default function NewsScreen() {
       );
     }
 
-    
     return (
       <View style={styles.paginationContainer}>
         <Pressable
@@ -109,31 +108,38 @@ export default function NewsScreen() {
     );
   };
 
-  const htmlToText = (html) : string => {
+  const htmlToText = (html): string => {
     // Loại bỏ tất cả thẻ HTML
     return html.replace(/<[^>]*>/g, "");
-  }
-
+  };
 
   const renderItem = ({ item }: { item: Post }) => (
-    <Link style={{ marginTop: 10 }} href={`/post/${item?.documentId}`}>
+    <Link style={{ marginTop: 12 }} href={`/post/${item?.documentId}`}>
       <View style={styles.postContainer}>
-        <Image
-          source={{
-            uri:
-              `${process.env.EXPO_PUBLIC_API_URL}${item?.Image?.[0]?.url}` ||
-              "https://via.placeholder.com/120",
-          }}
-          style={styles.image}
-        />
+        {!!item && item?.Image !== null ? (
+          <Image
+            source={{
+              uri:
+                `${process.env.EXPO_PUBLIC_API_URL}${item?.Image[0]?.url}` ||
+                "https://via.placeholder.com/150",
+            }}
+            style={styles.image}
+          />
+        ) : (
+          <Image
+            source={{
+              uri: "https://via.placeholder.com/150",
+            }}
+            style={styles.image}
+          />
+        )}
+
         <View style={styles.textContainer}>
           <Text style={styles.title} numberOfLines={2}>
             {item?.Title}
           </Text>
           <Text style={styles.content} numberOfLines={2}>
-            {item?.Content && 
-            htmlToText(item?.Content)
-            }
+            {item?.Content && htmlToText(item?.Content)}
           </Text>
           <Text style={styles.author} numberOfLines={2}>
             Theo: {item?.Author}
@@ -165,13 +171,14 @@ export default function NewsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    paddingTop: 40,
+    paddingHorizontal: 10,
+    paddingTop: 25,
+    backgroundColor: "#fff",
   },
   postContainer: {
     flexDirection: "row",
-    marginBottom: 10,
-    marginTop: 10,
+    marginBottom: 12,
+    marginTop: 12,
     backgroundColor: "#fff",
     borderRadius: 10,
     // padding: 12,
@@ -182,6 +189,8 @@ const styles = StyleSheet.create({
     elevation: 2,
     gap: 10,
     padding: 10,
+    borderWidth: 0.5,
+    borderColor: "#d1d5db",
   },
   textContainer: {
     flex: 1,

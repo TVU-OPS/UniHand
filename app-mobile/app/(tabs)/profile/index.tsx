@@ -115,12 +115,21 @@ export default function ProfileScreen() {
                 <Text style={styles.value}>{userInfo?.username}</Text>
               </View>
               <Link href="/(auth)/registerOrganization" style={styles.button}>
-                <Ionicons name="people" size={16} color="#fff" />
+                {/* <Ionicons name="people" size={16} color="#fff" style={{marginRight: 4}} /> */}
                 <Text style={[styles.buttonText]}>
-                  {" "}
                   Đăng ký tài khoản tổ chức
                 </Text>
               </Link>
+
+              <View style={styles.editButtonContainer}>
+                <TouchableOpacity
+                  style={styles.logoutButton}
+                  onPress={handleLogout}
+                >
+                  <Ionicons name="log-out-outline" size={16} color="#fff" />
+                  <Text style={styles.logoutButtonText}>Đăng xuất</Text>
+                </TouchableOpacity>
+              </View>
             </>
           ) : (
             <>
@@ -135,7 +144,14 @@ export default function ProfileScreen() {
                 />
               </View>
               <View style={styles.editButtonContainer}>
-                {isEditing && (
+                <TouchableOpacity
+                  style={styles.logoutButton}
+                  onPress={handleLogout}
+                >
+                  <Ionicons name="log-out-outline" size={16} color="#fff" />
+                  <Text style={styles.logoutButtonText}>Đăng xuất</Text>
+                </TouchableOpacity>
+                {/* {isEditing && (
                   <TouchableOpacity
                     style={styles.saveButton}
                     onPress={handleSaveChanges}
@@ -150,7 +166,7 @@ export default function ProfileScreen() {
                 >
                   <Ionicons name="log-out-outline" size={16} color="#fff" />
                   <Text style={styles.logoutButtonText}>Đăng xuất</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 {/* <TouchableOpacity
                   style={[
                     styles.editButton,
@@ -231,7 +247,9 @@ export default function ProfileScreen() {
                 )}
               </View>
               <View style={styles.infoContainer}>
-                <Text numberOfLines={2} style={styles.label}>Địa chỉ:</Text>
+                <Text numberOfLines={2} style={styles.label}>
+                  Địa chỉ:
+                </Text>
                 {isEditing ? (
                   <TextInput
                     style={styles.input}
@@ -256,11 +274,15 @@ export default function ProfileScreen() {
               </View>
               <View style={styles.infoContainer}>
                 <Text style={styles.label}>Mô tả:</Text>
-                <Text numberOfLines={3} style={styles.value}>{organizationInfo?.Description} Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit suscipit laudantium quibusdam. Nam, minima magnam similique nulla explicabo dolore quaerat eos consectetur, doloribus, earum illum beatae voluptas. Ipsam, harum cum.</Text>
+                <Text numberOfLines={3} style={styles.value}>
+                  {organizationInfo?.Description}
+                </Text>
               </View>
               <View style={styles.infoContainer}>
                 <Text style={styles.label}>Số điện thoại:</Text>
-                <Text numberOfLines={3} style={styles.value}>{organizationInfo?.PhoneNumber}</Text>
+                <Text numberOfLines={3} style={styles.value}>
+                  {organizationInfo?.PhoneNumber}
+                </Text>
               </View>
             </>
           )}
@@ -270,7 +292,9 @@ export default function ProfileScreen() {
           <Link href="/(auth)/login" style={styles.button}>
             <Text style={styles.buttonText}>Đăng nhập</Text>
           </Link>
-          <Text style={styles.orgText}>Vui lòng đăng nhập.</Text>
+          <Text style={styles.orgText}>
+            Chức năng chỉ dành cho tài khoản của tổ chức.
+          </Text>
         </>
       )}
     </ThemedView>
@@ -294,9 +318,11 @@ const styles = StyleSheet.create({
     // textTransform: "uppercase",
   },
   orgText: {
-    marginTop: 20,
+    marginTop: 10,
     fontSize: 16,
     color: "#6b7280",
+    maxWidth: 200,
+    textAlign: "center",
   },
   button: {
     backgroundColor: "#50bef1",

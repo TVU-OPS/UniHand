@@ -17,7 +17,7 @@ export default function PostDetailScreen() {
   const { width } = useWindowDimensions();
 
   const customRenderers = {
-    figure: ({ TDefaultRenderer, ...props }) => {
+    figure: ({ TDefaultRenderer, ...props }: { TDefaultRenderer: any; [key: string]: any }) => {
       const videoUrl = props.tnode.children[0]?.attributes?.url;
       if (videoUrl) {
         return (
@@ -93,6 +93,7 @@ export default function PostDetailScreen() {
 
         {/* Tác giả */}
         <ThemedText style={styles.author}>Nguồn: {post?.Author}</ThemedText>
+      <View style={{ height: 80 }}></View>
       </ScrollView>
     </ThemedView>
   );
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 8,
     objectFit: "cover",
+    marginBottom: 8,
   },
   createAtContainer: {
     display: "flex",
