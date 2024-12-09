@@ -35,7 +35,6 @@ import districtApi from "@/api/district";
 import { District } from "@/types/district";
 import { Ward } from "@/types/ward";
 import wardApi from "@/api/ward";
-import RNPickerSelect from "react-native-picker-select";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
 import { Audio } from "expo-av";
@@ -44,6 +43,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
+import { Picker } from "@react-native-picker/picker";
 
 import uploadApi from "@/api/upload";
 
@@ -106,12 +106,12 @@ export default function SOSScreen() {
 
   const toggleAccordion = () => {
     setIsExpanded(!isExpanded);
-    heightValue.value = isExpanded ? 0 : 240; 
+    heightValue.value = isExpanded ? 0 : 240;
   };
 
   const toggleAccordionAdress = () => {
     setExpandedAdress(!isExpandedAdress);
-    heightValueAdress.value = isExpandedAdress ? 0 : 110; 
+    heightValueAdress.value = isExpandedAdress ? 0 : 170;
   };
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -183,8 +183,8 @@ export default function SOSScreen() {
       const res = await disasterApi.getOngoingDisasters();
 
       const disasterOptions = res.data.map((disaster: Disaster) => ({
-        label: disaster.Name, 
-        value: disaster.id, 
+        label: disaster.Name,
+        value: disaster.id,
       }));
       await setDisasters(disasterOptions);
       if (selectedDisaster === null) {
@@ -273,7 +273,7 @@ export default function SOSScreen() {
 
   const removeImage = (index: number) => {
     const newImages = [...images];
-    newImages[index] = null; 
+    newImages[index] = null;
     setImages(newImages);
   };
 
@@ -462,7 +462,7 @@ export default function SOSScreen() {
     fetchProvinces();
     const getLocationCurrent = async () => {
       await getLocation();
-    }
+    };
     getLocationCurrent();
   }, []);
 
@@ -473,7 +473,10 @@ export default function SOSScreen() {
     >
       <ThemedView>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <ScrollView  showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.scrollContainer}
+          >
             <View
               style={{
                 display: "flex",
@@ -518,19 +521,31 @@ export default function SOSScreen() {
             />
 
             <View
-              style={[styles.pickerContainer, { width: "100%", marginTop: 14 }]}
+              style={{
+                borderColor: "#ddd",
+                borderWidth: 1,
+                borderRadius: 8,
+                marginTop: 12,
+                // paddingHorizontal: 12,
+                backgroundColor: "#fff",
+                height: 44,
+                fontSize: 16,
+                justifyContent: "center",
+              }}
             >
-              <RNPickerSelect
-                value={selectedDisaster}
-                onValueChange={(value) => setSelectedDisaster(value)}
-                items={disasters?.length ? disasters : []}
-                placeholder={{ label: "Chọn thiên tai*", value: null }}
-                style={{
-                  ...pickerSelectStyles,
-                }}
-              />
+              <Picker
+                selectedValue={selectedDisaster}
+                onValueChange={(itemValue) => setSelectedDisaster(itemValue)}
+              >
+                {disasters?.map((disaster) => (
+                  <Picker.Item
+                    key={disaster.value}
+                    label={disaster.label}
+                    value={disaster.value}
+                  />
+                ))}
+              </Picker>
             </View>
-
             {/* Address and Pick Button */}
             <View style={styles.addressContainer}>
               <ScrollView
@@ -539,7 +554,11 @@ export default function SOSScreen() {
                 contentContainerStyle={{ flexGrow: 1 }}
               >
                 <Text
-                  style={[address ? { fontSize: 16} : { color: "#9ca3af", fontSize: 16 }]}
+                  style={[
+                    address
+                      ? { fontSize: 16 }
+                      : { color: "#9ca3af", fontSize: 16 },
+                  ]}
                 >
                   {address || "Lấy địa chỉ *"}
                 </Text>
@@ -582,57 +601,87 @@ export default function SOSScreen() {
             </TouchableOpacity>
 
             <Animated.View style={[styles.extraInputs, animatedStyleAdress]}>
+              {/* <View style={styles.pickerContainer}></View> */}
+              <View
+                style={{
+                  borderColor: "#ddd",
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  marginTop: 12,
+                  // paddingHorizontal: 12,
+                  backgroundColor: "#fff",
+                  height: 44,
+                  fontSize: 16,
+                  justifyContent: "center",
+                }}
+              >
+                <Picker
+                  selectedValue={selectedProvince}
+                  onValueChange={(itemValue) => setSelectedProvince(itemValue)}
+                >
+                  {provinces?.map((province) => (
+                    <Picker.Item
+                      key={province.value}
+                      label={province.label}
+                      value={province.value}
+                    />
+                  ))}
+                </Picker>
+              </View>
+
+              <View
+                style={{
+                  borderColor: "#ddd",
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  marginTop: 12,
+                  // paddingHorizontal: 12,
+                  backgroundColor: "#fff",
+                  height: 44,
+                  fontSize: 16,
+                  justifyContent: "center",
+                }}
+              >
+                <Picker
+                  selectedValue={selectedDistrict}
+                  onValueChange={(itemValue) => setSelectedDistrict(itemValue)}
+                >
+                  {districts?.map((district) => (
+                    <Picker.Item
+                      key={district.value}
+                      label={district.label}
+                      value={district.value}
+                    />
+                  ))}
+                </Picker>
+              </View>
               {/* Dropdown for location */}
 
               <View
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  marginTop: 14,
-                  justifyContent: "space-between",
+                  borderColor: "#ddd",
+                  borderWidth: 1,
+                  borderRadius: 8,
+                  marginTop: 12,
+                  // paddingHorizontal: 12,
+                  backgroundColor: "#fff",
+                  height: 44,
+                  fontSize: 16,
+                  justifyContent: "center",
                 }}
               >
-                <View style={[styles.pickerContainer, { width: "48%" }]}>
-                  <RNPickerSelect
-                    value={selectedProvince}
-                    onValueChange={(value) => setSelectedProvince(value)}
-                    items={provinces?.length ? provinces : []}
-                    placeholder={{ label: "Chọn tỉnh/thành phố*", value: null }}
-                    style={{
-                      ...pickerSelectStyles,
-                    }}
-                  />
-                </View>
-
-                <View style={[styles.pickerContainer, { width: "48%" }]}>
-                  <RNPickerSelect
-                    value={selectedDistrict}
-                    onValueChange={(value) => setSelectedDistrict(value)}
-                    items={districts?.length ? districts : []}
-                    placeholder={{ label: "Chọn quận/huyện*", value: null }}
-                    style={{
-                      ...pickerSelectStyles,
-                    }}
-                  />
-                </View>
-              </View>
-
-              {/* // Dropdown for wards */}
-              <View
-                style={[
-                  styles.pickerContainer,
-                  { width: "100%", marginTop: 14 },
-                ]}
-              >
-                <RNPickerSelect
-                value={selectedWard}
-                  onValueChange={(value) => setSelectedWard(value)}
-                  items={wards?.length ? wards : []}
-                  placeholder={{ label: "Chọn phường/xã*", value: null }}
-                  style={{
-                    ...pickerSelectStyles,
-                  }}
-                />
+                <Picker
+                  selectedValue={selectedWard}
+                  onValueChange={(itemValue) => setSelectedWard(itemValue)}
+                >
+                  {wards?.map((ward) => (
+                    <Picker.Item
+                      key={ward.value}
+                      label={ward.label}
+                      value={ward.value}
+                    />
+                  ))}
+                </Picker>
               </View>
             </Animated.View>
 
@@ -666,10 +715,7 @@ export default function SOSScreen() {
               keyExtractor={(item, index) => index.toString()}
               renderItem={({ item, index }) => (
                 <View style={styles.audioCard}>
-                  <Text
-                    numberOfLines={1}
-                    style={styles.audioText}
-                  >
+                  <Text numberOfLines={1} style={styles.audioText}>
                     {item.split("/").pop()}
                   </Text>
                   <View style={styles.cardButtons}>
@@ -944,13 +990,17 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
   },
   pickerContainer: {
-    paddingRight: 5,
+    paddingLeft: 8,
     borderWidth: 0.8,
     borderColor: "#ccc",
     borderRadius: 8,
-    justifyContent: "center",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     height: 40,
     overflow: "hidden",
+    backgroundColor: "#ccc",
   },
 
   grid: {
@@ -1085,6 +1135,9 @@ const styles = StyleSheet.create({
   buttonTextAudio: {
     color: "#fff",
     fontSize: 14,
+  },
+  picker: {
+    alignItems: "center",
   },
 });
 

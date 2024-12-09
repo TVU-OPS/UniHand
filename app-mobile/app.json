@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/images/Logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.dinhtri21.uniHand"
+      "package": "com.dinhtri21.unihanddemo"
     },
     "web": {
       "bundler": "metro",
@@ -46,5 +46,6 @@
     "experiments": {
       "typedRoutes": true
     }
+   
   }
 }

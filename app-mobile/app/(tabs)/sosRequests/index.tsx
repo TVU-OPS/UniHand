@@ -18,10 +18,11 @@ import { Notification } from "@/types/notification";
 import notificationApi from "@/api/notificationApi";
 import SosRequestsList from "@/components/Notification";
 import { Ionicons } from "@expo/vector-icons";
-import RNPickerSelect from "react-native-picker-select";
 import sosRequestApi from "@/api/sosRequestApi";
+import { Picker } from "@react-native-picker/picker";
 
 const status = [
+  { label: "Chưa hỗ trợ", value: null },
   { label: "Đang hỗ trợ", value: 0 },
   { label: "Đã hỗ trợ", value: 1 },
 ];
@@ -242,15 +243,22 @@ export default function SosRequestsScreen() {
             <View
               style={[styles.pickerContainer, { width: "45%", marginTop: 14 }]}
             >
-              <RNPickerSelect
-                value={selectedStatusFilter}
-                onValueChange={(value) => setSelectedStatusFilter(value)}
-                items={statusFilter?.length ? statusFilter : []}
-                placeholder={{ label: "Chưa hỗ trợ", value: null }}
-                style={{
-                  ...pickerSelectStyles,
-                }}
-              />
+              <View>
+                <Picker
+                  selectedValue={selectedStatusFilter}
+                  onValueChange={(itemValue) =>
+                    setSelectedStatusFilter(itemValue)
+                  }
+                >
+                  {statusFilter?.map((statusFilter) => (
+                    <Picker.Item
+                      key={statusFilter.value}
+                      label={statusFilter.label}
+                      value={statusFilter.value}
+                    />
+                  ))}
+                </Picker>
+              </View>
             </View>
             {renderPagination()}
           </View>
