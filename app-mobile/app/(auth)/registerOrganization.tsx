@@ -18,7 +18,6 @@ import supportOrganizationApi from "@/api/supportOrganization";
 import { SupportOrganizationCreate } from "@/types/supportOrganization";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Link, router, useFocusEffect } from "expo-router";
-import RNPickerSelect from "react-native-picker-select";
 import provinceApi from "@/api/provinceApi";
 import districtApi from "@/api/district";
 import wardApi from "@/api/ward";
@@ -28,6 +27,7 @@ import { Ward } from "@/types/ward";
 import * as ImagePicker from "expo-image-picker";
 import uploadApi from "@/api/upload";
 import { User } from "@/types/user";
+import { Picker } from "@react-native-picker/picker";
 
 export default function RegisterOrganizationScreen() {
   const [name, setName] = useState("");
@@ -353,61 +353,112 @@ export default function RegisterOrganizationScreen() {
             placeholderTextColor={colorScheme === "dark" ? "#bbb" : "#888"}
           />
         </View>
-
         <View style={styles.labelContainer}>
-          <Ionicons
-            name="map"
-            size={20}
-            color={colorScheme === "dark" ? "#fff" : "#888"}
-          />
-          <ThemedText style={styles.label}>Địa chỉ</ThemedText>
-        </View>
+            <Ionicons
+              name="location"
+              size={20}
+              color={colorScheme === "dark" ? "#fff" : "#888"}
+            />
+            <ThemedText style={styles.label}>Tỉnh / Thành phố</ThemedText>
+          </View>
         <View
           style={{
-            display: "flex",
-            flexDirection: "row",
+            borderColor: "#ddd",
+            borderWidth: 1,
+            borderRadius: 8,
             marginTop: 8,
-            justifyContent: "space-between",
+            marginBottom: 8,
+            // paddingHorizontal: 12,
+            backgroundColor: "#fff",
+            height: 44,
+            fontSize: 16,
+            justifyContent: "center",
           }}
         >
-          <View style={[styles.pickerContainer, { width: "48%" }]}>
-            <RNPickerSelect
-              value={selectedProvince}
-              onValueChange={(value) => setSelectedProvince(value)}
-              items={provinces?.length ? provinces : []}
-              placeholder={{ label: "Chọn tỉnh/thành phố*", value: null }}
-              style={{
-                ...pickerSelectStyles,
-              }}
-            />
-          </View>
-
-          <View style={[styles.pickerContainer, { width: "48%" }]}>
-            <RNPickerSelect
-              value={selectedDistrict}
-              onValueChange={(value) => setSelectedDistrict(value)}
-              items={districts?.length ? districts : []}
-              placeholder={{ label: "Chọn quận/huyện*", value: null }}
-              style={{
-                ...pickerSelectStyles,
-              }}
-            />
-          </View>
+          <Picker
+            selectedValue={selectedProvince}
+            onValueChange={(itemValue) => setSelectedProvince(itemValue)}
+          >
+            {provinces?.map((ward) => (
+              <Picker.Item
+                key={ward.value}
+                label={ward.label}
+                value={ward.value}
+              />
+            ))}
+          </Picker>
         </View>
 
-        {/* // Dropdown for wards */}
+        <View style={styles.labelContainer}>
+            <Ionicons
+              name="location"
+              size={20}
+              color={colorScheme === "dark" ? "#fff" : "#888"}
+            />
+            <ThemedText style={styles.label}>Quận / Huyện</ThemedText>
+          </View>
         <View
-          style={[styles.pickerContainer, { width: "100%", marginTop: 14 }]}
+          style={{
+            borderColor: "#ddd",
+            borderWidth: 1,
+            borderRadius: 8,
+            marginTop: 8,
+            marginBottom: 8,
+            // paddingHorizontal: 12,
+            backgroundColor: "#fff",
+            height: 44,
+            fontSize: 16,
+            justifyContent: "center",
+          }}
         >
-          <RNPickerSelect
-            value={selectedWard}
-            onValueChange={(value) => setSelectedWard(value)}
-            items={wards?.length ? wards : []}
-            placeholder={{ label: "Chọn phường/xã*", value: null }}
-            style={{
-              ...pickerSelectStyles,
-            }}
-          />
+          <Picker
+            selectedValue={selectedDistrict}
+            onValueChange={(itemValue) => setSelectedDistrict(itemValue)}
+          >
+            {districts?.map((district) => (
+              <Picker.Item
+                key={district.value}
+                label={district.label}
+                value={district.value}
+              />
+            ))}
+          </Picker>
+        </View>
+
+        <View style={styles.labelContainer}>
+            <Ionicons
+              name="location"
+              size={20}
+              color={colorScheme === "dark" ? "#fff" : "#888"}
+            />
+            <ThemedText style={styles.label}>Quận / Huyện</ThemedText>
+          </View>
+        <View
+          style={{
+            borderColor: "#ddd",
+            borderWidth: 1,
+            borderRadius: 8,
+            marginTop: 8,
+            marginBottom: 8,
+            // paddingHorizontal: 12,
+            backgroundColor: "#fff",
+            height: 44,
+            fontSize: 16,
+            justifyContent: "center",
+          }}
+        >
+          <Picker
+            selectedValue={selectedWard}
+            onValueChange={(itemValue) => setSelectedWard(itemValue)}
+          >
+            {wards?.map((ward) => (
+              <Picker.Item
+                key={ward.value}
+                label={ward.label}
+                value={ward.value}
+              />
+            ))}
+          </Picker>
         </View>
 
         {/* Image Picker */}

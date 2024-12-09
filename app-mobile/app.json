@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "UniHand",
-    "slug": "uniHand",
+    "name": "UniHand Demo",
+    "slug": "uniHandDemo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/Logo.png",
-    "scheme": "unihand",
+    "scheme": "unihanddemo",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -24,7 +24,7 @@
         "foregroundImage": "./assets/images/Logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.dinhtri21.uniHand"
+      "package": "com.dinhtri21.unihanddemo"
     },
     "web": {
       "bundler": "metro",
@@ -45,14 +45,7 @@
     ],
     "experiments": {
       "typedRoutes": true
-    },
-    "extra": {
-      "router": {
-        "origin": false
-      },
-      "eas": {
-        "projectId": "af6cba34-3565-4836-8fc9-0c4ac44be393"
-      }
     }
+   
   }
 }
