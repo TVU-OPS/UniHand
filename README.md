@@ -10,6 +10,8 @@
 
 # ![UniHand Banner](public/banner_review.png)
 
+[![Document](https://img.shields.io/badge/Document-2ea44f?style=for-the-badge)](https://docs.unihand.site/)
+
 ## **Mục lục**
 
 1. [Giới thiệu](#giới-thiệu)
@@ -76,21 +78,28 @@
 ### Cài Đặt
 
 1. Clone dự án
+
 ```bash
 git clone https://github.com/TVU-OPS/UniHand.git
 ```
+
 2. Di chuyển vào thư mục dự án
+
 ```bash
 cd UniHand
 ```
+
 3. Khởi tạo các biến môi trường cần thiết
+
 ```bash
 npm run genv
 ```
+
 - Sau khi khởi tạo xong, bạn có thể truy cập tệp tin .env hệ thống vừa tạo để sửa biến môi trường cho phù hợp.
 - Hoặc hệ thống sẽ lấy giá trị mặc định và vẫn hoạt động bình thường.
 
 4. Build và chạy dự án.
+
 ```bash
 docker compose up -d
 ```
