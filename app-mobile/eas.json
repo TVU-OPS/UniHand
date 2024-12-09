@@ -5,7 +5,7 @@
         "buildType": "apk"
       },
       "env": {
-        "EXPO_PUBLIC_API_URL" : ""
+        "EXPO_PUBLIC_API_URL" : "http://localhost:1337"
       },
       "environment": "preview"
     },
