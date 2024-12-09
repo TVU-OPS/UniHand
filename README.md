@@ -11,6 +11,7 @@
 # ![UniHand Banner](public/banner_review.png)
 
 - Xem đầy đủ tài liệu của dự án tại: [![Documentation](https://img.shields.io/badge/Documentation-2ea44f?style=for-the-badge)](https://docs.unihand.site/)
+- Xem DEMO dự án: [![DEMO](https://img.shields.io/badge/DEMO-2ea44f?style=for-the-badge)](https://unihand.site/)
 
 ## **Mục lục**
 
