@@ -1,61 +1,129 @@
-# 🚀 Getting started with Strapi
+# 🚀 Cài đặt và sử dụng Strapi
 
-Strapi comes with a full featured [Command Line Interface](https://docs.strapi.io/dev-docs/cli) (CLI) which lets you scaffold and manage your project in seconds.
+Strapi là một nền tảng CMS mã nguồn mở, mạnh mẽ và dễ sử dụng, được thiết kế để giúp bạn xây dựng và quản lý nội dung cho các ứng dụng web hoặc di động một cách nhanh chóng. Với khả năng tùy chỉnh cao, Strapi cho phép các nhà phát triển linh hoạt trong việc mở rộng tính năng và tích hợp dịch vụ bên thứ ba.
 
-### `develop`
+---
 
-Start your Strapi application with autoReload enabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-develop)
+# ![UniHand Banner](./public/backend.png)
 
+## 🛠️ Yêu cầu hệ thống
+
+### 1. **Phần mềm**
+
+- **Node.js**: Phiên bản >= **14.x** và < **20.x**.  
+  [Tải Node.js tại đây](https://nodejs.org).
+- **npm** hoặc **yarn**: Công cụ quản lý gói (thường đi kèm khi cài Node.js).
+  - **npm** >= 6.x
+  - **yarn** >= 1.x
+
+### 2. **Cơ sở dữ liệu: MySQL**
+
+- Phiên bản yêu cầu: **MySQL >= 5.7** hoặc **MariaDB >= 10.3**.
+- Cần chuẩn bị:
+  - Tạo một cơ sở dữ liệu MySQL trước khi chạy ứng dụng.
+
+### 3. **Hệ điều hành**
+
+- **Windows** (khuyến nghị).
+- **Linux**.
+- **macOS**.
+
+### 4. **Dung lượng**
+
+- Dung lượng ổ cứng: Tối thiểu 1GB trống (tùy thuộc vào kích thước dự án).
+- RAM: Tối thiểu **2GB** (khuyến nghị **4GB** để đảm bảo hiệu suất tốt hơn).
+
+---
+
+## 🛠️ Cài đặt dự án
+
+### 1. Clone dự án từ GitHub
+
+```bash
+git clone https://github.com/TVU-OPS/UniHand.git
 ```
+
+### 2. Di chuyển vào thư mục dự án
+
+```bash
+cd UniHand/backend
+```
+
+### 3. Tạo file `.env` từ file mẫu `.env.example`
+
+```bash
+cp .env.example .env
+```
+
+- Chỉnh sửa thông tin cần thiết trong tệp .env.
+
+### 4. Cài đặt các gói phụ thuộc
+
+```bash
+npm install
+```
+
+---
+
+# 🚀 Sử dụng Strapi
+
+Strapi đi kèm với một [Giao diện Dòng Lệnh (CLI)](https://docs.strapi.io/dev-docs/cli) đầy đủ tính năng, cho phép bạn thiết lập và quản lý dự án trong vài giây.
+
+## `develop`
+
+Khởi động ứng dụng Strapi của bạn với chế độ **tự động tải lại (autoReload)**.  
+[Tìm hiểu thêm](https://docs.strapi.io/dev-docs/cli#strapi-develop).
+
+```bash
 npm run develop
-# or
+# hoặc
 yarn develop
 ```
 
 ### `start`
 
-Start your Strapi application with autoReload disabled. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-start)
+Khởi động ứng dụng Strapi với chế độ không tự động tải lại. [Tìm hiểu thêm](https://docs.strapi.io/dev-docs/cli#strapi-start)
 
-```
+```bash
 npm run start
-# or
+# hoặc
 yarn start
 ```
 
 ### `build`
 
-Build your admin panel. [Learn more](https://docs.strapi.io/dev-docs/cli#strapi-build)
+Build giao diện quản trị của Strapi. [Tìm hiểu thêm](https://docs.strapi.io/dev-docs/cli#strapi-build)
 
-```
+```bash
 npm run build
-# or
+# hoặc
 yarn build
 ```
 
-## ⚙️ Deployment
+## ⚙️ Triển khai
 
-Strapi gives you many possible deployment options for your project including [Strapi Cloud](https://cloud.strapi.io). Browse the [deployment section of the documentation](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
+Strapi cung cấp nhiều phương án triển khai ứng dụng, bao gồm cả [Strapi Cloud](https://cloud.strapi.io). Truy cập [tài liệu triển khai để tìm giải pháp phù hợp nhất cho dự án của bạn. ](https://docs.strapi.io/dev-docs/deployment) to find the best solution for your use case.
 
 ```
 yarn strapi deploy
 ```
 
-## 📚 Learn more
+## 📚 Tìm hiểu thêm
 
-- [Resource center](https://strapi.io/resource-center) - Strapi resource center.
-- [Strapi documentation](https://docs.strapi.io) - Official Strapi documentation.
-- [Strapi tutorials](https://strapi.io/tutorials) - List of tutorials made by the core team and the community.
-- [Strapi blog](https://strapi.io/blog) - Official Strapi blog containing articles made by the Strapi team and the community.
-- [Changelog](https://strapi.io/changelog) - Find out about the Strapi product updates, new features and general improvements.
+- [Resource center](https://strapi.io/resource-center) - Nguồn tài nguyên Strapi.
+- [Strapi documentation](https://docs.strapi.io) - Tài liệu chính thức của Strapi.
+- [Strapi tutorials](https://strapi.io/tutorials) - Danh sách các hướng dẫn từ đội ngũ phát triển và cộng đồng.
+- [Strapi blog](https://strapi.io/blog) - Blog chính thức của Strapi với các bài viết từ đội ngũ và cộng đồng.
+- [Changelog](https://strapi.io/changelog) Theo dõi các bản cập nhật sản phẩm, tính năng mới và cải tiến chung.
 
-Feel free to check out the [Strapi GitHub repository](https://github.com/strapi/strapi). Your feedback and contributions are welcome!
+Hãy xem qua [kho lưu trữ GitHub của Strapi](https://github.com/strapi/strapi). Rất mong nhận được phản hồi và sự đóng góp của bạn!
 
-## ✨ Community
+## ✨ Cộng đồng Strapi
 
-- [Discord](https://discord.strapi.io) - Come chat with the Strapi community including the core team.
-- [Forum](https://forum.strapi.io/) - Place to discuss, ask questions and find answers, show your Strapi project and get feedback or just talk with other Community members.
-- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - A curated list of awesome things related to Strapi.
+- [Discord](https://discord.strapi.io) - Tham gia trò chuyện với cộng đồng Strapi, bao gồm cả đội ngũ phát triển.
+- [Forum](https://forum.strapi.io/) - Nơi thảo luận, đặt câu hỏi và tìm câu trả lời, chia sẻ dự án Strapi và nhận ý kiến đóng góp từ cộng đồng.
+- [Awesome Strapi](https://github.com/strapi/awesome-strapi) - Danh sách tổng hợp các tài nguyên tuyệt vời liên quan đến Strapi.
 
 ---
 
-<sub>🤫 Psst! [Strapi is hiring](https://strapi.io/careers).</sub>
+🤫 Psst! [Strapi is hiring](https://strapi.io/careers).

@@ -1,50 +1,107 @@
-# Welcome to your Expo app 👋
+# 🚀 Hướng dẫn chạy ứng dụng React Native
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Ứng dụng **React Native** trong dự án này nằm trong thư mục `app-mobile`. Dưới đây là hướng dẫn để tải dự án, di chuyển vào thư mục `app-mobile`, và chạy ứng dụng trên máy ảo điện thoại.
 
-## Get started
+# ![UniHand Banner](./assets/images/app_mobile.png)
 
-1. Install dependencies
+---
 
-   ```bash
-   npm install
-   ```
+## 🛠️ Yêu cầu hệ thống
 
-2. Start the app
+### 1. **Phần mềm cần thiết**
 
-   ```bash
-    npx expo start
-   ```
+- **Node.js**: Phiên bản >= **14.x** và < **20.x**.  
+  [Tải Node.js tại đây](https://nodejs.org).
+- **npm** hoặc **yarn**: Công cụ quản lý gói.
+  - **npm** >= 6.x
+  - **yarn** >= 1.x
+- **React Native CLI**: Công cụ CLI để phát triển ứng dụng React Native.  
+  Cài đặt bằng lệnh:
 
-In the output, you'll find options to open the app in a
+  ```bash
+  npm install -g react-native-cli
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+  ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+- **Android Studio** (cho máy ảo Android):
 
-## Get a fresh project
+  - [Tải Android Studio](https://developer.android.com/studio).
+  - Cần bật tính năng Android Virtual Device (AVD) để tạo máy ảo.
 
-When you're ready, run:
+### 2. Cấu hình môi trường
+
+- Java Development Kit (JDK): Phiên bản 8 hoặc 11. [Tải JDK tại đây.](https://www.oracle.com/java/technologies/downloads/?er=221886)
+
+- Android SDK: Cài đặt qua Android Studio.
+
+Lưu ý: Đảm bảo bạn đã cấu hình các biến môi trường JAVA_HOME, ANDROID_HOME và thêm platform-tools của Android SDK vào PATH.
+
+## 🔧 Hướng dẫn cài đặt và chạy ứng dụng
+
+### 1. Clone dự án từ GitHub
 
 ```bash
-npm run reset-project
+git clone https://github.com/TVU-OPS/UniHand.git
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### 2. Di chuyển vào thư mục app-mobile
 
-## Learn more
+```bash
+cd UniHand/app-mobile
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+### 3. Cài đặt các phụ thuộc
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Cài đặt tất cả các gói cần thiết:
 
-## Join the community
+```bash
+npm install
 
-Join our community of developers creating universal apps.
+# hoặc
+yarn install
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### 4. Chạy ứng dụng trên máy ảo
+
+#### 4.1. Bật máy ảo Android
+
+- Mở Android Studio.
+- Chuyển đến AVD Manager và khởi chạy máy ảo bạn đã tạo.
+
+#### 4.2. Chạy ứng dụng React Native
+
+Sử dụng lệnh sau để chạy ứng dụng trên máy ảo Android:
+
+```bash
+npm run android
+# hoặc
+yarn android
+```
+
+## ⚙️ Các lệnh CLI hữu ích
+
+### Khởi động ứng dụng trên máy ảo
+
+```bash
+npm run android
+# hoặc
+yarn android
+```
+
+### Chạy ứng dụng trên thiết bị thật (Android)
+
+Kết nối thiết bị Android qua USB và chạy:
+
+```bash
+npm run android
+# hoặc
+yarn android
+```
+
+## 📚 Tài liệu tham khảo
+
+- [Hướng dẫn React Native](https://reactnative.dev/docs/getting-started)- Thiết lập môi trường React Native.
+
+- [Hướng dẫn máy ảo Android](https://developer.android.com/studio/run/) - Cách tạo và sử dụng AVD.
+
+💡 Mẹo: Kiểm tra kết nối của thiết bị bằng lệnh adb devices trước khi chạy ứng dụng.
