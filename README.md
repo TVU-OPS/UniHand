@@ -59,10 +59,10 @@
 
 ## Cấu trúc thư mục
 
-- [App Mobile](https://github.com/TVU-OPS/UniHand/tree/main/app-mobile): Mã nguồn ứng dụng di động.
 - [Backend](https://github.com/TVU-OPS/UniHand/tree/main/backend): Mã nguồn backend, bao gồm cấu hình hệ thống, cơ sở dữ liệu, mã nguồn chính và các tệp cấu hình.
 - [Web admin](https://github.com/TVU-OPS/UniHand/tree/main/web-admin): Mã nguồn trang quản trị.
 - [Web home](https://github.com/TVU-OPS/UniHand/tree/main/web-home): Mã nguồn trang chủ.
+- [App Mobile](https://github.com/TVU-OPS/UniHand/tree/main/app-mobile): Mã nguồn ứng dụng di động.
 
 ## 🔧 Cách Cài Đặt
 
