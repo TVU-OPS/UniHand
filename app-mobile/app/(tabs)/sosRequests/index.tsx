@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 50,
+    paddingTop: 20,
   },
   containerHeader: {
     width: "100%",
@@ -302,9 +302,11 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   orgText: {
-    marginTop: 20,
+    marginTop: 10,
     fontSize: 16,
     color: "#6b7280",
+    maxWidth: 200,
+    textAlign: "center",
   },
   button: {
     backgroundColor: "#50bef1",
@@ -347,7 +349,7 @@ const styles = StyleSheet.create({
 
   pickerContainer: {
     borderWidth: 1,
-    borderColor: "#9ca3af",
+    borderColor: "#d1d5db",
     borderRadius: 8,
     justifyContent: "center",
     height: 32,
@@ -367,7 +369,7 @@ const pickerSelectStyles = StyleSheet.create({
     paddingRight: 30,
   },
   placeholder: {
-    color: "",
+    color: "black",
   },
   inputAndroid: {
     fontSize: 12,

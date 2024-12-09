@@ -495,13 +495,14 @@ const provinces = [
        });
 
      /////////////////////////////  
-
+      const markers = {};
      document.addEventListener("message", (event) => {
        const data = JSON.parse(event.data);
        const { latitude, longitude, action, notification, zoom } = data;
 
        if (action === "update" || action === "move") {
-         if (!markers["currentLocation"]) {
+      
+          if (!markers["currentLocation"]) {
            markers["currentLocation"] = new mapboxgl.Marker()
              .setLngLat([longitude, latitude])
              .addTo(map);
@@ -545,109 +546,171 @@ const provinces = [
 
   return (
     <ThemedView style={styles.container}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <ScrollView
-          keyboardShouldPersistTaps="never"
-          contentContainerStyle={styles.scrollContainer}
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scrollContainer}
+        
+      >
+        <Text style={styles.titleId}> #{sosRequest && sosRequest?.id}</Text>
+        <Text style={styles.title}> {sosRequest && sosRequest?.FullName}</Text>
+        <View
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            marginBottom: 10,
+          }}
         >
-          <Text style={styles.titleId}> #{sosRequest.id}</Text>
-          <Text style={styles.title}> {sosRequest.FullName}</Text>
-          <View style={[styles.infoContainer, { alignItems: "flex-start" }]}>
-            <Ionicons name="document-text" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Mô tả: {sosRequest.RequestDescription}
+          <TouchableOpacity
+            style={styles.buttonSheetModal}
+            onPress={toggleAccordion}
+          >
+            <Text style={styles.buttonSheetModalText}>
+              {isExpanded ? "ĐÓNG BẢN ĐỒ" : "XEM BẢN ĐỒ"}
             </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="people" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Số người cần hỗ trợ: {sosRequest.PeopleCount}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="water" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Nước uống: {sosRequest.NeedWater ? "Có" : "Không"}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="fast-food" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Đồ ăn: {sosRequest.NeedFood ? "Có" : "Không"}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="medkit" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Y tế: {sosRequest.NeedMedical ? "Có" : "Không"}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="call" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Số điện thoại: {sosRequest.PhoneNumber}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="mail" size={20} color="#4CAF50" />
-            <Text style={styles.label}>Email: {sosRequest.Email}</Text>
-          </View>
-
-          <View style={styles.infoContainer}>
-            <Ionicons name="map" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Tỉnh: {sosRequest.Province.FullName}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="map" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Huyện: {sosRequest.District.FullName}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="map" size={20} color="#4CAF50" />
-            <Text style={styles.label}>Xã: {sosRequest.Ward.FullName}</Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="location" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Địa chỉ chi tiết: {sosRequest.Amenity}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="checkmark-circle" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Trạng thái: {sosRequest.State ? "Đã hỗ trợ" : "Đang hỗ trợ"}
-            </Text>
-          </View>
-          <View style={styles.infoContainer}>
-            <Ionicons name="calendar" size={20} color="#4CAF50" />
-            <Text style={styles.label}>
-              Ngày tạo: {new Date(sosRequest.createdAt).toLocaleString()}
-            </Text>
-          </View>
-          {/* <View style={styles.infoContainer}>
-          <Ionicons name="calendar" size={20} color="#4CAF50" />
+            <Ionicons
+              name={isExpanded ? "chevron-down" : "chevron-up"}
+              size={20}
+              color="#fff"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={[styles.infoContainer, { alignItems: "flex-start" }]}>
+          <Ionicons name="document-text" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Mô tả:</Text>
           <Text style={styles.label}>
-            Ngày cập nhật: {new Date(sosRequest.updatedAt).toLocaleString()}
+            {sosRequest && sosRequest?.RequestDescription?.length > 1
+              ? sosRequest && sosRequest?.RequestDescription
+              : "Không có"}
           </Text>
-        </View> */}
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="people" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Số người cần hỗ trợ:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.PeopleCount}
+          </Text>
+        </View>
 
-          {sosRequest?.AudioFile == null && (
+        <View style={styles.infoContainer}>
+          <Ionicons name="flash" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Thiên tai:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.Disaster.Name}
+          </Text>
+        </View>
+
+        <View style={styles.infoContainer}>
+          <Ionicons name="water" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Nước uống:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.NeedWater ? "Có" : "Không"}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="fast-food" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Đồ ăn:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.NeedFood ? "Có" : "Không"}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="medkit" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Y tế:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.NeedMedical ? "Có" : "Không"}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="call" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Số điện thoại:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.PhoneNumber}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="mail" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Email:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.Email?.length > 1
+              ? sosRequest && sosRequest?.Email
+              : "Không có"}
+          </Text>
+        </View>
+
+        <View style={styles.infoContainer}>
+          <Ionicons name="map" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Tỉnh / Thành phố:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.Province.FullName}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="map" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Quận / Huyện:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.District.FullName}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="map" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Phường / Xã:</Text>
+          <Text style={styles.label}>
+            {sosRequest && sosRequest?.Ward.FullName}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="location" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Địa chị chi tiết:</Text>
+          <Text numberOfLines={3} style={[styles.label, { maxWidth: "66%" }]}>
+            {sosRequest && (sosRequest.Amenity?.length ?? 0) > 1
+              ? sosRequest.Amenity
+              : "Không có"}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="checkmark-circle" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Trạng thái:</Text>
+          <Text numberOfLines={3} style={styles.label}>
+            {sosRequest.AcceptedBy == null
+              ? "Chưa hỗ trợ"
+              : sosRequest.State == null || sosRequest.State == false
+              ? `Đang được hỗ trợ bởi ${sosRequest.AcceptedBy.Name}`
+              : `Đã được hỗ trợ bởi ${sosRequest.AcceptedBy.Name}`}
+            {/* {sosRequest && sosRequest?.State ? "Đã hỗ trợ" : "Đang hỗ trợ"} */}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="calendar" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Ngày tạo:</Text>
+          <Text style={styles.label}>
+            {new Date(sosRequest && sosRequest?.createdAt).toLocaleString()}
+          </Text>
+        </View>
+        <View style={styles.infoContainer}>
+          <Ionicons name="calendar" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Ngày cập nhật:</Text>
+          <Text style={styles.label}>
+            {new Date(sosRequest && sosRequest?.updatedAt).toLocaleString()}
+          </Text>
+        </View>
+
+        {sosRequest && sosRequest?.AudioFile == null && (
+          <View style={styles.infoContainer}>
+            <Ionicons name="musical-notes" size={20} color="#38bdf8" />
+            <Text style={styles.tittleLabel}>File âm thanh:</Text>
+            <Text style={styles.label}>Không có</Text>
+          </View>
+        )}
+
+        {sosRequest && sosRequest.AudioFile?.length > 0 && (
+          <View style={styles.audioContainer}>
             <View style={styles.infoContainer}>
-              <Ionicons name="musical-notes" size={20} color="#4CAF50" />
-              <Text style={styles.label}>File âm thanh: Không có</Text>
+              <Ionicons name="musical-notes" size={20} color="#38bdf8" />
+              <Text style={styles.tittleLabel}>File âm thanh:</Text>
             </View>
-          )}
-
-          {sosRequest?.AudioFile && sosRequest?.AudioFile.length > 0 && (
-            <View style={styles.audioContainer}>
-              <View style={styles.infoContainer}>
-                <Ionicons name="musical-notes" size={20} color="#4CAF50" />
-                <Text style={styles.label}>File âm thanh:</Text>
-              </View>
-              {sosRequest?.AudioFile.map((audio) => (
+            {sosRequest &&
+              sosRequest.AudioFile?.map((audio) => (
                 <TouchableOpacity
                   key={audio.id}
                   onPress={() =>
@@ -667,70 +730,77 @@ const provinces = [
                   </Text>
                 </TouchableOpacity>
               ))}
+          </View>
+        )}
+
+        <View style={[styles.infoContainer]}>
+          <Ionicons name="image" size={20} color="#38bdf8" />
+          <Text style={styles.tittleLabel}>Ảnh thiệt hại:</Text>
+        </View>
+        <View style={styles.imageContainer}>
+          {Array.from({ length: 4 }).map((_, index) => (
+            <View key={index} style={styles.imageWrapper}>
+              {sosRequest &&
+              sosRequest?.DamageImage &&
+              sosRequest &&
+              sosRequest?.DamageImage[index] ? (
+                <Image
+                  source={{
+                    uri: `${process.env.EXPO_PUBLIC_API_URL}${
+                      sosRequest && sosRequest?.DamageImage[index].url
+                    }`,
+                  }}
+                  style={styles.image}
+                />
+              ) : (
+                <View style={styles.placeholder}>
+                  <Ionicons name="image" size={20} color="#ccc" />
+                </View>
+              )}
             </View>
-          )}
-          <View style={[styles.infoContainer]}>
-            <Ionicons name="image" size={20} color="#4CAF50" />
-            <Text style={[styles.label]}>Ảnh thiệt hại:</Text>
-          </View>
-          <View style={styles.imageContainer}>
-            {Array.from({ length: 4 }).map((_, index) => (
-              <View key={index} style={styles.imageWrapper}>
-                {sosRequest.DamageImage && sosRequest.DamageImage[index] ? (
-                  <Image
-                    source={{
-                      uri: `${process.env.EXPO_PUBLIC_API_URL}${sosRequest.DamageImage[index].url}`,
-                    }}
-                    style={styles.image}
-                  />
-                ) : (
-                  <View style={styles.placeholder}>
-                    <Ionicons name="image" size={20} color="#ccc" />
-                  </View>
-                )}
-              </View>
-            ))}
-          </View>
-        </ScrollView>
-        <TouchableOpacity
-          style={styles.buttonSheetModal}
-          onPress={toggleAccordion}
+          ))}
+        </View>
+
+        <View style={{height: 100}}>
+
+        </View>
+      </ScrollView>
+
+
+
+      <Animated.View style={[styles.extraInputs, animatedStyle]}>
+        <View
+          style={{
+            width: "100%",
+            backgroundColor: "#ccc",
+            height: 500,
+            borderTopWidth: 2,
+            borderTopColor: "#38bdf8",
+          }}
         >
-          <Text style={styles.buttonSheetModalText}>
-            {isExpanded ? "ĐÓNG BẢN ĐỒ" : "XEM BẢN ĐỒ"}
-          </Text>
-          <Ionicons
-            name={isExpanded ? "chevron-down" : "chevron-up"}
-            size={20}
-            color="#fff"
+          <WebView
+            ref={webviewRef}
+            source={{ html: mapHTML }}
+            javaScriptEnabled={true}
+            onMessage={(event) => {
+              console.log("WebView message:", event);
+            }}
+            originWhitelist={["https://*", "http://*", "file://*", "sms://*"]}
+            setSupportMultipleWindows={true}
+            startInLoadingState={true}
+            scalesPageToFit={true}
+            onLoadStart={() => {
+              setLoading(true);
+            }}
+            // onLoading={() => {
+            //   setLoading(false);
+            // }}
+            onLoadEnd={() => {
+              setLoading(false);
+            }}
           />
-        </TouchableOpacity>
-        <Animated.View style={[styles.extraInputs, animatedStyle]}>
-          <View style={{ width: "100%", backgroundColor: "#ccc", height: 500 }}>
-            <WebView
-              ref={webviewRef}
-              source={{ html: mapHTML }}
-              javaScriptEnabled={true}
-              onMessage={(event) => {
-                console.log("WebView message:", event);
-              }}
-              originWhitelist={["https://*", "http://*", "file://*", "sms://*"]}
-              setSupportMultipleWindows={true}
-              startInLoadingState={true}
-              scalesPageToFit={true}
-              onLoadStart={() => {
-                setLoading(true);
-              }}
-              // onLoading={() => {
-              //   setLoading(false);
-              // }}
-              onLoadEnd={() => {
-                setLoading(false);
-              }}
-            />
-          </View>
-        </Animated.View>
-      </GestureHandlerRootView>
+        </View>
+      </Animated.View>
     </ThemedView>
   );
 }
@@ -738,7 +808,6 @@ const provinces = [
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 16,
   },
   scrollContainer: {
     padding: 16,
@@ -754,7 +823,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 10,
+    marginBottom: 4,
     textAlign: "center",
     color: "#ef4444",
   },
@@ -765,12 +834,18 @@ const styles = StyleSheet.create({
   },
   infoContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
     marginBottom: 8,
   },
+  tittleLabel: {
+    fontWeight: 500,
+    fontSize: 15,
+    marginLeft: 5,
+  },
   label: {
-    fontSize: 14,
-    marginLeft: 10,
+    fontSize: 15,
+    marginLeft: 4,
+    color: "#4b5563",
   },
   imageContainer: {
     marginTop: 4,
@@ -781,7 +856,7 @@ const styles = StyleSheet.create({
   },
   imageWrapper: {
     width: "48%",
-    height: 200,
+    height: 150,
     marginBottom: 10,
     backgroundColor: "#f0f0f0",
     justifyContent: "center",
@@ -800,7 +875,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     borderRadius: 8,
   },
-  audioContainer: {},
+  audioContainer: {
+    marginBottom: 8,
+  },
   audioButton: {
     fontSize: 14,
     color: "blue",
@@ -814,7 +891,9 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     gap: 4,
   },
-  audioText: {},
+  audioText: {
+    maxWidth: "90%",
+  },
 
   contentContainer: {
     minHeight: 200,
@@ -826,15 +905,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#38bdf8",
     gap: 4,
-    padding: 12,
-    borderTopRightRadius: 20,
-    borderTopLeftRadius: 20,
-    // margin: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 10,
     alignItems: "center",
-    width: "100%",
   },
   buttonSheetModalText: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#fff",
     fontWeight: "bold",
   },

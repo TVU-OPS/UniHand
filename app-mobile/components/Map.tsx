@@ -112,7 +112,7 @@ export default function Map(props: MapProps) {
     });
     const { latitude, longitude } = location.coords;
 
-    sendMessageToWebView({ latitude, longitude, zoom: 12, action: "move" });
+    sendMessageToWebView({ latitude, longitude, zoom: 13, action: "move" });
   };
 
   const handleDisplayNotification = async () => {
@@ -145,7 +145,7 @@ export default function Map(props: MapProps) {
         setSelectedDisaster(res.data[0]?.id);
       }
     } catch (error: any) {
-      console.log("Failed to fetch ongoing disasters:", error);
+      console.error("Failed to fetch ongoing disasters:", error);
     }
   };
 
@@ -208,6 +208,12 @@ export default function Map(props: MapProps) {
     }
   };
 
+  const handleReloadWebView = () => {
+    if (webviewRef.current) {
+      webviewRef.current.reload();
+    }
+  };
+
   useEffect(() => {
     handleDisplayDisaster();
   }, [selectedDisaster]);
@@ -232,6 +238,7 @@ export default function Map(props: MapProps) {
   }, [loading]);
 
   useEffect(() => {
+    getCurrentLocation();
     handleMoveToCurrentLocation();
   }, []);
 
@@ -581,6 +588,12 @@ export default function Map(props: MapProps) {
         }}
       />
       <View style={styles.controls}>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#9ca3af" }]}
+          onPress={handleReloadWebView}
+        >
+          <Ionicons name="refresh-outline" size={24} color="#fff" />
+        </TouchableOpacity>
         <TouchableOpacity
           style={[styles.button, { backgroundColor: "#9ca3af" }]}
           onPress={handleZoomIn}
