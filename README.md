@@ -10,7 +10,7 @@
 
 # ![UniHand Banner](public/banner_review.png)
 
-[![Document](https://img.shields.io/badge/Document-2ea44f?style=for-the-badge)](https://docs.unihand.site/)
+- Xem đầy đủ tài liệu của dự án tại: [![Documentation](https://img.shields.io/badge/Documentation-2ea44f?style=for-the-badge)](https://docs.unihand.site/)
 
 ## **Mục lục**
 
