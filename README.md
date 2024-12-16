@@ -164,7 +164,7 @@ Mặc định hệ thống sẽ chạy trên:
 
 ## 📃 License
 
-Được phân phối theo Giấy phép AGPLv3. Xem [`LICENSE.md`](https://github.com/TVU-OPS/UniHand/blob/main/LICENSE) để biết thêm thông tin.
+Được phân phối theo Giấy phép GPLv3. Xem [`LICENSE.md`](https://github.com/TVU-OPS/UniHand/blob/main/LICENSE) để biết thêm thông tin.
 
 ## Cộng đồng và đóng góp
 
